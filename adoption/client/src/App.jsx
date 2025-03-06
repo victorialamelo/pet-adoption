@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <>
@@ -25,11 +25,22 @@ function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        hola its Ash doing a test
-      </p>
+      <p className="read-the-docs">hola its Ash doing a test teste</p>
     </>
-  )
+  );
 }
 
-export default App
+export function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/schedule/:schedule_id" element={<SchedulePage />} />
+      <Route
+        path="/schedule/:schedule_id/add-item"
+        element={<ScheduleItemAddPage />}
+      />
+    </Routes>
+  );
+}
+
+export default App;
