@@ -18,7 +18,7 @@ const con = mysql.createConnection({
     host: DB_HOST || "127.0.0.1", // Default to localhost if not provided
     user: DB_USER || "root", // Default to "root" if not provided
     password: DB_PASS, // Use provided password or undefined
-    database: DB_NAME || "library", // Default database name is "library"
+    database: DB_NAME || "petadoption", // Default database name is "library"
     multipleStatements: true, // Allows executing multiple SQL statements at once
 });
 
