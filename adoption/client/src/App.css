@@ -1,0 +1,13 @@
+#root {
+  margin: 0 auto;
+  width: 100%;
+}
+
+header {
+  padding: 30px;
+  width: 100%;
+}
+
+.container-fluid {
+  width: 100%;
+}

@@ -4,7 +4,7 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top w-100">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">pet adoption</Link>
+        <Link className="navbar-brand" to="/">Pet Adoption</Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -19,20 +19,26 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="/signup">sign up</Link>
+              <Link className="nav-link" to="/signup">About Us</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/petlist">adopt a pet</Link>
+              <Link className="nav-link" to="/signup">FAQs</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/postpet">post a pet</Link>
+              <Link className="nav-link" to="/signup">Sign Up</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/login">login</Link>
+              <Link className="nav-link" to="/petlist">Adopt a Friend</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/postpet">Post a Friend</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/login">Log In</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/" onClick={() => console.log("logout")}>
-                logout
+                Log Out
               </Link>
             </li>
           </ul>
