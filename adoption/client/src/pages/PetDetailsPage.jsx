@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 
 export default function PetDetailsPage() {
   // State to manage pending requests (if you're the poster)
-  const [isPoster, setIsPoster] = useState(true); // Check if the logged-in user is the poster
+  // const [isPoster, setIsPoster] = useState(true); // Check if the logged-in user is the poster
   const [pendingRequests, setPendingRequests] = useState([
     { id: 1, user: "User 1", status: "Applied", date: "2025-03-01", message: "I'm interested in adopting Buddy!" },
     { id: 2, user: "User 2", status: "Pending Approval", date: "2025-03-02", message: "Buddy seems like a great fit for my family!" },
@@ -12,7 +12,7 @@ export default function PetDetailsPage() {
   ]);
 
   const [applicationMessage, setApplicationMessage] = useState("");
-  const [filters, setFilters] = useState({
+  const [details] = useState({
     size: "medium",
     age: 2,
     weight: 5,
@@ -41,13 +41,13 @@ export default function PetDetailsPage() {
     );
   };
 
-  const handleFilterChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+  // const handleFilterChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   setFilters((prevFilters) => ({
+  //     ...prevFilters,
+  //     [name]: type === "checkbox" ? checked : value,
+  //   }));
+  // };
 
   return (
     <>
@@ -62,19 +62,19 @@ export default function PetDetailsPage() {
               <h2 className="display-4">Buddy</h2>
               <p className="lead">Buddy is a friendly and playful dog who loves to explore and cuddle. She's 2 years old and enjoys the outdoors.</p>
 
-              {/* Filters Section (Details of the pet) */}
+              {/* Details Section */}
               <div className="mb-4">
                 <h5>Details:</h5>
                 <ul className="list-unstyled">
-                  <li><strong>Size:</strong> {filters.size}</li>
-                  <li><strong>Age:</strong> {filters.age} years</li>
-                  <li><strong>Weight:</strong> {filters.weight} kg</li>
-                  <li><strong>Gender:</strong> {filters.gender}</li>
-                  <li><strong>Activity Level:</strong> {filters.activity}</li>
-                  <li><strong>Neutered:</strong> {filters.neutered ? "Yes" : "No"}</li>
-                  <li><strong>Special Needs:</strong> {filters.specialNeeds ? "Yes" : "No"}</li>
-                  <li><strong>Potty Trained:</strong> {filters.pottyTrained ? "Yes" : "No"}</li>
-                  <li><strong>Good With:</strong> {filters.goodWith.join(", ")}</li>
+                  <li><strong>Size:</strong> {details.size}</li>
+                  <li><strong>Age:</strong> {details.age} years</li>
+                  <li><strong>Weight:</strong> {details.weight} kg</li>
+                  <li><strong>Gender:</strong> {details.gender}</li>
+                  <li><strong>Activity Level:</strong> {details.activity}</li>
+                  <li><strong>Neutered:</strong> {details.neutered ? "Yes" : "No"}</li>
+                  <li><strong>Special Needs:</strong> {details.specialNeeds ? "Yes" : "No"}</li>
+                  <li><strong>Potty Trained:</strong> {details.pottyTrained ? "Yes" : "No"}</li>
+                  <li><strong>Good With:</strong> {details.goodWith.join(", ")}</li>
                 </ul>
               </div>
             </div>
@@ -111,7 +111,7 @@ export default function PetDetailsPage() {
             </div>
 
             {/* Right Column: Pending Requests (Dashboard for Poster) */}
-            {isPoster && (
+            {/* {isPoster && ( */}
               <div className="col-md-6">
                 <h3>Pending Requests</h3>
                 <ul className="list-group">
@@ -137,7 +137,7 @@ export default function PetDetailsPage() {
                   ))}
                 </ul>
               </div>
-            )}
+            {/* )} */}
           </div>
         </div>
       </section>
