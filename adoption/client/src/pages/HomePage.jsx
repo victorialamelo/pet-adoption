@@ -9,29 +9,32 @@ function HomePage() {
       <NavBar />
 
       {/* Hero Section */}
-      <header className="container-fluid text-center py-5 pt-100 mx-auto bg-light w-100">
-        <div className="container-fluid">
-          <h1 className="display-4 fw-bold">Find your new best friend</h1>
-        </div>
+      <header>
+        <h1>Find your new best friend</h1>
+        <img
+          src="https://zignature.com/wp-content/uploads/shutterstock_1048123303-scaled.jpg"
+          alt="Banner Image"
+        />
       </header>
 
       {/* Image Grid Section */}
       <section className="container-fluid py-5">
-        <div className="row text-center">
+        <div className="row">
+          <h1>Recently added Pets</h1>
           <div className="col-md-4">
             <img src="https://i.natgeofe.com/n/4f5aaece-3300-41a4-b2a8-ed2708a0a27c/domestic-dog_thumb_4x3.jpg" className="img-fluid rounded" alt="Adopt a pet" />
-            <h3 className="mt-3">Adopt a Pet</h3>
-            <p>Give a loving home to a pet in need.</p>
+            <h3 className="mt-3">Fred</h3>
+            <p>Give Fred loving home to a pet in need.</p>
           </div>
           <div className="col-md-4">
             <img src="https://i.natgeofe.com/n/4f5aaece-3300-41a4-b2a8-ed2708a0a27c/domestic-dog_thumb_4x3.jpg" className="img-fluid rounded" alt="Success stories" />
-            <h3 className="mt-3">Success Stories</h3>
-            <p>See how pet adoption changes lives.</p>
+            <h3 className="mt-3">Lulu</h3>
+            <p>Give Lulu loving home to a pet in need.</p>
           </div>
           <div className="col-md-4">
             <img src="https://i.natgeofe.com/n/4f5aaece-3300-41a4-b2a8-ed2708a0a27c/domestic-dog_thumb_4x3.jpg" className="img-fluid rounded" alt="Get Involved" />
-            <h3 className="mt-3">Get Involved</h3>
-            <p>Volunteer or support our mission.</p>
+            <h3 className="mt-3">Paquita</h3>
+            <p>Paquita Paquita Paquita Paquita Paquita.</p>
           </div>
         </div>
       </section>
