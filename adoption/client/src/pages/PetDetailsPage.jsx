@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 
@@ -6,9 +6,9 @@ export default function PetDetailsPage() {
   // State to manage pending requests (if you're the poster)
   // const [isPoster, setIsPoster] = useState(true); // Check if the logged-in user is the poster
   const [pendingRequests, setPendingRequests] = useState([
-    { id: 1, user: "User 1", status: "Applied", date: "2025-03-01", message: "I'm interested in adopting Buddy!" },
-    { id: 2, user: "User 2", status: "Pending Approval", date: "2025-03-02", message: "Buddy seems like a great fit for my family!" },
-    { id: 3, user: "User 3", status: "Adoption in Progress", date: "2025-03-03", message: "I'm excited to meet Buddy!" },
+    { id: 1, user: "User 1", email: "user@email.com", status: "Applied", date: "2025-03-01", message: "I'm interested in adopting Buddy!" },
+    { id: 2, user: "User 2", email: "user@email.com", status: "Pending Approval", date: "2025-03-02", message: "Buddy seems like a great fit for my family!" },
+    { id: 3, user: "User 3", email: "user@email.com", status: "Adoption in Progress", date: "2025-03-03", message: "I'm excited to meet Buddy!" },
   ]);
 
   const [applicationMessage, setApplicationMessage] = useState("");
@@ -52,7 +52,13 @@ export default function PetDetailsPage() {
   return (
     <>
       <NavBar />
-
+      <header>
+        <h1>Find your new best friend</h1>
+        <img
+          src="https://zignature.com/wp-content/uploads/shutterstock_1048123303-scaled.jpg"
+          alt="Banner Image"
+        />
+      </header>
       {/* Pet Details Section */}
       <section className="my-5">
         <div className="container">
@@ -117,9 +123,12 @@ export default function PetDetailsPage() {
                 <ul className="list-group">
                   {pendingRequests.map((request) => (
                     <li key={request.id} className="list-group-item">
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span>{request.user} - {request.status} (Applied on: {request.date})</span>
-                        <div className="d-flex">
+                      <div className="d-flex flex-column justify-content-between align-items-start">
+                        <h3>{request.user}</h3>
+                        <p>{request.email}</p>
+                        <p>{request.status}</p>
+                        <p>Applied on: {request.date}</p>
+                        <div className="d-flex w-100">
                           <select
                             className="form-select me-2"
                             value={request.status}
