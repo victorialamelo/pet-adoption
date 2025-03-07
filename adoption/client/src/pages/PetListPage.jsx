@@ -202,7 +202,7 @@ export default function PetListPage() {
                     <h5 className="card-title">Pet Name</h5>
                     <p className="card-text">Quick Facts: Age: 3, Size: Medium, Neutered: Yes</p>
                     <p className="card-text">This is a lovely pet who loves to play and get lots of attention!</p>
-                    <Link to="/pet-details" className="btn btn-primary w-100">
+                    <Link to="/petdetails" className="btn btn-primary w-100">
                       Learn More
                     </Link>
                   </div>
