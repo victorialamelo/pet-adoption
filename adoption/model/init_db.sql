@@ -3,7 +3,6 @@ DROP TABLE IF EXISTS CurrentOwner;
 DROP TABLE IF EXISTS Adopters;
 DROP TABLE IF EXISTS Pets;
 DROP TABLE IF EXISTS Adoptions;
-
 CREATE TABLE `CurrentOwner`(
     `current_owner_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `owner_type` VARCHAR(255) NOT NULL,
@@ -30,13 +29,12 @@ CREATE TABLE `Pets`(
     `pet_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `animal_type` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
-    `breed` VARCHAR(255) NULL,
     `weight` BIGINT NOT NULL,
     `size` VARCHAR(255) NOT NULL,
     `gender` VARCHAR(255) NOT NULL,
     `activity` VARCHAR(255) NOT NULL,
     `good_with` VARCHAR(255) NOT NULL,
-    `neutured` BOOLEAN NOT NULL,
+    `neutered` BOOLEAN NOT NULL,
     `has_especial_needs` BOOLEAN NOT NULL,
     `potty_trained` BOOLEAN NOT NULL,
     `img_url` VARCHAR(255) NOT NULL,
