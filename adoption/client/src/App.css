@@ -49,3 +49,17 @@ nav {
   z-index: 10;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.checkbox-span {
+  padding-right: 10px;
+  display: block;
+}
+
+.checkbox-label {
+
+  padding-left: 10px;
+}
+
+#specialNeeds, #neutered, #pottyTrained {
+  margin-left: 10px;
+}
