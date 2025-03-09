@@ -49,9 +49,8 @@ return (
       <NavBar />
 
       <section className="my-5">
-        <div className="container">
+        <div className="container postpet">
           <h1 className="display-4 text-center mb-4">Post a Pet for Adoption</h1>
-
           <form onSubmit={handleSubmit}>
             <div className="row">
               {/* Left Column: Pet Details */}

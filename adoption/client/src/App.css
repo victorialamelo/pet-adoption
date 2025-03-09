@@ -50,6 +50,11 @@ nav {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.postpet {
+  max-width: 700px;
+  padding: 30px;
+}
+
 .checkbox-span {
   padding-right: 10px;
   display: block;
