@@ -102,7 +102,13 @@ export default function UserDashboard() {
   return (
     <>
       <NavBar />
-      <section className="container my-5">
+
+      {/* Hero Section */}
+      <header>
+        <img src="../src/assets/rosedog.jpg" alt="" />
+      </header>
+
+      <section className="container-fluid user-dashboard">
         <h1 className="display-4 text-center mb-4">User Dashboard</h1>
 
         {/* Inbox Section */}
