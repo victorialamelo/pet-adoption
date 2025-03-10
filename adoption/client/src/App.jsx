@@ -6,6 +6,7 @@ import SignupPage from "./pages/SignupPage";
 import PetListPage from "./pages/PetListPage";
 import PetDetailsPage from "./pages/PetDetailsPage";
 import PostPetPage from "./pages/PostPetPage";
+import UserDashboard from "./pages/UserDashboard";
 import "./App.css";
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
       <Route path="/petlist" element={<PetListPage />} />
       <Route path="/petdetails" element={<PetDetailsPage />} />
       <Route path="/postpet" element={<PostPetPage />} />
+      <Route path="/userdashboard" element={<UserDashboard />} />
     </Routes>
   );
 }
