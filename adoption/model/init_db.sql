@@ -33,11 +33,8 @@ CREATE TABLE `Pets`(
     `has_especial_needs` BOOLEAN NOT NULL,
     `potty_trained` BOOLEAN NOT NULL,
     `img_url` VARCHAR(255) NOT NULL,
-    `pet_description` VARCHAR(255) NOT NULL,
+    `pet_description` VARCHAR(255) NOT NULL
 );
--- Adding foreign key constraints for Pets table
-ALTER TABLE `Pets`
-ADD CONSTRAINT `pets_owner_id_foreign` FOREIGN KEY (`owner_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
 -- Create Requests table
 CREATE TABLE `Requests`(
     `request_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -49,8 +46,9 @@ CREATE TABLE `Requests`(
 );
 -- Adding foreign key constraints for Requests table
 ALTER TABLE `Requests`
-ADD CONSTRAINT `requests_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE,
-    ADD CONSTRAINT `requests_requester_id_foreign` FOREIGN KEY (`requester_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
+ADD CONSTRAINT `requests_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
+ALTER TABLE `Requests`
+ADD CONSTRAINT `requests_requester_id_foreign` FOREIGN KEY (`requester_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
 -- Create Posts table
 CREATE TABLE `Posts`(
     `post_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -60,5 +58,6 @@ CREATE TABLE `Posts`(
 );
 -- Adding foreign key constraints for Posts table
 ALTER TABLE `Posts`
-ADD CONSTRAINT `posts_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE,
-    ADD CONSTRAINT `posts_post_owner_id_foreign` FOREIGN KEY (`post_owner_id`) REFERENCES `Pets`(`owner_id`) ON DELETE CASCADE;
+ADD CONSTRAINT `posts_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
+ALTER TABLE `Posts`
+ADD CONSTRAINT `posts_post_owner_id_foreign` FOREIGN KEY (`post_owner_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
