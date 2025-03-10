@@ -41,22 +41,22 @@ body, #root {
 
 header {
   position: relative;
-  min-height: 400px;
   width: 100%;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Ensures no weird spacing */
+  overflow: hidden;
 }
 
 header img {
-  position: absolute;
-  top: 25px;
+  top: 60px;
   left: 0;
-  width: 100%;
-  height: 600px;
-  object-fit: cover; /* Makes the image fill the space */
+  width: 100vw;
+  height: 100%;
+  object-fit: cover; /* Ensures full width while keeping image proportions */
 }
+
 
 header h1 {
   position: relative;
@@ -78,6 +78,10 @@ nav {
   top: 0;
   left: 0;
   z-index: 10;
+}
+
+.navbar {
+  padding: 20px;
 }
 
 section {

@@ -30,9 +30,8 @@ export default function PetListPage() {
 
       {/* Hero Header */}
       <header className="text-center">
-        <div className="container">
-          <h1 className="display-4 fw-bold">Find your best friend</h1>
-          <img src="https://i.ytimg.com/vi/fOd16PT1S7A/maxresdefault.jpg" alt="" />
+        <div className="herosection">
+          <img src="../src/assets/pinkcat.jpg" alt="" />
         </div>
       </header>
 

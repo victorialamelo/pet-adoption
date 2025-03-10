@@ -4,7 +4,7 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top w-100">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">Pet Adoption</Link>
+        <Link className="navbar-brand" to="/">Peluditos</Link>
         <button
           className="navbar-toggler"
           type="button"
