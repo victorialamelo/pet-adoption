@@ -27,14 +27,16 @@ h1, h2, h3, .navbar-brand {
 }
 
 p, span, li{
-  font-family: "Manrope", serif;
-  font-size: 1.3em;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.3em
 }
 
 body, #root {
   margin: 0 auto;
   width: 100%;
-  background-color: var(--sage);
+  background-color: var(--latte);
 }
 
 header {
@@ -65,7 +67,7 @@ header h1 {
 
 nav {
   height: 60px; /* Adjust if needed */
-  background: white;
+  background: var(--latte);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -75,8 +77,6 @@ nav {
   top: 0;
   left: 0;
   z-index: 10;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
 }
 
 section {
@@ -85,6 +85,27 @@ section {
 
 section, header, .row {
   padding: 50px;
+}
+
+input {
+  height: 55px;
+}
+
+input:focus {
+  border: 4px solid var(--peach) !important;
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  background-color: var(--skyblue);
+  border: none;
+  font-family: "Shrikhand", serif;
+  font-size: 1.3em;
+}
+
+.btn-primary:hover {
+  background-color: var(--celeste);
+  color: var(--skyblue);
 }
 
 .banner {
@@ -100,6 +121,11 @@ section, header, .row {
 
 .donate {
   background-color: var(--latte);
+}
+
+.card {
+  background-color: var(--latte);
+  border: 0px;
 }
 
 .postpet {
