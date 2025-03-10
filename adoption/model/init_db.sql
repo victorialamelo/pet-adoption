@@ -34,7 +34,6 @@ CREATE TABLE `Pets`(
     `potty_trained` BOOLEAN NOT NULL,
     `img_url` VARCHAR(255) NOT NULL,
     `pet_description` VARCHAR(255) NOT NULL,
-    `owner_id` BIGINT UNSIGNED NOT NULL
 );
 -- Adding foreign key constraints for Pets table
 ALTER TABLE `Pets`
