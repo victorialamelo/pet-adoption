@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top w-100">
+    <nav className="navbar navbar-expand-lg navbar-light fixed-top w-100">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/">Pet Adoption</Link>
         <button
