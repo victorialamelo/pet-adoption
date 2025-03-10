@@ -135,6 +135,8 @@ export default function PetDetailsPage() {
                             onChange={(e) => handleStatusChange(request.id, e.target.value)}
                           >
                             <option value="Applied">Applied</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Pending Application">Pending Application</option>
                             <option value="Pending Approval">Pending Approval</option>
                             <option value="Adoption in Progress">Adoption in Progress</option>
                             <option value="Adopted">Adopted</option>
