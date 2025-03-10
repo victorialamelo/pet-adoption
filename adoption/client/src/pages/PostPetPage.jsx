@@ -48,10 +48,15 @@ return (
     <>
       <NavBar />
 
-      <section className="my-5">
-        <div className="container postpet">
+      {/* Hero Section */}
+      <header>
+        <img src="../src/assets/beigekitten.jpg" alt="" />
+      </header>
+
+      <section className="postapet mt-10">
+        <div className="container">
           <h1 className="display-4 text-center mb-4">Post a Pet for Adoption</h1>
-          <form onSubmit={handleSubmit}>
+          <form className="form-postpet" onSubmit={handleSubmit}>
             <div className="row">
               {/* Left Column: Pet Details */}
               <div className="col-md-12">
