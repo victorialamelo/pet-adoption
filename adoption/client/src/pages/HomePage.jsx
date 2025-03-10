@@ -10,9 +10,9 @@ function HomePage() {
 
       {/* Hero Section */}
       <header>
-        <h1>Find your new best friend</h1>
+        <h1 className="header">Adopt me!</h1>
         <img
-          src="https://zignature.com/wp-content/uploads/shutterstock_1048123303-scaled.jpg"
+          src="https://images.squarespace-cdn.com/content/v1/53a60116e4b0488fb14d69d8/1597336605370-5BEYBPCYKAZEMWC4J7KQ/ke17ZwdGBToddI8pDm48kLkXF2pIyv_F2eUT9F60jBl7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0iyqMbMesKd95J-X4EagrgU9L3Sa3U8cogeb0tjXbfawd0urKshkc5MgdBeJmALQKw/image-asset.jpeg"
           alt="Banner Image"
         />
       </header>
