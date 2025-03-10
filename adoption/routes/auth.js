@@ -8,7 +8,8 @@ const supersecret = process.env.SUPER_SECRET;
 const router = express.Router();
 const saltRounds = 10;
 
-// User Registration
+
+// User Registration WORKING
 router.post("/register", async (req, res) => {
   const { email, password, user_name, ...otherDetails } = req.body;
 
@@ -19,17 +20,28 @@ router.post("/register", async (req, res) => {
 
     const result = await db(
       `INSERT INTO users (user_name, zipcode, city, country, date_of_birth, phone, entity_name, entity_website, entity_registration_id, quiz_result, email, password) 
-       VALUES ("${user_name}", "${zipcode}", "${city}", "${country}", "${date_of_birth}", ${phone}, "${entity_name}", "${entity_website}", "${entity_registration_id}", "${quiz_result}", "${email}", "${hash}")`
+       VALUES ("${user_name}", "${zipcode}", "${city}", "${country}", "${date_of_birth}", "${phone}", "${entity_name}", "${entity_website}", "${entity_registration_id}", "${quiz_result}", "${email}", "${hash}")`
     );
 
-    res.send({ message: "User registration successful" });
+    const user_id = result.insertId;
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { user_id, email },
+      'yourSecretKey',
+      { expiresIn: '1h' }
+    );
+
+    // Return response with token and user_id
+    res.send({ message: "User registration successful", user_id, token });
 
   } catch (err) {
     res.status(400).send({ message: err.message });
   }
 });
 
-// User Login
+
+// User Login WORKING
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -66,7 +78,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// User Logout
+// User Logout WORKING
 router.post("/logout", (req, res) => {
 
   res.send({ message: "You have been logged out." });
