@@ -36,7 +36,7 @@ p, span, li{
 body, #root {
   margin: 0 auto;
   width: 100%;
-  background-color: var(--latte);
+  background-color: var(--skyblue);
 }
 
 header {
@@ -67,7 +67,7 @@ header h1 {
 }
 
 nav {
-  height: 60px; /* Adjust if needed */
+  height: 100px; /* Adjust if needed */
   background: var(--lemon);
   display: flex;
   align-items: center;
@@ -78,6 +78,7 @@ nav {
   top: 0;
   left: 0;
   z-index: 10;
+  border-bottom: 10px solid white;
 }
 
 .navbar {
@@ -86,6 +87,7 @@ nav {
 
 
 section {
+  border-top: 10px solid white;
   background-color: var(--celeste);
   padding: 50px;
   min-height: 600px;
