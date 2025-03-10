@@ -47,7 +47,7 @@ export default function UserDashboard() {
     },
   ]);
 
-  const [sortBy, setSortBy] = useState("dateApplied");
+  const [setSortBy] = useState("dateApplied");
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [responseMessage, setResponseMessage] = useState("");
 
