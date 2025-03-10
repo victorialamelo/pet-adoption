@@ -97,6 +97,11 @@ section {
   padding: 50px;
 }
 
+label {
+  font-weight: bold;
+  color: var(--lavender)
+}
+
 input {
   height: 55px;
 }
@@ -116,6 +121,10 @@ input:focus {
 .btn-primary:hover {
   background-color: var(--celeste);
   color: var(--skyblue);
+}
+
+.signup {
+  background-color: var(--sage);
 }
 
 .banner {
@@ -166,10 +175,6 @@ input:focus {
 
 .petgrid {
   background-color: var(--sage);
-}
-.card {
-  background-color: var(--latte);
-  border: 0px;
 }
 
 .postpet {

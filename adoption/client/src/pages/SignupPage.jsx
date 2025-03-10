@@ -99,7 +99,7 @@ export default function SignupPage() {
         <div className="container my-5">
           <div className="row justify-content-center">
             <div className="col-md-6">
-              <div className="card shadow p-4">
+              <div className="signup card p-4">
                 <h1 className="text-center mb-3">Sign Up</h1>
                 <form onSubmit={handleSubmit}>
                   {/* Full Name */}
@@ -152,18 +152,44 @@ export default function SignupPage() {
 
                   {/* Shelter/Organization Name (Only if posting a pet) */}
                   {role === "posting" && (
+                    <>
                     <div className="mb-3">
-                      <label htmlFor="shelter" className="form-label">Shelter/Organization Name (Optional)</label>
+                      <label htmlFor="shelter" className="form-label">Organization Name (Optional)</label>
                       <input
                         type="text"
                         id="shelter"
                         name="shelter"
                         className="form-control"
-                        placeholder="Enter shelter name (if applicable)"
+                        placeholder="Enter organization name"
                         value={shelterName}
                         onChange={(e) => setShelterName(e.target.value)}
                       />
                     </div>
+                    <div className="mb-3">
+                    <label htmlFor="website" className="form-label">Organization Website (Optional)</label>
+                    <input
+                      type="text"
+                      id="shelter"
+                      name="shelter"
+                      className="form-control"
+                      placeholder="Enter your organization's website"
+                      value={shelterName}
+                      onChange={(e) => setShelterName(e.target.value)}
+                    />
+                    </div>
+                    <div className="mb-3">
+                    <label htmlFor="registration-id" className="form-label">Organization Registration ID</label>
+                    <input
+                      type="text"
+                      id="shelter"
+                      name="shelter"
+                      className="form-control"
+                      placeholder="Enter your organization's registration ID/license"
+                      value={shelterName}
+                      onChange={(e) => setShelterName(e.target.value)}
+                    />
+                    </div>
+                  </>
                   )}
 
                   {/* Submit Button */}
