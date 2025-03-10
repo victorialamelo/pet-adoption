@@ -25,13 +25,16 @@ function Navbar() {
               <Link className="nav-link" to="/signup">FAQs</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/signup">Sign Up</Link>
-            </li>
-            <li className="nav-item">
               <Link className="nav-link" to="/petlist">Adopt a Friend</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/postpet">Post a Friend</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/userdashboard">Pet Dashboard</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/signup">Sign Up</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/login">Log In</Link>
