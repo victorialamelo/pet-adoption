@@ -49,13 +49,12 @@ return (
       <NavBar />
 
       <section className="my-5">
-        <div className="container">
+        <div className="container postpet">
           <h1 className="display-4 text-center mb-4">Post a Pet for Adoption</h1>
-
           <form onSubmit={handleSubmit}>
             <div className="row">
               {/* Left Column: Pet Details */}
-              <div className="col-md-6">
+              <div className="col-md-12">
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">Pet Name</label>
                   <input
@@ -70,20 +69,27 @@ return (
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="size" className="form-label">Size</label>
-                  <select
-                    className="form-select"
-                    id="size"
-                    name="size"
-                    value={petDetails.size}
+                  <label htmlFor="image" className="form-label">Pet Image</label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="image"
+                    name="image"
                     onChange={handleChange}
-                  >
-                    <option value="extra small">Extra Small</option>
-                    <option value="small">Small</option>
-                    <option value="medium">Medium</option>
-                    <option value="large">Large</option>
-                    <option value="extra large">Extra Large</option>
-                  </select>
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="story" className="form-label">Pet's Story</label>
+                  <textarea
+                    className="form-control"
+                    id="story"
+                    name="story"
+                    rows="6"
+                    value={petDetails.story}
+                    onChange={handleChange}
+                    placeholder="Tell us the story of your pet"
+                  />
                 </div>
 
                 <div className="mb-3">
@@ -96,19 +102,6 @@ return (
                     value={petDetails.age}
                     onChange={handleChange}
                     placeholder="Enter pet's age"
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="weight" className="form-label">Weight (kg)</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="weight"
-                    name="weight"
-                    value={petDetails.weight}
-                    onChange={handleChange}
-                    placeholder="Enter pet's weight"
                   />
                 </div>
 
@@ -128,6 +121,40 @@ return (
                 </div>
 
                 <div className="mb-3">
+                  <label htmlFor="weight" className="form-label">Weight (kg)</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="weight"
+                    name="weight"
+                    value={petDetails.weight}
+                    onChange={handleChange}
+                    placeholder="Enter pet's weight"
+                  />
+                </div>
+
+              </div>
+
+              {/* Right Column: Pet's Story, Image, and Boolean Inputs */}
+              <div className="col-md-12">
+              <div className="mb-3">
+                  <label htmlFor="size" className="form-label">Size</label>
+                  <select
+                    className="form-select"
+                    id="size"
+                    name="size"
+                    value={petDetails.size}
+                    onChange={handleChange}
+                  >
+                    <option value="extra small">Extra Small</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                    <option value="extra large">Extra Large</option>
+                  </select>
+                </div>
+
+                <div className="mb-3">
                   <label htmlFor="activity" className="form-label">Activity Level</label>
                   <select
                     className="form-select"
@@ -142,69 +169,47 @@ return (
                     <option value="lots of exercise">Lots of Exercise</option>
                   </select>
                 </div>
-              </div>
-
-              {/* Right Column: Pet's Story, Image, and Boolean Inputs */}
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label htmlFor="story" className="form-label">Pet's Story</label>
-                  <textarea
-                    className="form-control"
-                    id="story"
-                    name="story"
-                    rows="6"
-                    value={petDetails.story}
-                    onChange={handleChange}
-                    placeholder="Tell us the story of your pet"
-                  />
-                </div>
 
                 <div className="mb-3">
-                  <label htmlFor="image" className="form-label">Pet Image</label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="image"
-                    name="image"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="neutered" className="form-label">Neutered</label>
+                  <span className="ms-2 checkbox-span">Is the pet neutered?</span>
                   <input
                     type="checkbox"
+                    className="checkbox"
                     id="neutered"
                     name="neutered"
                     checked={petDetails.neutered}
                     onChange={handleChange}
                   />
-                  <span className="ms-2">Is the pet neutered?</span>
+                  <label htmlFor="neutered" className="form-label checkbox-label">Neutered</label>
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="specialNeeds" className="form-label">Special Needs</label>
+                  <span className="ms-2 checkbox-span">Does the pet have special needs?</span>
                   <input
+                    className="checkbox"
                     type="checkbox"
                     id="specialNeeds"
                     name="specialNeeds"
                     checked={petDetails.specialNeeds}
                     onChange={handleChange}
                   />
-                  <span className="ms-2">Does the pet have special needs?</span>
+                  <label htmlFor="specialNeeds" className="form-label checkbox-label">Special Needs</label>
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="pottyTrained" className="form-label">Potty Trained</label>
+                <span className="ms-2 checkbox-span">Is the pet potty trained?</span>
                   <input
                     type="checkbox"
+                    className="checkbox"
                     id="pottyTrained"
                     name="pottyTrained"
                     checked={petDetails.pottyTrained}
                     onChange={handleChange}
                   />
-                  <span className="ms-2">Is the pet potty trained?</span>
+                  <label htmlFor="pottyTrained" className="form-label checkbox-label"> Potty Trained</label>
                 </div>
+
+                <hr />
 
                 <div className="mb-3">
                   <label className="form-label">Good With</label>
