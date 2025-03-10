@@ -14,7 +14,7 @@ CREATE TABLE `Users`(
     `password` VARCHAR(255) NOT NULL,
     `date_of_birth` DATE NOT NULL,
     `phone` VARCHAR(20) NOT NULL,
-    `entity_name` BIGINT NOT NULL,
+    `entity_name` VARCHAR(255) NOT NULL,
     `entity_website` VARCHAR(255) NOT NULL,
     `entity_registration_id` BIGINT NOT NULL,
     `quiz_result` VARCHAR(255) NOT NULL
