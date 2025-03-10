@@ -41,7 +41,7 @@ body, #root {
 
 header {
   position: relative;
-  height: 554px; /* Adjust as needed */
+  min-height: 400px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -51,9 +51,10 @@ header {
 
 header img {
   position: absolute;
-  top: 0;
+  top: 25px;
   left: 0;
   width: 100%;
+  height: 600px;
   object-fit: cover; /* Makes the image fill the space */
 }
 
@@ -83,7 +84,12 @@ section {
   background-color: var(--mistyrose);
 }
 
-section, header, .row {
+section {
+  padding: 50px;
+  min-height: 600px;
+}
+
+.home-content {
   padding: 50px;
 }
 
@@ -123,6 +129,13 @@ input:focus {
   background-color: var(--latte);
 }
 
+.filter {
+  background-color: var(--celeste);
+}
+
+.petgrid {
+  background-color: var(--sage);
+}
 .card {
   background-color: var(--latte);
   border: 0px;
