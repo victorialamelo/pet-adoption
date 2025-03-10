@@ -17,8 +17,8 @@ function HomePage() {
         />
       </header>
 
-      {/* Testimonial Section */}
-      <section className="bg-light py-5 w-100">
+      {/* Intro Section */}
+      <section className="py-5 w-100 introduction">
         <div className="container-fluid">
           <div className="row align-items-center">
             <div className="col-md-12">
@@ -52,7 +52,7 @@ function HomePage() {
       </section>
 
       {/* Testimonial Section */}
-      <section className="bg-light py-5 w-100">
+      <section className="py-5 w-100 banner">
         <div className="container-fluid">
           <div className="row align-items-center">
             <div className="col-md-6">
@@ -67,7 +67,7 @@ function HomePage() {
       </section>
 
       {/* Donate Section */}
-      <section className="py-5 w-100">
+      <section className="py-5 w-100 donate">
         <div className="container-fluid text-center">
           <h2>💖 Donate and Change Lives</h2>
           <div className="row mt-4">

@@ -1,3 +1,16 @@
+:root {
+  --cherrypink: #FFB6C1;
+  --mistyrose: #f6dde0;
+  --skyblue: #87CEEB;
+  --celeste: #daf8f8;
+  --buff: #D4A373;
+  --lavender: #2a2a6a;
+  --peach: #FFCBA4;
+  --lemon: #FFFACD;
+  --sage: #DCE2BD;
+  --latte: #FFF8E7;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,7 +22,8 @@ h1, h2, h3, .navbar-brand {
   font-weight: 400;
   font-style: normal;
   text-transform: uppercase;
-  text-shadow:rgba(0, 0, 0, 0.5)
+  text-shadow:rgba(0, 0, 0, 0.5);
+  color: var(--lavender);
 }
 
 p, span, li{
@@ -17,9 +31,10 @@ p, span, li{
   font-size: 1.3em;
 }
 
-#root {
+body, #root {
   margin: 0 auto;
   width: 100%;
+  background-color: var(--sage);
 }
 
 header {
@@ -61,10 +76,30 @@ nav {
   left: 0;
   z-index: 10;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+section {
+  background-color: var(--mistyrose);
 }
 
 section, header, .row {
   padding: 50px;
+}
+
+.banner {
+  background-color: var(--sage);
+}
+
+.introduction {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  height: 400px;
+  background-color: var(--celeste);
+}
+
+.donate {
+  background-color: var(--latte);
 }
 
 .postpet {
