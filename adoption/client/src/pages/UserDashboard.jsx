@@ -6,6 +6,7 @@ import NavBar from "../components/NavBar";
 import "../App.css";
 
 export default function UserDashboard({ userType }) {
+  const [selectedPet, setSelectedPet] = useState(null);
   const [pets, setPets] = useState([
     {
       id: 1,
@@ -51,6 +52,49 @@ export default function UserDashboard({ userType }) {
       requests: []
     }
   ]);
+  const samplePets = [
+    {
+      id: 1,
+      name: "Buddy",
+      age: "2 years",
+      size: "Medium",
+      weight: 30,
+      activity: "High",
+      specialNeeds: "None",
+      pottyTrained: true,
+      neutered: true,
+      goodWith: ["Cats", "Dogs", "Kids"],
+      datePosted: "2025-03-10",
+      applicants: [
+        {
+          id: 1,
+          name: "Alice Johnson",
+          contact: "alice@example.com",
+          dateApplied: "2025-03-05"
+        },
+        {
+          id: 2,
+          name: "Bob Smith",
+          contact: "bob@example.com",
+          dateApplied: "2025-03-06"
+        }
+      ]
+    },
+    {
+      id: 2,
+      name: "Luna",
+      age: "3 years",
+      size: "Small",
+      weight: 15,
+      activity: "Medium",
+      specialNeeds: "Dietary restrictions",
+      pottyTrained: false,
+      neutered: true,
+      goodWith: ["Dogs"],
+      datePosted: "2025-03-08",
+      applicants: []
+    }
+  ];
 
   const [selectedChat, setSelectedChat] = useState(null);
 
@@ -83,58 +127,98 @@ export default function UserDashboard({ userType }) {
 
       <section className="dashboard-container row">
       <h1>Pets Posted</h1>
-      <Table striped bordered hover className="pets-table">
+      <div>
+      <Table className="pets-table">
         <thead>
           <tr>
-            <th>Photo</th>
-            <th>Name</th>
+            <th colSpan={2}>Pet</th>
+            <th>Details</th>
             <th>Date Posted</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {pets.map(pet => (
-            <tr key={pet.id}>
-              <td><Image src="../src/assets/dogsvg.svg" width={50} rounded /></td>
-              <td>{pet.name}</td>
-              <td>{pet.datePosted}</td>
-              <td>
-                <select
-                    className="form-applicationstatus"
-                    id="applicationstatus"
-                    name="applicationstatus"
-                    value="applicationstatus"
-                    onChange=""
-                  >
+          {samplePets.map((pet) => (
+            <>
+              <tr key={pet.id}>
+                <td rowSpan={3} style={{ width: "150px", textAlign: "center" }}>
+                  <Image src="../src/assets/dogsvg.svg" width={100} rounded />
+                </td>
+                <td rowSpan={3} style={{ verticalAlign: "middle" }}>
+                  <strong>{pet.name}</strong>
+                </td>
+                <td>Age: {pet.age}, Size: {pet.size}, Weight: {pet.weight} lbs</td>
+                <td rowSpan={3}>{pet.datePosted}</td>
+                <td rowSpan={3}>
+                  <select className="form-applicationstatus">
                     <option value="Available">Available</option>
                     <option value="Adopted">Adopted</option>
                     <option value="Archived">Archived</option>
-                </select>
-              </td>
-              <td>
-                <Button variant="btn btn-primary warning">Edit Details</Button>{' '}
-                <Button variant="btn btn-primary info">Applicants</Button>
-              </td>
-            </tr>
+                  </select>
+                </td>
+                <td rowSpan={3}>
+                  <Button variant="warning">Edit Details</Button>{" "}
+                  <Button variant="info" onClick={() => setSelectedPet(pet)}>
+                    Applicants
+                  </Button>
+                </td>
+              </tr>
+              <tr>
+                <td>Activity: {pet.activity}, Special Needs: {pet.specialNeeds}</td>
+              </tr>
+              <tr>
+                <td>
+                  Potty Trained: {pet.pottyTrained ? "Yes" : "No"}, Neutered: {pet.neutered ? "Yes" : "No"},
+                  Good with: {pet.goodWith}
+                </td>
+              </tr>
+            </>
           ))}
         </tbody>
       </Table>
-            <h1>Adoption Requests</h1>
-            {pets.flatMap(pet => pet.requests).length === 0 ? (
-              <p>No requests yet.</p>
-            ) : (
-              <ListGroup className="requests-list">
-                {pets.flatMap(pet => pet.requests).map(req => (
-                  <ListGroup.Item key={req.id} className="request-item">
-                    <strong>{req.adopterName}</strong> - Applied on {req.dateApplied}
-                    <Button variant="primary" className="ml-2" onClick={() => setSelectedChat(req)}>View Messages</Button>
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-            )}
 
-          <>
+      {selectedPet && (
+        <div className="applicants-section">
+          <h3>Applicants for {selectedPet.name}</h3>
+          <p>
+            Age: {selectedPet.age}, Size: {selectedPet.size}, Weight: {selectedPet.weight} lbs, Activity: {selectedPet.activity}
+          </p>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>User Name</th>
+                <th>Contact Info</th>
+                <th>Date Applied</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedPet.applicants.map((applicant) => (
+                <tr key={applicant.id}>
+                  <td>{applicant.name}</td>
+                  <td>{applicant.contact}</td>
+                  <td>{applicant.dateApplied}</td>
+                  <td>
+                    <Button variant="primary">Message</Button>{" "}
+                    <select>
+                      <option value="Pending">Pending</option>
+                      <option value="Approved">Approved</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Button variant="secondary" onClick={() => setSelectedPet(null)}>
+            Close
+          </Button>
+        </div>
+      )}
+    </div>
+
+          {/* <>
             <h1>Adopter Dashboard</h1>
             <h2>Favorite Pets</h2>
             <Row className="favorite-pets">
@@ -169,7 +253,7 @@ export default function UserDashboard({ userType }) {
 
 
 
-        {/* <div className="chat-panel">
+        <div className="chat-panel">
           <h3>Chat with {selectedChat.adopterName}</h3>
           <ListGroup className="chat-history">
             {selectedChat.chatHistory.map((msg, index) => (

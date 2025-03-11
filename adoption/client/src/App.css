@@ -223,6 +223,26 @@ input:focus {
 }
 
 .dashboard-container {
-  min-height: 1000px;
+  background-color: var(--sage);
+}
+
+tbody,th,td {
+  border-top: 1px solid var(--lavender);
+  border-bottom: 1px solid var(--lavender)
+}
+
+th {
+  font-size: 1.2em;
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+  font-style: normal;
+  text-transform: uppercase;
+  color: var(--lavender);
+}
+
+.form-applicationstatus {
+  padding: 5px;
   background-color: var(--latte);
+  color: var(--lavender);
+  height: 55px;
 }
