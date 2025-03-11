@@ -4,23 +4,23 @@ DROP TABLE IF EXISTS `Users`,
 `Requests`,
 `Posts`;
 -- Create Users table
-CREATE TABLE `Users`(
+CREATE TABLE `Users` (
     `user_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_name` VARCHAR(255) NOT NULL,
     `zipcode` VARCHAR(255) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
     `country` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
     `date_of_birth` DATE NOT NULL,
     `phone` VARCHAR(20) NOT NULL,
-    `entity_name` VARCHAR(255) NOT NULL,
-    `entity_website` VARCHAR(255) NOT NULL,
-    `entity_registration_id` BIGINT NOT NULL,
+    `entity_name` VARCHAR(255),
+    `entity_website` VARCHAR(255),
+    `entity_registration_id` BIGINT,
     `quiz_result` VARCHAR(255) NOT NULL
 );
 -- Create Pets table
-CREATE TABLE `Pets`(
+CREATE TABLE `Pets` (
     `pet_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `animal_type` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
@@ -28,21 +28,26 @@ CREATE TABLE `Pets`(
     `size` VARCHAR(255) NOT NULL,
     `gender` VARCHAR(255) NOT NULL,
     `activity_level` VARCHAR(255) NOT NULL,
-    `good_with` VARCHAR(255) NOT NULL,
+    `good_with_cats` BOOLEAN NOT NULL,
+    `good_with_dogs` BOOLEAN NOT NULL,
+    `good_with_kids` BOOLEAN NOT NULL,
+    `good_with_smallspaces` BOOLEAN NOT NULL,
     `neutered` BOOLEAN NOT NULL,
-    `has_especial_needs` BOOLEAN NOT NULL,
+    `has_special_needs` BOOLEAN NOT NULL,
     `potty_trained` BOOLEAN NOT NULL,
     `img_url` VARCHAR(255) NOT NULL,
-    `pet_description` VARCHAR(255) NOT NULL
+    `pet_description` VARCHAR(255) NOT NULL,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    CONSTRAINT `pets_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
 );
 -- Create Requests table
-CREATE TABLE `Requests`(
+CREATE TABLE `Requests` (
     `request_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pet_id` BIGINT UNSIGNED NOT NULL,
     `requester_id` BIGINT UNSIGNED NOT NULL,
     `request_date` DATE NOT NULL,
     `request_status` VARCHAR(255) NOT NULL,
-    `request_message` VARCHAR(255) NOT NULL
+    `request_message` TEXT NOT NULL
 );
 -- Adding foreign key constraints for Requests table
 ALTER TABLE `Requests`
@@ -50,7 +55,7 @@ ADD CONSTRAINT `requests_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets
 ALTER TABLE `Requests`
 ADD CONSTRAINT `requests_requester_id_foreign` FOREIGN KEY (`requester_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
 -- Create Posts table
-CREATE TABLE `Posts`(
+CREATE TABLE `Posts` (
     `post_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pet_id` BIGINT UNSIGNED NOT NULL,
     `post_owner_id` BIGINT UNSIGNED NOT NULL,
