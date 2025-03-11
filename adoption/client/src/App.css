@@ -224,10 +224,10 @@ input:focus {
 
 .dashboard-container {
   background-color: var(--sage);
+  margin: 0 auto;
 }
 
 tbody,th,td {
-  border-top: 1px solid var(--lavender);
   border-bottom: 1px solid var(--lavender)
 }
 
@@ -243,6 +243,10 @@ th {
 .form-applicationstatus {
   padding: 5px;
   background-color: var(--latte);
+  height: 43px;
+  border-radius: 7px;
+  font-size: 1.2em;
+  font-weight: 400;
+  font-style: normal;
   color: var(--lavender);
-  height: 55px;
 }

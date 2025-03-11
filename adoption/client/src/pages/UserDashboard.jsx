@@ -1,6 +1,7 @@
 /*eslint-disable no-unused-vars*/
 import { useState } from "react";
-import { Table, Button, Card, Image, Form, ListGroup, Container, Row, Col } from "react-bootstrap";
+import { Accordion, AccordionItem } from "react-bootstrap";
+import { Image, Card, Button, Dropdown, DropdownButton, Form }from "react-bootstrap";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import "../App.css";
@@ -52,6 +53,20 @@ export default function UserDashboard({ userType }) {
       requests: []
     }
   ]);
+
+
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [editing, setEditing] = useState(false);
+
+  // SAMPLE ORGANIZATION DATA
+  const [profile, setProfile] = useState({
+    name: "Protectora BCN",
+    website: "https://protectorabcn.es/",
+    registrationID: "123-456-789",
+    about: "Volunteer-run animal rescue group, connecting shelters with the community 🐾. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tempus tellus eu leo dictum cursus. Maecenas eleifend libero interdum eleifend condimentum. Fusce justo nibh, mattis sit amet tellus at, pretium ullamcorper augue. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+  });
+
+  // SAMPLE PETS
   const samplePets = [
     {
       id: 1,
@@ -96,7 +111,18 @@ export default function UserDashboard({ userType }) {
     }
   ];
 
-  const [selectedChat, setSelectedChat] = useState(null);
+  const [formData, setFormData] = useState(profile);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setProfile(formData);
+    setEditing(false);
+  };
 
   return (
     <>
@@ -108,116 +134,129 @@ export default function UserDashboard({ userType }) {
       </header>
 
       <section className="dashboard-container row">
+        <div className="col-md-6">
+          <h1>{profile.name} Dashboard</h1>
+          <img src="../src/assets/dogsvg.svg" width={500} alt="Dog Logo" />
+        </div>
 
-          <div className="col-md-6">
-            <h1></h1>
-            <img src="../src/assets/dogsvg.svg" width={500}  alt="" />
-          </div>
+        <div className="col-md-6">
+          {editing ? (
+            <form onSubmit={handleSubmit} className="profile-form">
+              <label>Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="form-control"
+              />
 
-          <div className="col-md-6">
-            <h1>Organization Dashboard</h1>
-            <p>The Paw Portal            </p>
-            <p>https://www.instagram.com/thepawportal</p>
-            <p>Organization Registration ID</p>
-            <p>About Us</p>
-            <span>Volunteer-run animal rescue group, connecting shelters with community 🐾</span>
-            <Link to="/postpet" className="btn btn-primary w-100">Post a Pet</Link>
-          </div>
+              <label>Website</label>
+              <input
+                type="url"
+                name="website"
+                value={formData.website}
+                onChange={handleChange}
+                className="form-control"
+              />
+
+              <label>Registration ID</label>
+              <input
+                type="text"
+                name="registrationID"
+                value={formData.registrationID}
+                onChange={handleChange}
+                className="form-control"
+              />
+
+              <label>About Us</label>
+              <textarea
+                name="about"
+                value={formData.about}
+                onChange={handleChange}
+                className="form-control"
+              />
+
+              <button type="submit" className="btn btn-success mt-3 w-100">Save</button>
+              <button type="button" onClick={() => setEditing(false)} className="btn btn-secondary mt-2 w-100">Cancel</button>
+            </form>
+          ) : (
+            <>
+              <h1>{profile.name}</h1>
+              <a href={profile.website} target="_blank" rel="noopener noreferrer">{profile.name} website</a>
+              <p>Organization Registration ID: {profile.registrationID}</p>
+              <p>About Us</p>
+              <span>{profile.about}</span>
+              <Link to="/postpet" className="btn btn-primary w-100 mt-5">Post a Pet</Link>
+              <button onClick={() => setEditing(true)} className="btn btn-primary w-100 mt-3">Edit Profile</button>
+            </>
+          )}
+        </div>
       </section>
 
       <section className="dashboard-container row">
-      <h1>Pets Posted</h1>
-      <div>
-      <Table className="pets-table">
-        <thead>
-          <tr>
-            <th colSpan={2}>Pet</th>
-            <th>Details</th>
-            <th>Date Posted</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {samplePets.map((pet) => (
-            <>
-              <tr key={pet.id}>
-                <td rowSpan={3} style={{ width: "150px", textAlign: "center" }}>
-                  <Image src="../src/assets/dogsvg.svg" width={100} rounded />
-                </td>
-                <td rowSpan={3} style={{ verticalAlign: "middle" }}>
-                  <strong>{pet.name}</strong>
-                </td>
-                <td>Age: {pet.age}, Size: {pet.size}, Weight: {pet.weight} lbs</td>
-                <td rowSpan={3}>{pet.datePosted}</td>
-                <td rowSpan={3}>
-                  <select className="form-applicationstatus">
+      <h1>Posted Peluditos</h1>
+      <div className="space-y-4">
+      <Accordion defaultActiveKey="0">
+        {samplePets.map((pet, index) => (
+          <Card key={pet.id}>
+            <Accordion.Item eventKey={index.toString()}>
+              <Accordion.Header>
+                <div className="d-flex align-items-center gap-4 w-100">
+                  <Image src="../src/assets/dogsvg.svg" width={80} height={80} alt={pet.name} className="rounded" />
+                  <div className="flex-1">
+                    <h3 className="font-weight-bold">{pet.name}</h3>
+                    <p className="text-muted">Age: {pet.age} | Size: {pet.size} | Weight: {pet.weight} lbs</p>
+                  </div>
+                  <Form.Select defaultValue={pet.status} style={{ width: '130px' }}>
                     <option value="Available">Available</option>
                     <option value="Adopted">Adopted</option>
                     <option value="Archived">Archived</option>
-                  </select>
-                </td>
-                <td rowSpan={3}>
-                  <Button variant="warning">Edit Details</Button>{" "}
-                  <Button variant="info" onClick={() => setSelectedPet(pet)}>
-                    Applicants
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>Activity: {pet.activity}, Special Needs: {pet.specialNeeds}</td>
-              </tr>
-              <tr>
-                <td>
-                  Potty Trained: {pet.pottyTrained ? "Yes" : "No"}, Neutered: {pet.neutered ? "Yes" : "No"},
-                  Good with: {pet.goodWith}
-                </td>
-              </tr>
-            </>
-          ))}
-        </tbody>
-      </Table>
+                  </Form.Select>
+                </div>
+              </Accordion.Header>
+              <Accordion.Body>
+                <div className="p-3">
+                  <p><strong>Activity:</strong> {pet.activity}</p>
+                  <p><strong>Special Needs:</strong> {pet.specialNeeds}</p>
+                  <p><strong>Potty Trained:</strong> {pet.pottyTrained ? "Yes" : "No"} | <strong>Neutered:</strong> {pet.neutered ? "Yes" : "No"}</p>
+                  <p><strong>Good with:</strong> {pet.goodWith}</p>
+                  <div className="d-flex gap-2 mt-3">
+                    <Button variant="outline-secondary">Edit</Button>
+                    <Button variant="primary" onClick={() => setSelectedPet(pet)}>View Applicants</Button>
+                  </div>
+                </div>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Card>
+        ))}
+      </Accordion>
 
       {selectedPet && (
-        <div className="applicants-section">
-          <h3>Applicants for {selectedPet.name}</h3>
-          <p>
-            Age: {selectedPet.age}, Size: {selectedPet.size}, Weight: {selectedPet.weight} lbs, Activity: {selectedPet.activity}
-          </p>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>User Name</th>
-                <th>Contact Info</th>
-                <th>Date Applied</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedPet.applicants.map((applicant) => (
-                <tr key={applicant.id}>
-                  <td>{applicant.name}</td>
-                  <td>{applicant.contact}</td>
-                  <td>{applicant.dateApplied}</td>
-                  <td>
-                    <Button variant="primary">Message</Button>{" "}
-                    <select>
-                      <option value="Pending">Pending</option>
-                      <option value="Approved">Approved</option>
-                      <option value="Rejected">Rejected</option>
-                    </select>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Button variant="secondary" onClick={() => setSelectedPet(null)}>
-            Close
-          </Button>
+        <div className="p-4 border rounded-lg shadow-sm mt-4">
+          <h3 className="font-weight-bold">Applicants for {selectedPet.name}</h3>
+          <p className="text-muted">Age: {selectedPet.age} | Size: {selectedPet.size} | Weight: {selectedPet.weight} lbs</p>
+          <div className="mt-3 space-y-2">
+            {selectedPet.applicants.map((applicant) => (
+              <div key={applicant.id} className="p-2 border rounded-md d-flex justify-content-between align-items-center">
+                <div>
+                  <p className="font-weight-medium">{applicant.name}</p>
+                  <p className="text-muted">{applicant.contact}</p>
+                  <p className="text-muted">Applied on {applicant.dateApplied}</p>
+                </div>
+                <Form.Select defaultValue="Pending" style={{ width: '120px' }}>
+                  <option value="Pending">Pending</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                </Form.Select>
+                <Button size="sm" variant="outline-primary">Message</Button>
+              </div>
+            ))}
+          </div>
+          <Button variant="secondary" onClick={() => setSelectedPet(null)} className="mt-3">Close</Button>
         </div>
       )}
     </div>
-
           {/* <>
             <h1>Adopter Dashboard</h1>
             <h2>Favorite Pets</h2>
