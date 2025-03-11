@@ -1,88 +1,72 @@
-// Load environment variables from a .env file
 require("dotenv").config();
+const mysql = require("mysql");
 
-// Import the MySQL module to interact with the database
-const mysql = require("mysql2");
-
-/**
- * Those are JSDoc comments, a special type of comment used to document JavaScript functions, parameters, and return values.
-
-@param {string} query → Describes that the query parameter is a string and represents an SQL query.
-@returns {Promise<object>} → Indicates that the function returns a Promise that resolves to an object.
- * Asynchronous function to execute a database query.
- * @param {string} query - The SQL query to execute.
- * @returns {Promise<object>} - A promise that resolves with the query results or an error.
- */
 module.exports = async function db(query) {
-    // Initialize an object to store query results and errors
-    const results = {
-        data: [],
-        error: null,
-    };
+	const results = {
+		data: [],
+		error: null,
+	};
+	let promise = await new Promise((resolve, reject) => {
+		const DB_HOST = process.env.DB_HOST;
+		const DB_USER = process.env.DB_USER;
+		const DB_PASS = process.env.DB_PASS;
+		const DB_NAME = process.env.DB_NAME;
 
-    // Return a promise that handles the database query execution
-    let promise = await new Promise((resolve, reject) => {
-        // Retrieve database credentials from environment variables
-        const DB_HOST = process.env.DB_HOST;
-        const DB_USER = process.env.DB_USER;
-        const DB_PASS = process.env.DB_PASS;
-        const DB_NAME = process.env.DB_NAME;
+		const con = mysql.createConnection({
+			host: DB_HOST || "127.0.0.1",
+			user: DB_USER || "root",
+			password: DB_PASS,
+			database: DB_NAME || "database",
+			multipleStatements: true,
+		});
 
-        // Create a connection to the MySQL database
-        const con = mysql.createConnection({
-            host: DB_HOST || "127.0.0.1", // Default to localhost if not provided
-            user: DB_USER || "root", // Default to "root" if not provided
-            password: DB_PASS, // Use provided password or undefined
-            database: DB_NAME || "database", // Default database name is "database"
-            multipleStatements: true, // Allows execution of multiple SQL statements in one query
-        });
+		con.connect(function (err) {
+			if (err) throw err;
+			console.log("Connected!");
 
-        // Establish the connection to the database
-        con.connect(function (err) {
-            if (err) throw err; // If connection fails, throw an error
-            console.log("Connected!"); // Log successful connection
+			con.query(query, function (err, result) {
+				if (err) {
+					results.error = err;
+					console.log(err);
+					reject(err);
+					con.end();
+					return;
+				}
 
-            // Execute the provided SQL query
-            con.query(query, function (err, result) {
-                if (err) {
-                    // If an error occurs, store it in the results object and reject the promise
-                    results.error = err;
-                    console.log(err);
-                    reject(err);
-                    con.end(); // Close the database connection
-                    return;
-                }
+				if (!result.length) {
+                    if (result.insertId) {
+						results.insertId = result.insertId; // Store the inserted ID
+						console.log(results);
+					}
+					if (result.affectedRows === 0) {
+						results.error = "Action not complete";
+						console.log(err);
+						reject(err);
+						con.end();
+						return;
+					}
 
-                // Handle different types of MySQL query results
-                if (!result.length) {
-                    // If the query does not return a result set
-                    if (result.affectedRows === 0) {
-                        results.error = "Action not complete"; // No rows were affected
-                        console.log(err);
-                        reject(err);
-                        con.end();
-                        return;
-                    }
-
-                    // The following line was removed because it caused an unnecessary nested array:
-                    // results.data.push(result);
-                } else if (result[0].constructor.name == "RowDataPacket") {
-                    // If the result contains rows, push each row into the data array
-                    result.forEach((row) => results.data.push(row));
-                } else if (result[0].constructor.name == "OkPacket") {
-                    // If the result contains an OkPacket (e.g., from an INSERT operation),
-                    // push the first item in the result list (e.g., LAST_INSERT_ID())
-                    results.data.push(result[0]);
-                    if (result[0].insertId) {
+					// push the result (which should be an OkPacket) to data
+					// germinal - removed next line because it returns an array in an array when empty set
+					// results.data.push(result);
+				} else if (result[0].constructor.name == "RowDataPacket") {
+					// push each row (RowDataPacket) to data
+					result.forEach((row) => results.data.push(row));
+				} else if (result[0].constructor.name == "OkPacket") {
+					// push the first item in result list to data (this accounts for situations
+					// such as when the query ends with SELECT LAST_INSERT_ID() and returns an insertId)
+					results.data.push(result[0]);
+					// ✅ If it's an INSERT query, we also add the `insertId`
+					if (result[0].insertId) {
 						results.insertId = result[0].insertId; // Store the inserted ID
 					}
-                }
+				}
 
-                con.end(); // Close the database connection
-                resolve(results); // Resolve the promise with the results
-            });
-        });
-    });
+				con.end();
+				resolve(results);
+			});
+		});
+	});
 
-    return promise; // Return the promise with the query results
+	return promise;
 };
