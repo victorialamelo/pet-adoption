@@ -17,26 +17,26 @@
   padding: 0;
 }
 
-h1, h2, h3, .navbar-brand {
+h1, .navbar-brand {
   font-family: "Shrikhand", serif;
   font-weight: 400;
   font-style: normal;
   text-transform: uppercase;
-  text-shadow:rgba(0, 0, 0, 0.5);
   color: var(--lavender);
 }
 
-p, span, li{
+h2, h3, p, span, li{
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
-  font-size: 1.3em
+  font-size: 1.3em;
+  color: var(--lavender);
 }
 
 body, #root {
   margin: 0 auto;
   width: 100%;
-  background-color: var(--skyblue);
+  background-color: var(--celeste);
 }
 
 header {
@@ -144,8 +144,8 @@ input:focus {
   color: var(--skyblue);
 }
 
-.signup {
-  background-color: var(--sage);
+.signup, .login {
+  background-color: var(--latte);
 }
 
 .banner {
@@ -203,6 +203,11 @@ input:focus {
   padding: 30px;
 }
 
+.user-dashboard {
+  background-color: var(--celeste);
+  padding: 70px;
+}
+
 .checkbox-span {
   padding-right: 10px;
   display: block;
@@ -215,4 +220,10 @@ input:focus {
 
 #specialNeeds, #neutered, #pottyTrained {
   margin-left: 10px;
+}
+
+.dashboard-container {
+  min-height: 1000px;
+  padding: 70px 20px 20px 20px;
+  width: 100%;
 }
