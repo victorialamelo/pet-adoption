@@ -53,7 +53,7 @@ export default function LoginPage() {
         <div className="container my-5">
           <div className="row justify-content-center">
             <div className="col-md-6">
-              <div className="card shadow p-4">
+              <div className="login p-4">
                 <h1 className="text-center mb-3">Welcome Back!</h1>
                 <form onSubmit={handleSubmit}>
 

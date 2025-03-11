@@ -29,21 +29,57 @@ export default function PetListPage() {
       <NavBar />
 
       {/* Hero Header */}
-      <header className="bg-light py-5 text-center">
-        <div className="container">
-          <h1 className="display-4 fw-bold">Find your best friend and explore more about our amazing pets</h1>
-          <img src="https://i.ytimg.com/vi/fOd16PT1S7A/maxresdefault.jpg" alt="" />
+      <header className="text-center">
+        <div className="herosection">
+          <img src="../src/assets/pinkcat.jpg" alt="" />
         </div>
       </header>
 
       {/* Filters Section */}
-      <section className="my-5">
+      <section className="filter">
         <div className="container">
           <h2 className="mb-4">Filter Pets</h2>
           <form>
             <div className="row">
+
+              {/* Age */}
+              <div className="col-md-6 mb-3">
+                <label htmlFor="age" className="form-label">Age</label>
+                <select
+                  id="age"
+                  name="age"
+                  className="form-select"
+                  value={filters.age}
+                  onChange={handleFilterChange}
+                  placeholder="Enter age"
+                >
+                  <option value="">Select Age</option>
+                  <option value="Puppy">Puppy</option>
+                  <option value="Teenager">Teenager</option>
+                  <option value="Adult">Adult</option>
+                  <option value="Senior">Senior</option>
+                </select>
+              </div>
+
+              {/* Gender */}
+              <div className="col-md-6">
+                <label htmlFor="gender" className="form-label">Gender</label>
+                <select
+                  id="gender"
+                  name="gender"
+                  className="form-select"
+                  value={filters.gender}
+                  onChange={handleFilterChange}
+                >
+                  <option value="">Select gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="unknown">Unknown</option>
+                </select>
+              </div>
+
               {/* Size */}
-              <div className="col-md-3">
+              <div className="col-md-6 mt-3">
                 <label htmlFor="size" className="form-label">Size</label>
                 <select
                   id="size"
@@ -61,53 +97,8 @@ export default function PetListPage() {
                 </select>
               </div>
 
-              {/* Age */}
-              <div className="col-md-3">
-                <label htmlFor="age" className="form-label">Age</label>
-                <input
-                  type="number"
-                  id="age"
-                  name="age"
-                  className="form-control"
-                  value={filters.age}
-                  onChange={handleFilterChange}
-                  placeholder="Enter age"
-                />
-              </div>
-
-              {/* Weight */}
-              <div className="col-md-3">
-                <label htmlFor="weight" className="form-label">Weight (kg)</label>
-                <input
-                  type="number"
-                  id="weight"
-                  name="weight"
-                  className="form-control"
-                  value={filters.weight}
-                  onChange={handleFilterChange}
-                  placeholder="Enter weight"
-                />
-              </div>
-
-              {/* Gender */}
-              <div className="col-md-3">
-                <label htmlFor="gender" className="form-label">Gender</label>
-                <select
-                  id="gender"
-                  name="gender"
-                  className="form-select"
-                  value={filters.gender}
-                  onChange={handleFilterChange}
-                >
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="unknown">Unknown</option>
-                </select>
-              </div>
-
               {/* Activity Level */}
-              <div className="col-md-3 mt-3">
+              <div className="col-md-6 mt-3">
                 <label htmlFor="activity" className="form-label">Activity Level</label>
                 <select
                   id="activity"
@@ -124,47 +115,8 @@ export default function PetListPage() {
                 </select>
               </div>
 
-              {/* Neutered */}
-              <div className="col-md-3 mt-3">
-                <label htmlFor="neutered" className="form-label">Neutered</label>
-                <input
-                  type="checkbox"
-                  id="neutered"
-                  name="neutered"
-                  checked={filters.neutered}
-                  onChange={handleFilterChange}
-                  className="form-check-input"
-                />
-              </div>
-
-              {/* Special Needs */}
-              <div className="col-md-3 mt-3">
-                <label htmlFor="specialNeeds" className="form-label">Has Special Needs</label>
-                <input
-                  type="checkbox"
-                  id="specialNeeds"
-                  name="specialNeeds"
-                  checked={filters.specialNeeds}
-                  onChange={handleFilterChange}
-                  className="form-check-input"
-                />
-              </div>
-
-              {/* Potty Trained */}
-              <div className="col-md-3 mt-3">
-                <label htmlFor="pottyTrained" className="form-label">Potty Trained</label>
-                <input
-                  type="checkbox"
-                  id="pottyTrained"
-                  name="pottyTrained"
-                  checked={filters.pottyTrained}
-                  onChange={handleFilterChange}
-                  className="form-check-input"
-                />
-              </div>
-
               {/* Good With */}
-              <div className="col-md-3 mt-3">
+              <div className="col-md-6 mt-3">
                 <label htmlFor="goodWith" className="form-label">Good With</label>
                 <select
                   id="goodWith"
@@ -180,13 +132,51 @@ export default function PetListPage() {
                   <option value="small-spaces">Small Spaces</option>
                 </select>
               </div>
-            </div>
+
+              {/* Special Needs, Potty Trained, Neutered */}
+              <div className="col-md-6 mt-3">
+                <h4 className="mt-3">Care & Behavior</h4>
+                {/* Special Needs */}
+                <label htmlFor="specialNeeds" className="form-label mt-3">Has Special Needs</label>
+                <input
+                  type="checkbox"
+                  id="specialNeeds"
+                  name="specialNeeds"
+                  checked={filters.specialNeeds}
+                  onChange={handleFilterChange}
+                  className="form-check-input mt-3"
+                />
+                <hr />
+                {/* Potty Trained */}
+                <label htmlFor="pottyTrained" className="form-label">Potty Trained</label>
+                <input
+                  type="checkbox"
+                  id="pottyTrained"
+                  name="pottyTrained"
+                  checked={filters.pottyTrained}
+                  onChange={handleFilterChange}
+                  className="form-check-input"
+                />
+                 <hr />
+                {/* Neutered */}
+                <label htmlFor="neutered" className="form-label">Neutered</label>
+                <input
+                  type="checkbox"
+                  id="neutered"
+                  name="neutered"
+                  checked={filters.neutered}
+                  onChange={handleFilterChange}
+                  className="form-check-input"
+                />
+              </div>
+
+              </div>
           </form>
         </div>
       </section>
 
       {/* Pet Grid */}
-      <section className="my-5">
+      <section className="petgrid">
         <div className="container">
           <h2 className="mb-4">Explore Our Pets</h2>
           <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
