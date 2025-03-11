@@ -224,6 +224,5 @@ input:focus {
 
 .dashboard-container {
   min-height: 1000px;
-  padding: 70px 20px 20px 20px;
-  width: 100%;
+  background-color: var(--latte);
 }

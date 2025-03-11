@@ -63,41 +63,63 @@ export default function UserDashboard({ userType }) {
         <img src="../src/assets/rosedog.jpg" alt="" />
       </header>
 
-      <Container className="dashboard-container">
-          <>
-            <h1>Organization Dashboard</h1>
-            <p>Organization Name</p>
-            <p>Organization Website</p>
-            <p>Organization Registration ID</p>
-            <p>Organization About Us</p>
-            <Button variant="primary" className="ml-2" onClick={() => console.log("Post a Pet")}>Post a Pet</Button>
-            <hr />
-            <h1>Pets Posted</h1>
+      <section className="dashboard-container row">
 
-            <Table striped bordered hover className="pets-table">
-              <thead>
-                <tr>
-                  <th>Photo</th>
-                  <th>Name</th>
-                  <th>Date Posted</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pets.map(pet => (
-                  <tr key={pet.id}>
-                    <td><Image src="../src/assets/dogsvg.svg" width={50} rounded /></td>
-                    <td>{pet.name}</td>
-                    <td>{pet.datePosted}</td>
-                    <td>
-                      <Button variant="warning">Edit Details</Button>{' '}
-                      <Button variant="info">Applicants</Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-           <hr/>
+          <div className="col-md-6">
+            <h1></h1>
+            <img src="../src/assets/dogsvg.svg" width={500}  alt="" />
+          </div>
+
+          <div className="col-md-6">
+            <h1>Organization Dashboard</h1>
+            <p>The Paw Portal            </p>
+            <p>https://www.instagram.com/thepawportal</p>
+            <p>Organization Registration ID</p>
+            <p>About Us</p>
+            <span>Volunteer-run animal rescue group, connecting shelters with community 🐾</span>
+            <Link to="/postpet" className="btn btn-primary w-100">Post a Pet</Link>
+          </div>
+      </section>
+
+      <section className="dashboard-container row">
+      <h1>Pets Posted</h1>
+      <Table striped bordered hover className="pets-table">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Date Posted</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pets.map(pet => (
+            <tr key={pet.id}>
+              <td><Image src="../src/assets/dogsvg.svg" width={50} rounded /></td>
+              <td>{pet.name}</td>
+              <td>{pet.datePosted}</td>
+              <td>
+                <select
+                    className="form-applicationstatus"
+                    id="applicationstatus"
+                    name="applicationstatus"
+                    value="applicationstatus"
+                    onChange=""
+                  >
+                    <option value="Available">Available</option>
+                    <option value="Adopted">Adopted</option>
+                    <option value="Archived">Archived</option>
+                </select>
+              </td>
+              <td>
+                <Button variant="btn btn-primary warning">Edit Details</Button>{' '}
+                <Button variant="btn btn-primary info">Applicants</Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
             <h1>Adoption Requests</h1>
             {pets.flatMap(pet => pet.requests).length === 0 ? (
               <p>No requests yet.</p>
@@ -111,8 +133,8 @@ export default function UserDashboard({ userType }) {
                 ))}
               </ListGroup>
             )}
-          </>
-          {/* <>
+
+          <>
             <h1>Adopter Dashboard</h1>
             <h2>Favorite Pets</h2>
             <Row className="favorite-pets">
@@ -143,11 +165,11 @@ export default function UserDashboard({ userType }) {
                 ))}
               </ListGroup>
             )}
-          </> */}
+          </>
 
-      </Container>
-      {/* {selectedChat && (
-        <div className="chat-panel">
+
+
+        {/* <div className="chat-panel">
           <h3>Chat with {selectedChat.adopterName}</h3>
           <ListGroup className="chat-history">
             {selectedChat.chatHistory.map((msg, index) => (
@@ -157,8 +179,10 @@ export default function UserDashboard({ userType }) {
             ))}
           </ListGroup>
           <Form.Control type="text" placeholder="Type a message..." className="mt-2 chat-input" />
-        </div>
-      )} */}
+        </div> */}
+
+
+      </section>
     </>
   );
 }
