@@ -3,108 +3,87 @@ const router = express.Router();
 const authenticate = require("./middleware/authentication");
 const db = require("../model/helper");
 
-// Create Adoption Request
-router.post('/', authenticate, async (req, res) => {
-    const { pet_id, requester_id, request_date, request_status, request_message } = req.body;
 
+//Create Adoption Request WORKING
+router.post('/adopt', authenticate, async (req, res) => {
     try {
-        const query = `INSERT INTO Requests (pet_id, requester_id, request_date, request_status, request_message) 
-                       VALUES (${pet_id}, ${requester_id}, '${request_date}', '${request_status}', '${request_message}')`;
-        await db.query(query);
-        res.status(201).json({ message: 'Request created successfully' });
+        const { pet_id, request_message } = req.body;
+        const requester_id = req.user.user_id;
+
+        if (!pet_id || !request_message) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        const insertRequestQuery = `
+            INSERT INTO Requests (pet_id, requester_id, request_date, request_status, request_message)
+            VALUES (${pet_id}, ${requester_id}, NOW(), 'pending', '${request_message}')
+        `;
+
+        await db(insertRequestQuery);
+        res.status(201).json({ message: 'Adoption request submitted successfully' });
+
     } catch (error) {
-        console.error('Error creating request:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Database Error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
-// Get All Adoption Requests
-router.get('/', authenticate, async (req, res) => {
+
+//Get Adoption Requests (Users can only see their own pets.)
+router.get('/adoption-requests', authenticate, async (req, res) => {
     try {
-        const query = 'SELECT * FROM Requests';
-        const [requests] = await db.query(query);
-        res.json(requests);
+        const user_id = req.user.user_id; // Logged-in user's ID
+
+        const getRequestsQuery = `
+            SELECT Requests.*, Pets.name AS pet_name 
+            FROM Requests
+            JOIN Pets ON Requests.pet_id = Pets.pet_id
+            WHERE Pets.user_id = ${user_id}
+        `;
+
+        const adoptionRequests = await db(getRequestsQuery);
+        res.status(200).json(adoptionRequests);
     } catch (error) {
-        console.error('Error fetching requests:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Database Error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
-// Get Request By Request ID
-router.get('/:request_id', authenticate, async (req, res) => {
-    const { request_id } = req.params;
 
+//Update Adoption Status
+router.put('/request-status/:request_id', authenticate, async (req, res) => {
     try {
-        const query = `SELECT * FROM Requests WHERE request_id = ${request_id}`;
-        const [request] = await db.query(query);
+        const { request_id } = req.params;
+        const { request_status } = req.body;
+        const requester_id = req.user.user_id;
 
-        if (request.length === 0) {
+        if (!request_status) {
+            return res.status(400).json({ message: 'Missing request status' });
+        }
+
+        const checkRequestQuery = `SELECT requester_id FROM Requests WHERE request_id = ${request_id}`;
+        const requestResult = await db(checkRequestQuery);
+
+        if (!requestResult || !requestResult.data || requestResult.data.length === 0) {
             return res.status(404).json({ message: 'Request not found' });
         }
 
-        res.json(request[0]);
-    } catch (error) {
-        console.error('Error fetching request:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-//Get Request By Pet ID
-router.get('/pet/:pet_id', authenticate, async (req, res) => {
-    const { pet_id } = req.params;
-
-    try {
-        const query = `SELECT * FROM Requests WHERE pet_id = ${pet_id}`;
-        const [requests] = await db.query(query);
-        
-        if (requests.length === 0) {
-            return res.status(404).json({ message: 'No adoption requests found for this pet.' });
+        if (requestResult.data[0].requester_id != requester_id) {
+            return res.status(403).json({ message: 'Unauthorized to update this request' });
         }
 
-        res.json(requests);
+        const updateRequestQuery = `
+            UPDATE Requests 
+            SET request_status = '${request_status}'
+            WHERE request_id = ${request_id}
+        `;
+
+        await db(updateRequestQuery);
+        res.status(200).json({ message: 'Adoption request status updated successfully' });
+
     } catch (error) {
-        console.error('Error fetching adoption requests for pet:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-
-// Update Request Status
-router.put('/:request_id', authenticate, async (req, res) => {
-    const { request_id } = req.params;
-    const { request_status } = req.body;
-
-    try {
-        const query = `UPDATE Requests SET request_status = '${request_status}' WHERE request_id = ${request_id}`;
-        const [result] = await db.query(query);
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Request not found' });
-        }
-
-        res.json({ message: 'Request status updated successfully' });
-    } catch (error) {
-        console.error('Error updating request:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-// Delete A Request
-router.delete('/:request_id', authenticate, async (req, res) => {
-    const { request_id } = req.params;
-
-    try {
-        const query = `DELETE FROM Requests WHERE request_id = ${request_id}`;
-        const [result] = await db.query(query);
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Request not found' });
-        }
-
-        res.json({ message: 'Request deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting request:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Database Error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 

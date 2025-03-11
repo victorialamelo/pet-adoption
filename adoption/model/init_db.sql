@@ -58,7 +58,7 @@ ADD CONSTRAINT `requests_requester_id_foreign` FOREIGN KEY (`requester_id`) REFE
 CREATE TABLE `Posts` (
     `post_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pet_id` BIGINT UNSIGNED NOT NULL,
-    `user_id` BIGINT UNSIGNED NOT NULL,
+    `post_owner_id` BIGINT UNSIGNED NOT NULL,
     `post_date` DATETIME NOT NULL
 );
 
@@ -67,4 +67,4 @@ ALTER TABLE `Posts`
 ADD CONSTRAINT `posts_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
 
 ALTER TABLE `Posts`
-ADD CONSTRAINT `posts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
+ADD CONSTRAINT `posts_post_owner_id_foreign` FOREIGN KEY (`post_owner_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
