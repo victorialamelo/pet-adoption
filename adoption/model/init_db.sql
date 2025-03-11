@@ -1,6 +1,8 @@
 -- Drop existing tables if they exist
-DROP TABLE IF EXISTS `Users`, `Pets`, `Requests`, `Posts`;
-
+DROP TABLE IF EXISTS `Users`,
+`Pets`,
+`Requests`,
+`Posts`;
 -- Create Users table
 CREATE TABLE `Users` (
     `user_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -17,7 +19,6 @@ CREATE TABLE `Users` (
     `entity_registration_id` BIGINT,
     `quiz_result` VARCHAR(255) NOT NULL
 );
-
 -- Create Pets table
 CREATE TABLE `Pets` (
     `pet_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -27,7 +28,10 @@ CREATE TABLE `Pets` (
     `size` VARCHAR(255) NOT NULL,
     `gender` VARCHAR(255) NOT NULL,
     `activity_level` VARCHAR(255) NOT NULL,
-    `good_with` VARCHAR(255) NOT NULL,
+    `good_with_cats` BOOLEAN NOT NULL,
+    `good_with_dogs` BOOLEAN NOT NULL,
+    `good_with_kids` BOOLEAN NOT NULL,
+    `good_with_smallspaces` BOOLEAN NOT NULL,
     `neutered` BOOLEAN NOT NULL,
     `has_special_needs` BOOLEAN NOT NULL,
     `potty_trained` BOOLEAN NOT NULL,
@@ -36,7 +40,6 @@ CREATE TABLE `Pets` (
     `user_id` BIGINT UNSIGNED NOT NULL,
     CONSTRAINT `pets_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
 );
-
 -- Create Requests table
 CREATE TABLE `Requests` (
     `request_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -46,14 +49,11 @@ CREATE TABLE `Requests` (
     `request_status` VARCHAR(255) NOT NULL,
     `request_message` TEXT NOT NULL
 );
-
 -- Adding foreign key constraints for Requests table
 ALTER TABLE `Requests`
 ADD CONSTRAINT `requests_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
-
 ALTER TABLE `Requests`
 ADD CONSTRAINT `requests_requester_id_foreign` FOREIGN KEY (`requester_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
-
 -- Create Posts table
 CREATE TABLE `Posts` (
     `post_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -61,10 +61,8 @@ CREATE TABLE `Posts` (
     `post_owner_id` BIGINT UNSIGNED NOT NULL,
     `post_date` DATETIME NOT NULL
 );
-
 -- Adding foreign key constraints for Posts table
 ALTER TABLE `Posts`
 ADD CONSTRAINT `posts_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
-
 ALTER TABLE `Posts`
 ADD CONSTRAINT `posts_post_owner_id_foreign` FOREIGN KEY (`post_owner_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
