@@ -33,7 +33,7 @@ export default function SignupPage() {
 
     console.log("handleSubmit Sign Up");
 
-    // redirect user to Dashboard page
+    // redirect user to Dashboard page/user_id
     navigate(`/userdashboard/${addedUser.user_id}`);
   };
 
