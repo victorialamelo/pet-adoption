@@ -1,9 +1,8 @@
-
 // Load environment variables from a .env file
 require("dotenv").config();
 
 // Import the MySQL module to interact with the database
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
 /**
  * Those are JSDoc comments, a special type of comment used to document JavaScript functions, parameters, and return values.
@@ -74,6 +73,9 @@ module.exports = async function db(query) {
                     // If the result contains an OkPacket (e.g., from an INSERT operation),
                     // push the first item in the result list (e.g., LAST_INSERT_ID())
                     results.data.push(result[0]);
+                    if (result[0].insertId) {
+						results.insertId = result[0].insertId; // Store the inserted ID
+					}
                 }
 
                 con.end(); // Close the database connection

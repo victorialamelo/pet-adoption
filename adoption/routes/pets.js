@@ -3,143 +3,124 @@ const router = express.Router();
 const authenticate = require("./middleware/authentication");
 const db = require("../model/helper");
 
-
 // Add a Pet to Pets and Posts Table
 router.post('/addpet', authenticate, async (req, res) => {
-  const { animal_type, name, weight, size, gender, activity_level, good_with, neutered, has_especial_needs, potty_trained, img_url, pet_description, owner_id } = req.body;
-
   try {
- 
-    const result = await db(
-      `INSERT INTO pets (animal_type, name, weight, size, gender, activity_level, good_with, neutered, has_especial_needs, potty_trained, img_url, pet_description, owner_id)
-       VALUES ("${animal_type}", "${name}", ${weight}, "${size}", "${gender}", "${activity_level}", "${good_with}", ${neutered}, ${has_especial_needs}, ${potty_trained}, "${img_url}", "${pet_description}", ${owner_id})`
-    );
+      const {
+          animal_type, name, weight, size, gender, activity_level,
+          good_with, neutered, has_special_needs, potty_trained,
+          img_url, pet_description
+      } = req.body;
 
-    const pet_id = result.insertId;
+      const user_id = req.user.user_id;
 
-    await db(
-      `INSERT INTO posts (pet_id, post_owner_id, post_date)
-       VALUES (${pet_id}, ${owner_id}, NOW())`
-    );
+      if (!animal_type || !name || !weight || !size || !gender || !activity_level || !good_with || !img_url || !pet_description) {
+          return res.status(400).json({ message: 'Missing required fields' });
+      }
 
-    res.send({ message: 'New pet added and posted successfully' });
-  } catch (err) {
-    res.status(500).send({ message: 'Error adding pet and post', error: err.message });
-  }
-});
+      // Start a database transaction so they get inserted at the same time
+      //const connection = await db.getConnection();
+      //await connection.beginTransaction();
 
+      try {
+          const insertPetQuery = `
+              INSERT INTO Pets (animal_type, name, weight, size, gender, activity_level, good_with, neutered, has_special_needs, potty_trained, img_url, pet_description, user_id)
+              VALUES ('${animal_type}', '${name}', ${weight}, '${size}', '${gender}', '${activity_level}', '${good_with}', ${neutered}, ${has_special_needs}, ${potty_trained}, '${img_url}', '${pet_description}', ${user_id})
+          `;
+          const result = await db(insertPetQuery);
+          console.log(result);
 
-// Get All Pets
-router.get('/all', authenticate, async (req, res) => {
-  try {
-    const result = await db('SELECT * FROM pets');
-    res.send({ pets: result.data });
-  } catch (err) {
-    res.status(500).send({ message: "Error fetching pets", error: err.message });
-  }
-});
+         /* const pet_id = result.insertId; // Get the newly inserted pet's ID
+          
 
-//Get Pet With FE Filters
-router.get('/pets', authenticate, async (req, res) => {
-  const { 
-    animal_type, 
-    gender, 
-    activity_level, 
-    good_with, 
-    neutered, 
-    has_especial_needs, 
-    potty_trained, 
-    owner_id 
-  } = req.query;
+          const insertPostQuery = `
+              INSERT INTO Posts (pet_id, user_id, post_date)
+              VALUES (${pet_id}, ${user_id}, NOW())
+          `;
+          await connection.query(insertPostQuery);
 
-  let query = 'SELECT * FROM pets WHERE 1=1';
+          // Commit transaction if both inserts are successful
+          await connection.commit();
+          connection.release();
 
-  const queryParams = [];
+          res.status(201).json({ message: 'Pet added and post created successfully' }); */
 
-  if (animal_type) {
-    query += ' AND animal_type = ?';
-    queryParams.push(animal_type);
-  }
+      } catch (error) {
+          /*await connection.rollback(); // Rollback if anything fails
+          connection.release();
+          throw error;*/
+          console.log(error);
+      }
 
-  if (gender) {
-    query += ' AND gender = ?';
-    queryParams.push(gender);
-  }
-
-  if (activity_level) {
-    query += ' AND activity_level = ?';
-    queryParams.push(activity_level);
-  }
-
-  if (good_with) {
-    query += ' AND good_with = ?';
-    queryParams.push(good_with);
-  }
-
-  if (neutered !== undefined) {
-    query += ' AND neutered = ?';
-    queryParams.push(neutered === 'true' ? 1 : 0);
-  }
-
-  if (has_especial_needs !== undefined) {
-    query += ' AND has_especial_needs = ?';
-    queryParams.push(has_especial_needs === 'true' ? 1 : 0);
-  }
-
-  if (potty_trained !== undefined) {
-    query += ' AND potty_trained = ?';
-    queryParams.push(potty_trained === 'true' ? 1 : 0);
-  }
-
-  if (owner_id) {
-    query += ' AND owner_id = ?';
-    queryParams.push(owner_id);
-  }
-
-  try {
-    const result = await db(query, queryParams);
-    res.send({ pets: result.data });
-  } catch (err) {
-    res.status(500).send({ message: "Error fetching pets with filters", error: err.message });
+  } catch (error) {
+      console.error('Database Error:', error);
+      res.status(500).json({ message: 'Server error' });
   }
 });
 
 
 // Update Pet Information
-router.put('/update/:id', authenticate, async (req, res) => {
-  const { id } = req.params;
-  const { animal_type, name, weight, size, gender, activity_level, good_with, neutered, has_especial_needs, potty_trained, img_url, pet_description, owner_id } = req.body;
+router.put("/update/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    const { 
+        animal_type, name, weight, size, gender, activity_level, good_with, 
+        neutered, has_special_needs, potty_trained, img_url, pet_description 
+    } = req.body;
 
-  try {
-    const result = await db(
-      `UPDATE pets SET animal_type = "${animal_type}", name = "${name}", weight = ${weight}, size = "${size}", gender = "${gender}", activity_level = "${activity_level}", good_with = "${good_with}", neutered = ${neutered}, has_especial_needs = ${has_especial_needs}, potty_trained = ${potty_trained}, img_url = "${img_url}", pet_description = "${pet_description}", owner_id = ${owner_id} WHERE pet_id = ${id}`
-    );
+    const user_id = req.user.user_id;
 
-    if (result.data.affectedRows > 0) {
-      res.send({ message: `Pet data updated for ID: ${id}` });
-    } else {
-      res.status(404).send({ message: "Pet not found" });
+    try {
+        const connection = await db.getConnection();
+        try {
+            const updateSql = `
+                UPDATE Pets 
+                SET animal_type = ?, name = ?, weight = ?, size = ?, gender = ?, 
+                    activity_level = ?, good_with = ?, neutered = ?, has_special_needs = ?, 
+                    potty_trained = ?, img_url = ?, pet_description = ?
+                WHERE pet_id = ? AND user_id = ?`;
+
+            const [result] = await connection.execute(updateSql, [
+                animal_type, name, weight, size, gender, activity_level, good_with, 
+                neutered, has_special_needs, potty_trained, img_url, pet_description, id, user_id
+            ]);
+
+            if (result.affectedRows > 0) {
+                res.send({ message: `Pet data updated for ID: ${id}` });
+            } else {
+                res.status(404).send({ message: "Pet not found or you are not authorized to update this pet" });
+            }
+        } finally {
+            connection.release(); // Release connection back to pool
+        }
+    } catch (err) {
+        console.error("Error updating pet:", err);
+        res.status(500).send({ message: "Error updating pet", error: err.message });
     }
-  } catch (err) {
-    res.status(500).send({ message: "Error updating pet", error: err.message });
-  }
 });
 
 // Delete a Pet
-router.delete('/delete/:id', authenticate, async (req, res) => {
-  const { id } = req.params;
+router.delete("/delete/:id", authenticate, async (req, res) => {
+    const { id } = req.params;
+    const user_id = req.user.user_id;
 
-  try {
-    const result = await db(`DELETE FROM pets WHERE pet_id = ${id}`);
-    
-    if (result.data.affectedRows > 0) {
-      res.send({ message: `Pet with ID: ${id} deleted` });
-    } else {
-      res.status(404).send({ message: "Pet not found" });
+    try {
+        const connection = await db.getConnection();
+        try {
+            const deleteSql = `DELETE FROM Pets WHERE pet_id = ? AND user_id = ?`;
+            const [result] = await connection.execute(deleteSql, [id, user_id]);
+
+            if (result.affectedRows > 0) {
+                res.send({ message: `Pet with ID: ${id} deleted` });
+            } else {
+                res.status(404).send({ message: "Pet not found or you are not authorized to delete this pet" });
+            }
+        } finally {
+            connection.release(); // Release connection back to pool
+        }
+    } catch (err) {
+        console.error("Error deleting pet:", err);
+        res.status(500).send({ message: "Error deleting pet", error: err.message });
     }
-  } catch (err) {
-    res.status(500).send({ message: "Error deleting pet", error: err.message });
-  }
 });
 
 module.exports = router;

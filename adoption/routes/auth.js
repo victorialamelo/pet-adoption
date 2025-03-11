@@ -2,12 +2,12 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../model/helper");
+require('dotenv').config();
 
 const supersecret = process.env.SUPER_SECRET;
 
 const router = express.Router();
 const saltRounds = 10;
-
 
 // User Registration WORKING
 router.post("/register", async (req, res) => {
@@ -25,14 +25,13 @@ router.post("/register", async (req, res) => {
 
     const user_id = result.insertId;
 
-    // Generate JWT token
+ 
     const token = jwt.sign(
       { user_id, email },
-      'yourSecretKey',
+      supersecret,
       { expiresIn: '1h' }
     );
 
-    // Return response with token and user_id
     res.send({ message: "User registration successful", user_id, token });
 
   } catch (err) {
@@ -46,7 +45,6 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-  
     const result = await db(
       `SELECT user_id, user_name, email, password, quiz_result, entity_name, entity_website, entity_registration_id, zipcode, city, country, date_of_birth, phone 
        FROM users WHERE email = "${email}"`
@@ -62,7 +60,6 @@ router.post("/login", async (req, res) => {
       const user_id = user.user_id;
       let userDetails = { ...user };
 
-      // Generate JWT token
       var token = jwt.sign({ user_id }, supersecret);
 
       res.send({
@@ -80,7 +77,6 @@ router.post("/login", async (req, res) => {
 
 // User Logout WORKING
 router.post("/logout", (req, res) => {
-
   res.send({ message: "You have been logged out." });
 });
 
