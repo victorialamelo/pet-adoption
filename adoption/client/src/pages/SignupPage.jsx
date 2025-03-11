@@ -1,95 +1,40 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
+// import { AddNewUser, backendAuthLogin, backendCreateUser } from "../backend";
+// import { hasSession, saveSession, getCurrentSession } from "../session";
 
 export default function SignupPage() {
-  const [emailError, setEmailError] = useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [nameError, setNameError] = useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = useState("");
-  const [role, setRole] = useState(""); // "adopting" or "posting"
-  const [shelterName, setShelterName] = useState("");
+  const [role, setRole] = useState("");
+  const navigate = useNavigate();
 
-  const handleRoleChange = (e) => {
-    setRole(e.target.value);
-  };
-
-  const handleSubmit = async (event) => {
+  const createUser = async (formData, event) => {
     event.preventDefault();
+    const newUser = {
+      user_name: formData.get("name"),
+      date_of_birth: formData.get("date"),
+      city: formData.get("city"),
+      zipcode: Number(formData.get("zipcode")), // transform to number due to original string value
+      phone: Number(formData.get("phone")),
+      email: formData.get("email"),
+      password: formData.get("password"),
+      entity_name: formData.get("shelter"),
+      entity_website: formData.get("website"),
+      entity_registration_id: Number(formData.get("registrationid")),
+    };
 
-    if (!validateInputs(event)) {
-      return;
-    }
+    // TODO: create backendCreateUser function in backend.js
+    const addedUser = await backendCreateUser(newUser); // send the new object (with all the input from new user) to backend
+
+    // TODO: integrate authLogin function in backend.js
+    const { token } = await backendAuthLogin({ email, password });
+    saveSession(token);
 
     console.log("handleSubmit Sign Up");
-    // const data = new FormData(event.currentTarget);
-    // const userData = {
-    //   name: data.get('name'),
-    //   username: data.get('email'),
-    //   password: data.get('password'),
-    // };
 
-    // const credentials = {
-    //   username: data.get('email'),
-    //   password: data.get('password'),
-    // };
-
-    // try {
-    //   const response = await axios.post("/api/auth/register", userData, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-
-    //   if (response.status === 200) {
-    //     localStorage.setItem("token", response.data.token);
-    //     auth.login(credentials);
-    //   } else {
-    //     alert("Error: " + response.data.message);
-    //   }
-    // } catch (error) {
-    //   console.error("Error during registration:", error);
-    // }
-  };
-
-  const validateInputs = (event) => {
-    event.preventDefault();
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-    const name = document.getElementById("name");
-
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage("Please enter a valid email address.");
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage("Password must be at least 6 characters long.");
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage("");
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage("Name is required.");
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage("");
-    }
-
-    return isValid;
+    // redirect user to Dashboard page
+    navigate(`/userdashboard/${addedUser.user_id}`);
   };
 
   return (
@@ -100,7 +45,7 @@ export default function SignupPage() {
           <div className="col-md-6">
             <div className="card shadow p-4">
               <h1 className="text-center mb-3">Sign Up</h1>
-              <form onSubmit={handleSubmit}>
+              <form action={createUser}>
                 {/* Full Name */}
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">
@@ -121,9 +66,6 @@ export default function SignupPage() {
                     }}
                     required
                   />
-                  {nameError && (
-                    <p className="error-message">{nameErrorMessage}</p>
-                  )}
                 </div>
 
                 {/* Date of Birth */}
@@ -221,9 +163,6 @@ export default function SignupPage() {
                     placeholder="your@email.com"
                     required
                   />
-                  {emailError && (
-                    <p className="error-message">{emailErrorMessage}</p>
-                  )}
                 </div>
 
                 {/* Password */}
@@ -239,9 +178,6 @@ export default function SignupPage() {
                     placeholder="••••••••"
                     required
                   />
-                  {passwordError && (
-                    <p className="error-message">{passwordErrorMessage}</p>
-                  )}
                 </div>
 
                 {/* Are they adopting or posting? */}
@@ -256,7 +192,7 @@ export default function SignupPage() {
                       name="role"
                       value="adopting"
                       className="form-check-input"
-                      onChange={handleRoleChange}
+                      onChange={(e) => setRole(e.target.value)}
                     />
                     <label htmlFor="adopting" className="form-check-label">
                       Adopting
@@ -269,7 +205,7 @@ export default function SignupPage() {
                       name="role"
                       value="posting"
                       className="form-check-input"
-                      onChange={handleRoleChange}
+                      onChange={(e) => setRole(e.target.value)}
                     />
                     <label htmlFor="posting" className="form-check-label">
                       Posting a pet
@@ -289,8 +225,6 @@ export default function SignupPage() {
                       name="shelter"
                       className="form-control"
                       placeholder="Enter shelter name (if applicable)"
-                      value={shelterName}
-                      onChange={(e) => setShelterName(e.target.value)}
                     />
                   </div>
                 )}
@@ -306,8 +240,6 @@ export default function SignupPage() {
                       name="website"
                       className="form-control"
                       placeholder="www.website.com"
-                      value={shelterName}
-                      onChange={(e) => setShelterName(e.target.value)}
                     />
                   </div>
                 )}
@@ -324,8 +256,6 @@ export default function SignupPage() {
                       maxLength="9"
                       className="form-control"
                       placeholder="A12345678"
-                      value={shelterName}
-                      onChange={(e) => setShelterName(e.target.value)}
                     />
                   </div>
                 )}
