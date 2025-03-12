@@ -1,16 +1,21 @@
 // API CLIENT FUNCTIONS - making requests to backend APIs
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL; 
 
 // import { jwtDecode } from "jwt-decode";
 
+//API to Create User
 export async function backendCreateUser(inputs) {
-    const response = await fetch("/auth/register", {
+    //console.log("Sending data:", inputs);
+    const response = await fetch("http://localhost:5001/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(inputs),
     });
     if (!response.ok) {
         console.log("User creation failed");
+        //const errorText = await response.text(); // Get more details from the server
+        //console.log("Server response:", errorText);
         throw new Error("User creation failed");
     }
 
