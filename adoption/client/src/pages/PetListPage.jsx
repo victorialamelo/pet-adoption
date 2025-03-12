@@ -1,26 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 
 export default function PetListPage() {
-  // State to manage filter values
   const [filters, setFilters] = useState({
+    animal_type: "",
     size: "",
-    age: "",
     weight: "",
     gender: "",
-    activity: "",
+    activity_level: "",
     neutered: false,
-    specialNeeds: false,
-    pottyTrained: false,
-    goodWith: [],
+    has_special_needs: false,
+    potty_trained: false,
+    good_with_cats: false,
+    good_with_dogs: false,
+    good_with_kids: false,
+    good_with_smallspaces: false,
   });
+
+  const [pets, setPets] = useState([]);
+
+  useEffect(() => {
+    // fetch pets from the database; convert filters into a query string
+    const fetchPets = async () => {
+      try {
+        const queryParams = new URLSearchParams(
+          Object.entries(filters).reduce((acc, [key, value]) => {
+            if (value !== "" && value !== false) acc[key] = value;
+            return acc;
+          }, {})
+        );
+        // fetch filtered pet data from API
+        const response = await fetch(`/api/pets?${queryParams}`);
+        if (!response.ok) throw new Error("Failed to fetch pets");
+
+        const data = await response.json();
+        setPets(data);
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+      }
+    };
+
+    fetchPets();
+  }, [filters]); // fetch pets when filters change
 
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : value, // [name] is the name of the input (e.g. gender). If the input is a checkbox, we set the filter value to 'checked' property; otherwise, we use the value property (eg. for dropdowns)
     }));
   };
 
@@ -28,43 +56,42 @@ export default function PetListPage() {
     <>
       <NavBar />
 
-      {/* Hero Header */}
       <header className="text-center">
         <div className="container">
           <h1 className="display-4 fw-bold">Find your best friend</h1>
-          <img src="https://i.ytimg.com/vi/fOd16PT1S7A/maxresdefault.jpg" alt="" />
+          <img
+            src="https://i.ytimg.com/vi/fOd16PT1S7A/maxresdefault.jpg"
+            alt="Hero"
+          />
         </div>
       </header>
 
-      {/* Filters Section */}
       <section className="filter">
         <div className="container">
           <h2 className="mb-4">Filter Pets</h2>
           <form>
             <div className="row">
-
-              {/* Age */}
               <div className="col-md-6 mb-3">
-                <label htmlFor="age" className="form-label">Age</label>
+                <label htmlFor="animal_type" className="form-label">
+                  Animal Type
+                </label>
                 <select
-                  id="age"
-                  name="age"
+                  id="animal_type"
+                  name="animal_type"
                   className="form-select"
-                  value={filters.age}
+                  value={filters.animal_type}
                   onChange={handleFilterChange}
-                  placeholder="Enter age"
                 >
-                  <option value="">Select Age</option>
-                  <option value="Puppy">Puppy</option>
-                  <option value="Teenager">Teenager</option>
-                  <option value="Adult">Adult</option>
-                  <option value="Senior">Senior</option>
+                  <option value="">Select Type</option>
+                  <option value="dog">Cat</option>
+                  <option value="cat">Dog</option>
                 </select>
               </div>
 
-              {/* Gender */}
               <div className="col-md-6">
-                <label htmlFor="gender" className="form-label">Gender</label>
+                <label htmlFor="gender" className="form-label">
+                  Gender
+                </label>
                 <select
                   id="gender"
                   name="gender"
@@ -73,15 +100,16 @@ export default function PetListPage() {
                   onChange={handleFilterChange}
                 >
                   <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="male">Female</option>
+                  <option value="female">Male</option>
                   <option value="unknown">Unknown</option>
                 </select>
               </div>
 
-              {/* Size */}
               <div className="col-md-6 mt-3">
-                <label htmlFor="size" className="form-label">Size</label>
+                <label htmlFor="size" className="form-label">
+                  Size
+                </label>
                 <select
                   id="size"
                   name="size"
@@ -98,14 +126,16 @@ export default function PetListPage() {
                 </select>
               </div>
 
-              {/* Activity Level */}
+              {/* Activity Level Filter */}
               <div className="col-md-6 mt-3">
-                <label htmlFor="activity" className="form-label">Activity Level</label>
+                <label htmlFor="activity_level" className="form-label">
+                  Activity Level
+                </label>
                 <select
-                  id="activity"
-                  name="activity"
+                  id="activity_level"
+                  name="activity_level"
                   className="form-select"
-                  value={filters.activity}
+                  value={filters.activity_level}
                   onChange={handleFilterChange}
                 >
                   <option value="">Select activity level</option>
@@ -116,51 +146,35 @@ export default function PetListPage() {
                 </select>
               </div>
 
-              {/* Good With */}
-              <div className="col-md-6 mt-3">
-                <label htmlFor="goodWith" className="form-label">Good With</label>
-                <select
-                  id="goodWith"
-                  name="goodWith"
-                  multiple
-                  className="form-select"
-                  value={filters.goodWith}
-                  onChange={handleFilterChange}
-                >
-                  <option value="cats">Cats</option>
-                  <option value="dogs">Dogs</option>
-                  <option value="kids">Kids</option>
-                  <option value="small-spaces">Small Spaces</option>
-                </select>
-              </div>
-
-              {/* Special Needs, Potty Trained, Neutered */}
               <div className="col-md-6 mt-3">
                 <h4 className="mt-3">Care & Behavior</h4>
-                {/* Special Needs */}
-                <label htmlFor="specialNeeds" className="form-label mt-3">Has Special Needs</label>
+                <label htmlFor="has_special_needs" className="form-label mt-3">
+                  Has Special Needs
+                </label>
                 <input
                   type="checkbox"
-                  id="specialNeeds"
-                  name="specialNeeds"
-                  checked={filters.specialNeeds}
+                  id="has_special_needs"
+                  name="has_special_needs"
+                  checked={filters.has_special_needs}
                   onChange={handleFilterChange}
                   className="form-check-input mt-3"
                 />
                 <hr />
-                {/* Potty Trained */}
-                <label htmlFor="pottyTrained" className="form-label">Potty Trained</label>
+                <label htmlFor="potty_trained" className="form-label">
+                  Potty Trained
+                </label>
                 <input
                   type="checkbox"
-                  id="pottyTrained"
-                  name="pottyTrained"
-                  checked={filters.pottyTrained}
+                  id="potty_trained"
+                  name="potty_trained"
+                  checked={filters.potty_trained}
                   onChange={handleFilterChange}
                   className="form-check-input"
                 />
-                 <hr />
-                {/* Neutered */}
-                <label htmlFor="neutered" className="form-label">Neutered</label>
+                <hr />
+                <label htmlFor="neutered" className="form-label">
+                  Neutered
+                </label>
                 <input
                   type="checkbox"
                   id="neutered"
@@ -171,36 +185,58 @@ export default function PetListPage() {
                 />
               </div>
 
+              <div className="col-md-6 mt-3">
+                <h4 className="mt-3">The pet is good with:</h4>
+                <label htmlFor="good_with_cats" className="form-label mt-3">
+                  Other Cats
+                </label>
+                <input
+                  type="checkbox"
+                  id="good_with_cats"
+                  name="good_with_cats"
+                  checked={filters.good_with_cats}
+                  onChange={handleFilterChange}
+                  className="form-check-input mt-3"
+                />
+                <hr />
+                <label htmlFor="good_with_dogs" className="form-label">
+                  Other Dogs
+                </label>
+                <input
+                  type="checkbox"
+                  id="good_with_dogs"
+                  name="good_with_dogs"
+                  checked={filters.good_with_dogs}
+                  onChange={handleFilterChange}
+                  className="form-check-input"
+                />
+                <hr />
+                <label htmlFor="good_with_kids" className="form-label">
+                  Kids
+                </label>
+                <input
+                  type="checkbox"
+                  id="good_with_kids"
+                  name="good_with_kids"
+                  checked={filters.good_with_kids}
+                  onChange={handleFilterChange}
+                  className="form-check-input"
+                />
+                <hr />
+                <label htmlFor="good_with_smallspaces" className="form-label">
+                  Small Spaces
+                </label>
+                <input
+                  type="checkbox"
+                  id="good_with_smallspaces"
+                  name="good_with_smallspaces"
+                  checked={filters.good_with_smallspaces}
+                  onChange={handleFilterChange}
+                  className="form-check-input"
+                />
               </div>
+            </div>
           </form>
-        </div>
-      </section>
-
-      {/* Pet Grid */}
-      <section className="petgrid">
-        <div className="container">
-          <h2 className="mb-4">Explore Our Pets</h2>
-          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            {[...Array(4)].map((_, index) => (
-              <div key={index} className="col">
-                <div className="card shadow-sm">
-                  <img
-                    src="https://t4.ftcdn.net/jpg/02/66/72/41/360_F_266724172_Iy8gdKgMa7XmrhYYxLCxyhx6J7070Pr8.jpg"
-                    alt="Pet"
-                    className="card-img-top"
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">Pet Name</h5>
-                    <p className="card-text">Quick Facts: Age: 3, Size: Medium, Neutered: Yes</p>
-                    <p className="card-text">This is a lovely pet who loves to play and get lots of attention!</p>
-                    <Link to="/petdetails" className="btn btn-primary w-100">
-                      Learn More
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
     </>
