@@ -15,7 +15,7 @@ CREATE TABLE `Users` (
     `phone` VARCHAR(20) NOT NULL,
     `entity_name` VARCHAR(255),
     `entity_website` VARCHAR(255),
-    `entity_registration_id` BIGINT
+    `entity_registration_id` VARCHAR(255)
 );
 -- Create Pets table
 CREATE TABLE `Pets` (
