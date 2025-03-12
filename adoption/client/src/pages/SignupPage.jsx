@@ -1,40 +1,55 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
-import { AddNewUser, backendAuthLogin, backendCreateUser } from "../backend";
-// import { hasSession, saveSession, getCurrentSession } from "../session";
+import { backendCreateUser } from "../backend";
 
 export default function SignupPage() {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
-  const createUser = async (formData, event) => {
+  // Function to handle user creation
+  const createUser = async (formData) => {
+    try {
+      const newUser = {
+        user_name: formData.get("name"),
+        date_of_birth: formData.get("date"),
+        city: formData.get("city"),
+        zipcode: formData.get("zipcode"),
+        phone: formData.get("phone"),
+        email: formData.get("email"),
+        password: formData.get("password"),
+        entity_name: formData.get("shelter"),
+        entity_website: formData.get("website"),
+        entity_registration_id: formData.get("registrationid"),
+      };
+
+      const addedUser = await backendCreateUser(newUser); // Send new user data to backend
+      console.log("User created successfully:", addedUser);
+
+      navigate(`/userdashboard/${addedUser.user_id}`);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      alert("Failed to create account. Please try again.");
+    }
+  };
+
+  // Form submission handler
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const newUser = {
-      user_name: formData.get("name"),
-      date_of_birth: formData.get("date"),
-      city: formData.get("city"),
-      zipcode: Number(formData.get("zipcode")), // transform to number due to original string value
-      phone: Number(formData.get("phone")),
-      email: formData.get("email"),
-      password: formData.get("password"),
-      entity_name: formData.get("shelter"),
-      entity_website: formData.get("website"),
-      entity_registration_id: Number(formData.get("registrationid")),
-    };
+    const formData = new FormData(event.target);
 
-    // TODO: create backendCreateUser function in backend.js
-    const addedUser = await backendCreateUser(newUser); // send the new object (with all the input from new user) to backend
+    // Basic validation
+    if (!formData.get("email").includes("@")) {
+      alert("Please enter a valid email.");
+      return;
+    }
 
-    // TODO: integrate authLogin function in backend.js
-    const { token } = await backendAuthLogin({ email, password });
-    saveSession(token);
+    if (formData.get("password").length < 6) {
+      alert("Password must be at least 6 characters.");
+      return;
+    }
 
-    console.log("handleSubmit Sign Up");
-
-    // redirect user to Dashboard page/user_id
-    navigate(`/userdashboard/${addedUser.user_id}`);
+    createUser(formData);
   };
 
   return (
@@ -45,7 +60,7 @@ export default function SignupPage() {
           <div className="col-md-6">
             <div className="card shadow p-4">
               <h1 className="text-center mb-3">Sign Up</h1>
-              <form action={createUser}>
+              <form onSubmit={handleSubmit}>
                 {/* Full Name */}
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">
@@ -58,7 +73,7 @@ export default function SignupPage() {
                     className="form-control"
                     placeholder="Enter your name"
                     onInput={(e) => {
-                      let value = e.target.value;
+                      let value = e.target.value.trim();
                       if (value.length > 0) {
                         e.target.value =
                           value.charAt(0).toUpperCase() + value.slice(1);
@@ -70,25 +85,14 @@ export default function SignupPage() {
 
                 {/* Date of Birth */}
                 <div className="mb-3">
-                  <label
-                    htmlFor="date"
-                    className="form-label"
-                    style={{ display: "block", marginBottom: "10px" }}
-                  >
+                  <label htmlFor="date" className="form-label">
                     Date of Birth
                   </label>
                   <input
                     type="date"
                     id="date"
                     name="date"
-                    style={{
-                      paddingRight: "5px",
-                      paddingLeft: "5px",
-                      borderRadius: "5px",
-                      fontSize: "15px",
-                      backgroundColor: "#fff",
-                      color: "#000",
-                    }}
+                    className="form-control"
                     required
                   />
                 </div>
@@ -105,7 +109,7 @@ export default function SignupPage() {
                     className="form-control"
                     placeholder="City of residence"
                     onInput={(e) => {
-                      let value = e.target.value;
+                      let value = e.target.value.trim();
                       if (value.length > 0) {
                         e.target.value =
                           value.charAt(0).toUpperCase() + value.slice(1);
@@ -213,51 +217,49 @@ export default function SignupPage() {
                   </div>
                 </div>
 
-                {/* Shelter/Organization Name (Only if posting a pet) */}
+                {/* Shelter/Organization Fields (Only if posting a pet) */}
                 {role === "posting" && (
-                  <div className="mb-3">
-                    <label htmlFor="shelter" className="form-label">
-                      Shelter/Organization Name (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      id="shelter"
-                      name="shelter"
-                      className="form-control"
-                      placeholder="Enter shelter name (if applicable)"
-                    />
-                  </div>
-                )}
+                  <>
+                    <div className="mb-3">
+                      <label htmlFor="shelter" className="form-label">
+                        Shelter/Organization Name (Optional)
+                      </label>
+                      <input
+                        type="text"
+                        id="shelter"
+                        name="shelter"
+                        className="form-control"
+                        placeholder="Enter shelter name (if applicable)"
+                      />
+                    </div>
 
-                {role === "posting" && (
-                  <div className="mb-3">
-                    <label htmlFor="website" className="form-label">
-                      Shelter/Organization Website (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      id="website"
-                      name="website"
-                      className="form-control"
-                      placeholder="www.website.com"
-                    />
-                  </div>
-                )}
+                    <div className="mb-3">
+                      <label htmlFor="website" className="form-label">
+                        Shelter/Organization Website (Optional)
+                      </label>
+                      <input
+                        type="text"
+                        id="website"
+                        name="website"
+                        className="form-control"
+                        placeholder="www.website.com"
+                      />
+                    </div>
 
-                {role === "posting" && (
-                  <div className="mb-3">
-                    <label htmlFor="registrationid" className="form-label">
-                      Shelter/Organization Registration Number (Optional)
-                    </label>
-                    <input
-                      type="text"
-                      id="registrationid"
-                      name="registrationid"
-                      maxLength="9"
-                      className="form-control"
-                      placeholder="A12345678"
-                    />
-                  </div>
+                    <div className="mb-3">
+                      <label htmlFor="registrationid" className="form-label">
+                        Shelter/Organization Registration Number (Optional)
+                      </label>
+                      <input
+                        type="text"
+                        id="registrationid"
+                        name="registrationid"
+                        maxLength="9"
+                        className="form-control"
+                        placeholder="A12345678"
+                      />
+                    </div>
+                  </>
                 )}
 
                 {/* Submit Button */}

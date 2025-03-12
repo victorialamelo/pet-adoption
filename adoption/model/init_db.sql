@@ -9,15 +9,13 @@ CREATE TABLE `Users` (
     `user_name` VARCHAR(255) NOT NULL,
     `zipcode` VARCHAR(255) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
-    `country` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
     `date_of_birth` DATE NOT NULL,
     `phone` VARCHAR(20) NOT NULL,
     `entity_name` VARCHAR(255),
     `entity_website` VARCHAR(255),
-    `entity_registration_id` BIGINT,
-    `quiz_result` VARCHAR(255) NOT NULL
+    `entity_registration_id` VARCHAR(255)
 );
 -- Create Pets table
 CREATE TABLE `Pets` (
@@ -37,9 +35,11 @@ CREATE TABLE `Pets` (
     `potty_trained` BOOLEAN NOT NULL,
     `img_url` VARCHAR(255) NOT NULL,
     `pet_description` VARCHAR(255) NOT NULL,
-    `user_id` BIGINT UNSIGNED NOT NULL,
-    CONSTRAINT `pets_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
+    `user_id` BIGINT UNSIGNED NOT NULL
 );
+-- Add foreign key constraint for Pets table
+ALTER TABLE `Pets`
+ADD CONSTRAINT `pets_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
 -- Create Requests table
 CREATE TABLE `Requests` (
     `request_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -49,7 +49,7 @@ CREATE TABLE `Requests` (
     `request_status` VARCHAR(255) NOT NULL,
     `request_message` TEXT NOT NULL
 );
--- Adding foreign key constraints for Requests table
+-- Add foreign key constraints for Requests table
 ALTER TABLE `Requests`
 ADD CONSTRAINT `requests_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
 ALTER TABLE `Requests`
@@ -61,7 +61,7 @@ CREATE TABLE `Posts` (
     `post_owner_id` BIGINT UNSIGNED NOT NULL,
     `post_date` DATETIME NOT NULL
 );
--- Adding foreign key constraints for Posts table
+-- Add foreign key constraints for Posts table
 ALTER TABLE `Posts`
 ADD CONSTRAINT `posts_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
 ALTER TABLE `Posts`
