@@ -2,13 +2,16 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import "../App.css";
+// import axios from 'axios'
+
 // import { backendCreateUserPet } from "../backend";
 // import { hasSession, saveSession, getCurrentSession } from "../session";
 
 export default function PostPetPage() {
   const params = useParams();
   const navigate = useNavigate();
-
+  const [photo, setPhoto] = useState(null);
+  // const [uploadSuccess, setUploadSuccess] = useState(false);
   const createPet = async (formData) => {
     const newPet = {
       name: formData.get("name"),
@@ -39,6 +42,34 @@ export default function PostPetPage() {
 
     // redirect user to petdetails/pet_id
     navigate(`/petdetails/${addedPet.pet_id}`);
+  };
+
+  // NOT WORKING
+  const handleFileChange = (e) => {
+    setPhoto(e.target.files[0]);
+  };
+
+  // photo upload need photo filename in the async request NOT WORKING
+  const handleUpload = async () => {
+    // Send the form data with the file to the server
+    const formData = new FormData();
+
+    // Add the file to the form data with the key 'photo'
+    //formData.append('photo', photo) adds the file (photo)
+    //to the form data with the key 'photo'.
+    //This key ('photo') should match the field name expected
+    //by the server. In our case, it matches the field name 'photo'
+    //in the Express route: upload.single('photo').
+    formData.append('photo', photo);
+    // try {
+    //   const res = await axios.post('/api/photo', formData);
+    //   console.log(res);
+    //   //show a success notification
+    //   setUploadSuccess(true);
+    //   setTimeout(() => setUploadSuccess(false), 3000); // Hide notification after 3 seconds
+    // } catch (err) {
+    //   console.error(err);
+    // }
   };
 
   return (
@@ -100,9 +131,17 @@ export default function PostPetPage() {
                     className="form-control"
                     id="image"
                     name="image"
+                    onChange={handleFileChange}
                     required
                   />
+                  <button className="btn btn-primary btn-block mt-3" onClick={handleUpload}>Upload Photo</button>
                 </div>
+
+                {/* {uploadSuccess && (
+                  <div className="alert alert-success" role="alert">
+                    Photo uploaded successfully!
+                  </div>
+                )} */}
 
                 <div className="mb-3">
                   <label htmlFor="story" className="form-label">

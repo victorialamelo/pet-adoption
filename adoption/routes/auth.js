@@ -19,13 +19,13 @@ router.post("/register", async (req, res) => {
     const { zipcode, city, country, date_of_birth, phone, entity_name, entity_website, entity_registration_id, quiz_result } = otherDetails;
 
     const result = await db(
-      `INSERT INTO users (user_name, zipcode, city, country, date_of_birth, phone, entity_name, entity_website, entity_registration_id, quiz_result, email, password) 
+      `INSERT INTO users (user_name, zipcode, city, country, date_of_birth, phone, entity_name, entity_website, entity_registration_id, quiz_result, email, password)
        VALUES ("${user_name}", "${zipcode}", "${city}", "${country}", "${date_of_birth}", "${phone}", "${entity_name}", "${entity_website}", "${entity_registration_id}", "${quiz_result}", "${email}", "${hash}")`
     );
 
     const user_id = result.insertId;
 
- 
+
     const token = jwt.sign(
       { user_id, email },
       supersecret,
@@ -46,7 +46,7 @@ router.post("/login", async (req, res) => {
 
   try {
     const result = await db(
-      `SELECT user_id, user_name, email, password, quiz_result, entity_name, entity_website, entity_registration_id, zipcode, city, country, date_of_birth, phone 
+      `SELECT user_id, user_name, email, password, quiz_result, entity_name, entity_website, entity_registration_id, zipcode, city, country, date_of_birth, phone
        FROM users WHERE email = "${email}"`
     );
 
