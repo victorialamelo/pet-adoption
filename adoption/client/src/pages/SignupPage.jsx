@@ -9,8 +9,9 @@ export default function SignupPage() {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
-  const createUser = async (formData, event) => {
+  const createUser = async (event, formData) => {
     event.preventDefault();
+    
     const newUser = {
       user_name: formData.get("name"),
       date_of_birth: formData.get("date"),

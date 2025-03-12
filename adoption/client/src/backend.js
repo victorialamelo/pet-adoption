@@ -45,7 +45,7 @@ export async function backendGetUserPokemon(userId) {
 }
 
 export async function backendCreateUser(inputs) {
-    const response = await fetch(`/api/users`, {
+    const response = await fetch(`/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(inputs),
