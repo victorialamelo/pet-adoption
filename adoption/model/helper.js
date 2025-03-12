@@ -34,7 +34,7 @@ module.exports = async function db(query) {
 				}
 
 				if (!result.length) {
-                    if (result.insertId) {
+					if (result.insertId) {
 						results.insertId = result.insertId; // Store the inserted ID
 						console.log(results);
 					}

@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const db = require("../model/helper");
 require('dotenv').config();
 
+// const authenticate = require('./middleware/authentication');
+
 const supersecret = process.env.SUPER_SECRET;
 
 const router = express.Router();
@@ -16,16 +18,16 @@ router.post("/register", async (req, res) => {
   try {
     const hash = await bcrypt.hash(password, saltRounds);
 
-    const { zipcode, city, date_of_birth, phone, entity_name, entity_website, entity_registration_id, quiz_result } = otherDetails;
+    const { zipcode, city, date_of_birth, phone, entity_name, entity_website, entity_registration_id } = otherDetails;
 
     const result = await db(
-      `INSERT INTO users (user_name, zipcode, city, country, date_of_birth, phone, entity_name, entity_website, entity_registration_id, quiz_result, email, password) 
-       VALUES ("${user_name}", "${zipcode}", "${city}", "${country}", "${date_of_birth}", "${phone}", "${entity_name}", "${entity_website}", "${entity_registration_id}", "${quiz_result}", "${email}", "${hash}")`
+      `INSERT INTO Users (user_name, zipcode, city,  date_of_birth, phone, entity_name, entity_website, entity_registration_id, email, password) 
+       VALUES ("${user_name}", "${zipcode}", "${city}", "${date_of_birth}", "${phone}", "${entity_name}", "${entity_website}", "${entity_registration_id}", "${email}", "${hash}")`
     );
 
     const user_id = result.insertId;
 
- 
+
     const token = jwt.sign(
       { user_id, email },
       supersecret,
@@ -46,7 +48,7 @@ router.post("/login", async (req, res) => {
 
   try {
     const result = await db(
-      `SELECT user_id, user_name, email, password, quiz_result, entity_name, entity_website, entity_registration_id, zipcode, city, country, date_of_birth, phone 
+      `SELECT user_id, user_name, email, password, entity_name, entity_website, entity_registration_id, zipcode, city, country, date_of_birth, phone 
        FROM users WHERE email = "${email}"`
     );
 
