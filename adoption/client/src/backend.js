@@ -1,14 +1,16 @@
 // API CLIENT FUNCTIONS - making requests to backend APIs
 
-// import { getAuthHeader } from "./session";
+
+// import { jwtDecode } from "jwt-decode";
 
 export async function backendCreateUser(inputs) {
-    const response = await fetch(`/auth/register`, {
+    const response = await fetch("/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(inputs),
     });
     if (!response.ok) {
+        console.log("User creation failed");
         throw new Error("User creation failed");
     }
 
@@ -18,22 +20,22 @@ export async function backendCreateUser(inputs) {
 }
 
 
-export async function backendAuthLogin(credentials) {
-    const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-    });
-    if (!response.ok) {
-        throw new Error("Login failed");
-    }
+// export async function backendAuthLogin(credentials) {
+//     const response = await fetch("/auth/register", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(credentials),
+//     });
+//     if (!response.ok) {
+//         throw new Error("Login failed");
+//     }
 
-    const data = await response.json();
+//     const data = await response.json();
 
-    return data;
-}
+//     return data;
+// }
 
 export async function backendGetUser(userId) {
     const response = await fetch(`/api/users/${userId}`);
@@ -100,3 +102,40 @@ export async function backendDeleteUserPokemon(pokemonId) {
 
     await response.json();
 }
+
+// const TOKEN_STORAGE_KEY = "token";
+
+// export function hasSession() {
+//     return localStorage.getItem(TOKEN_STORAGE_KEY) !== null;
+// }
+
+// export function getAuthHeader() {
+//     const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+//     if (!token) {
+//         throw new Error("no session");
+//     }
+//     return {
+//         Authorization: `Bearer ${token}`,
+//     };
+// }
+
+// export function getCurrentSession() {
+//     const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+//     if (!token) {
+//         throw new Error("no session");
+//     }
+
+//     const payload = jwtDecode(token);
+
+//     return {
+//         userId: payload.user_id,
+//     };
+// }
+
+// export function deleteCurrentSession() {
+//     localStorage.removeItem(TOKEN_STORAGE_KEY);
+// }
+
+// export function saveSession(token) {
+//     localStorage.setItem(TOKEN_STORAGE_KEY, token);
+// }

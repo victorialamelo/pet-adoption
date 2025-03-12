@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const authenticate = require("./middleware/authentication");
+const authenticate = require('./middleware/authentication');
 const db = require("../model/helper");
 const multer = require("multer");
 
@@ -21,8 +21,6 @@ router.post('/pet', authenticate, async (req, res) => {
             !img_url || !pet_description) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
-
-        const img_url = req.file.filename;
 
         try {
             const insertPetQuery = `
@@ -62,52 +60,52 @@ router.post('/pet', authenticate, async (req, res) => {
 // Update Pet Information WORKING
 router.put('/:pet_id', authenticate, async (req, res) => {
     try {
-      const { pet_id } = req.params;
-      const user_id = req.user.user_id;
+        const { pet_id } = req.params;
+        const user_id = req.user.user_id;
 
-      const {
-        animal_type, name, weight, size, gender, activity_level,
-        good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-        neutered, has_special_needs, potty_trained, img_url, pet_description
-      } = req.body;
+        const {
+            animal_type, name, weight, size, gender, activity_level,
+            good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
+            neutered, has_special_needs, potty_trained, img_url, pet_description
+        } = req.body;
 
-      const checkOwnershipQuery = `SELECT user_id FROM Pets WHERE pet_id = ${pet_id}`;
-      const ownershipResult = await db(checkOwnershipQuery);
+        const checkOwnershipQuery = `SELECT user_id FROM Pets WHERE pet_id = ${pet_id}`;
+        const ownershipResult = await db(checkOwnershipQuery);
 
-      if (!ownershipResult || !ownershipResult.data || ownershipResult.data.length === 0) {
-        return res.status(404).json({ message: 'Pet not found' });
-      }
+        if (!ownershipResult || !ownershipResult.data || ownershipResult.data.length === 0) {
+            return res.status(404).json({ message: 'Pet not found' });
+        }
 
-      if (ownershipResult.data[0].user_id != user_id) {
-        return res.status(403).json({ message: 'Unauthorized to update this pet' });
-      }
+        if (ownershipResult.data[0].user_id != user_id) {
+            return res.status(403).json({ message: 'Unauthorized to update this pet' });
+        }
 
-      const fields = {
-        animal_type, name, weight, size, gender, activity_level,
-        good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-        neutered, has_special_needs, potty_trained, img_url, pet_description
-      };
+        const fields = {
+            animal_type, name, weight, size, gender, activity_level,
+            good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
+            neutered, has_special_needs, potty_trained, img_url, pet_description
+        };
 
-      const updateFields = Object.entries(fields)
-        .filter(([_, value]) => value !== undefined)
-        .map(([key, value]) =>
-          typeof value === "string" ? `${key} = '${value}'` : `${key} = ${value}`
-        );
+        const updateFields = Object.entries(fields)
+            .filter(([_, value]) => value !== undefined)
+            .map(([key, value]) =>
+                typeof value === "string" ? `${key} = '${value}'` : `${key} = ${value}`
+            );
 
-      if (updateFields.length === 0) {
-        return res.status(400).json({ message: "No valid fields provided for update" });
-      }
+        if (updateFields.length === 0) {
+            return res.status(400).json({ message: "No valid fields provided for update" });
+        }
 
-      const updatePetQuery = `UPDATE Pets SET ${updateFields.join(', ')} WHERE pet_id = ${pet_id}`;
+        const updatePetQuery = `UPDATE Pets SET ${updateFields.join(', ')} WHERE pet_id = ${pet_id}`;
 
-      await db(updatePetQuery);
-      res.status(200).json({ message: 'Pet information updated successfully' });
+        await db(updatePetQuery);
+        res.status(200).json({ message: 'Pet information updated successfully' });
 
     } catch (error) {
-      console.error('Database Error:', error);
-      res.status(500).json({ message: 'Server error' });
+        console.error('Database Error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
-  });
+});
 
 
 // Get All Posts WORKING (Logged in users can access)
