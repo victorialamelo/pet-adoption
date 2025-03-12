@@ -1,6 +1,22 @@
 // API CLIENT FUNCTIONS - making requests to backend APIs
 
-import { getAuthHeader } from "./session";
+// import { getAuthHeader } from "./session";
+
+export async function backendCreateUser(inputs) {
+    const response = await fetch(`/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(inputs),
+    });
+    if (!response.ok) {
+        throw new Error("User creation failed");
+    }
+
+    const data = await response.json();
+
+    return data;
+}
+
 
 export async function backendAuthLogin(credentials) {
     const response = await fetch("/api/auth/login", {
@@ -44,20 +60,6 @@ export async function backendGetUserPokemon(userId) {
     return data[0];
 }
 
-export async function backendCreateUser(inputs) {
-    const response = await fetch(`/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(inputs),
-    });
-    if (!response.ok) {
-        throw new Error("User creation failed");
-    }
-
-    const data = await response.json();
-
-    return data;
-}
 
 export async function backendCreateUserPokemon(userId, pokemonId) {
     const response = await fetch("/api/userpokemon", {
