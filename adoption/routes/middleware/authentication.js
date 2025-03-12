@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const supersecret = process.env.SUPER_SECRET;
 
-const authenticate = (req, res, next) => {
+function authenticate(req, res, next) {
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {

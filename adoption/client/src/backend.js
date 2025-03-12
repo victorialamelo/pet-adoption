@@ -1,23 +1,46 @@
 // API CLIENT FUNCTIONS - making requests to backend APIs
 
-import { getAuthHeader } from "./session";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL; 
 
-export async function backendAuthLogin(credentials) {
-    const response = await fetch("/api/auth/login", {
+// import { jwtDecode } from "jwt-decode";
+
+//API to Create User
+export async function backendCreateUser(inputs) {
+    //console.log("Sending data:", inputs);
+    const response = await fetch("http://localhost:5001/auth/register", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(inputs),
     });
     if (!response.ok) {
-        throw new Error("Login failed");
+        console.log("User creation failed");
+        //const errorText = await response.text(); // Get more details from the server
+        //console.log("Server response:", errorText);
+        throw new Error("User creation failed");
     }
 
     const data = await response.json();
 
     return data;
 }
+
+
+// export async function backendAuthLogin(credentials) {
+//     const response = await fetch("/auth/register", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(credentials),
+//     });
+//     if (!response.ok) {
+//         throw new Error("Login failed");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+// }
 
 export async function backendGetUser(userId) {
     const response = await fetch(`/api/users/${userId}`);
@@ -44,20 +67,6 @@ export async function backendGetUserPokemon(userId) {
     return data[0];
 }
 
-export async function backendCreateUser(inputs) {
-    const response = await fetch(`/api/users`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(inputs),
-    });
-    if (!response.ok) {
-        throw new Error("User creation failed");
-    }
-
-    const data = await response.json();
-
-    return data;
-}
 
 export async function backendCreateUserPokemon(userId, pokemonId) {
     const response = await fetch("/api/userpokemon", {
@@ -98,3 +107,40 @@ export async function backendDeleteUserPokemon(pokemonId) {
 
     await response.json();
 }
+
+// const TOKEN_STORAGE_KEY = "token";
+
+// export function hasSession() {
+//     return localStorage.getItem(TOKEN_STORAGE_KEY) !== null;
+// }
+
+// export function getAuthHeader() {
+//     const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+//     if (!token) {
+//         throw new Error("no session");
+//     }
+//     return {
+//         Authorization: `Bearer ${token}`,
+//     };
+// }
+
+// export function getCurrentSession() {
+//     const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+//     if (!token) {
+//         throw new Error("no session");
+//     }
+
+//     const payload = jwtDecode(token);
+
+//     return {
+//         userId: payload.user_id,
+//     };
+// }
+
+// export function deleteCurrentSession() {
+//     localStorage.removeItem(TOKEN_STORAGE_KEY);
+// }
+
+// export function saveSession(token) {
+//     localStorage.setItem(TOKEN_STORAGE_KEY, token);
+// }
