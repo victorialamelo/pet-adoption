@@ -5,7 +5,7 @@ const db = require("../model/helper");
 const multer = require("multer");
 
 // Add a Pet to Pets and Posts Table WORKING
-router.post('/pet', authenticate, upload.single('photo'), async (req, res) => {
+router.post('/pet', authenticate, async (req, res) => {
     try {
         const {
             animal_type, name, weight, size, gender, activity_level,
