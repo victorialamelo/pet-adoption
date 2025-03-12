@@ -9,6 +9,7 @@
   --lemon: #FFFACD;
   --sage: #DCE2BD;
   --latte: #FFF8E7;
+  --textshadow: #c4c4ea6e;
 }
 
 * {
@@ -17,15 +18,22 @@
   padding: 0;
 }
 
-h1, .navbar-brand {
+h1, h2, h3,  .navbar-brand {
   font-family: "Shrikhand", serif;
   font-weight: 400;
   font-style: normal;
   text-transform: uppercase;
   color: var(--lavender);
+  text-shadow:
+    var(--textshadow) 1px 1px,
+    var(--textshadow) 2px 2px,
+    var(--textshadow) 3px 3px,
+    var(--textshadow) 4px 4px,
+    var(--textshadow) 5px 5px,
+    var(--textshadow) 6px 6px
 }
 
-h2, h3, p, span, li{
+p, span, li{
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
@@ -223,7 +231,30 @@ input:focus {
 }
 
 .dashboard-container {
-  min-height: 1000px;
-  padding: 70px 20px 20px 20px;
-  width: 100%;
+  background-color: var(--sage);
+  margin: 0 auto;
+}
+
+tbody,th,td {
+  border-bottom: 1px solid var(--lavender)
+}
+
+th {
+  font-size: 1.2em;
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+  font-style: normal;
+  text-transform: uppercase;
+  color: var(--lavender);
+}
+
+.form-applicationstatus {
+  padding: 5px;
+  background-color: var(--latte);
+  height: 43px;
+  border-radius: 7px;
+  font-size: 1.2em;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--lavender);
 }

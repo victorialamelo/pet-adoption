@@ -29,16 +29,14 @@ export default function PetListPage() {
       <NavBar />
 
       {/* Hero Header */}
-      <header className="text-center">
-        <div className="herosection">
-          <img src="../src/assets/pinkcat.jpg" alt="" />
-        </div>
+      <header>
+        <img src="../src/assets/beigekitten.jpg" alt="" />
       </header>
 
       {/* Filters Section */}
       <section className="filter">
         <div className="container">
-          <h2 className="mb-4">Filter Pets</h2>
+          <h1 className="mb-4">Search Peluditos</h1>
           <form>
             <div className="row">
 
@@ -178,7 +176,7 @@ export default function PetListPage() {
       {/* Pet Grid */}
       <section className="petgrid">
         <div className="container">
-          <h2 className="mb-4">Explore Our Pets</h2>
+          <h1 className="mb-4">Explore Our Peluditos</h1>
           <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="col">
