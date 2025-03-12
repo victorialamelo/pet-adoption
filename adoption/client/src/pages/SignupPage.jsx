@@ -2,17 +2,16 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
-// import { AddNewUser, backendAuthLogin, backendCreateUser } from "../backend";
+import { backendAuthLogin, backendCreateUser } from "../backend";
 // import { hasSession, saveSession, getCurrentSession } from "../session";
 
 export default function SignupPage() {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
-  const createUser = async (event, formData) => {
-    event.preventDefault();
-    
-    const newUser = {
+  const createUser = async (formData) => {
+   
+        const newUser = {
       user_name: formData.get("name"),
       date_of_birth: formData.get("date"),
       city: formData.get("city"),
@@ -29,8 +28,8 @@ export default function SignupPage() {
     const addedUser = await backendCreateUser(newUser); // send the new object (with all the input from new user) to backend
 
     // TODO: integrate authLogin function in backend.js
-    const { token } = await backendAuthLogin({ email, password });
-    saveSession(token);
+    //const { token } = await backendAuthLogin({ email, password });
+    //saveSession(token);
 
     console.log("handleSubmit Sign Up");
 

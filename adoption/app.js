@@ -6,9 +6,13 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
+// var usersRouter = require('./routes/users.js');
+
 var authRouter = require('./routes/auth');
 var petsRouter = require('./routes/pets');
 var requestsRouter = require('./routes/requests');
+var authMiddleware = require('./routes/middleware/authentication');
 
 var app = express();
 app.use(cors());
@@ -19,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('uploads'));
 
+app.use('/authentication', authMiddleware);
 app.use('/auth', authRouter);
 app.use('/pets', petsRouter);
 app.use('/requests', requestsRouter);
