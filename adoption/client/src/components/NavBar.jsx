@@ -1,8 +1,10 @@
 import { useAuth } from "../AuthContext";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const { id } = useParams();
+  console.log("user", user);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top w-100">
@@ -36,7 +38,7 @@ function Navbar() {
               <Link className="nav-link" to="/postpet">Post a Friend</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/userdashboard">Pet Dashboard</Link>
+          <Link className="nav-link" to={`/userdashboard/${id ? id : user.user_id}`}>Pet Dashboard</Link>
             </li>
             </>
             )}
