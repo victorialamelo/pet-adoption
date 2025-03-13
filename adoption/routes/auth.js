@@ -74,8 +74,8 @@ router.post("/login", async (req, res) => {
 
       res.send({
         message: "Login successful, here is your token",
+        user_details: userDetails,
         token,
-        user_details: userDetails
       });
     } else {
       throw new Error("User does not exist");

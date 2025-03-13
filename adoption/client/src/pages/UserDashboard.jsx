@@ -7,11 +7,11 @@ import "../App.css";
 
 // Import backend helper functions
 import {
-  fetchUserProfile,
-  updateUserProfile,
-  fetchPetsWithRequests,
-  updatePetStatus,
-  updateRequestStatus
+//fetchUserProfile,
+//updateUserProfile,
+//fetchPetsWithRequests,
+//updatePetStatus,
+//updateRequestStatus
 } from "../backend";
 
 export default function UserDashboard({ userType }) {
@@ -179,6 +179,7 @@ export default function UserDashboard({ userType }) {
     );
   }
 
+ 
   return (
     <>
       <NavBar />
@@ -354,3 +355,4 @@ export default function UserDashboard({ userType }) {
     </>
   );
 }
+

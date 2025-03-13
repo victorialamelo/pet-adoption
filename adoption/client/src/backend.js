@@ -1,10 +1,7 @@
 // API CLIENT FUNCTIONS - making requests to backend APIs
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-// import { jwtDecode } from "jwt-decode";
-
-//API to Create User
+//API to Create User WORKING.
 export async function backendCreateUser(inputs) {
     //console.log("Sending data:", inputs);
     const response = await fetch("http://localhost:5001/auth/register", {
@@ -25,33 +22,28 @@ export async function backendCreateUser(inputs) {
 }
 
 
-// export async function backendAuthLogin(credentials) {
-//     const response = await fetch("/auth/register", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(credentials),
-//     });
-//     if (!response.ok) {
-//         throw new Error("Login failed");
-//     }
+//API for User Login
+export async function backendLoginUser({email, password}) {
+    const credentials = {email, password};
 
-//     const data = await response.json();
+    console.log("Sending login request with:", credentials); //Debugging
 
-//     return data;
-// }
+    const response = await fetch("http://localhost:5001/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentials),
+    });
 
-export async function backendGetUser(userId) {
-    const response = await fetch(`/api/users/${userId}`);
     if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        console.log("Login failed");
+        throw new Error("Login failed");
     }
 
     const data = await response.json();
 
     return data;
 }
+
 
 // NOTE: requires a valid session
 export async function backendGetUserPokemon(userId) {
