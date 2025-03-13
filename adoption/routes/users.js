@@ -7,7 +7,7 @@ const router = express.Router();
 // G E T all users =======================
 router.get("/", async function (req, res) {
   try {
-    const results = await db("SELECT * FROM users");
+    const results = await db("SELECT * FROM Users");
     console.log("DATABASE RESULTS:", results); // Debugging
     res.json(results); // Fix .data issue
   } catch (err) {
@@ -16,23 +16,35 @@ router.get("/", async function (req, res) {
   }
 });
 
-// G E T by  user id ==================================
+// G E T by user id ==================================
 router.get('/:userId', async (req, res) => {
-  const { userId } = req.params;
-  try {
-    const result = await db(`
-            SELECT * FROM users WHERE user_id = ${userId}
-        `);
+    const { userId } = req.params;
+    console.log("GET request received for user ID:", userId);
+    console.log("Request params:", req.params);
 
-    if (result.data.length) {
-      res.status(200).send(result.data[0]);
-    } else {
-      return res.status(404).send({ message: "User not found" });
+    try {
+      const query = `SELECT * FROM Users WHERE user_id = ${userId}`;
+      console.log("Executing query:", query);
+
+      const result = await db(query);
+      console.log("Query Result:", result.data);
+
+      if (result.data) {
+          res.status(200).json(result.data[0]);
+      } else {
+          console.log("No user found with ID:", userId);
+          res.status(404).json({ message: "User not found" });
+      }
+    } catch (err) {
+      console.error("Database error:", err);
+      res.status(500).send({ message: 'Error fetching user data', error: err.message });
     }
-  } catch (err) {
-    res.status(500).send({ message: 'Error fetching user data', error: err.message });
-  }
-});
+  });
+
+// P U T by user id ==================================
+router.put('/:userId', async (req, res) => {
+
+  });
 
 // P O S T insert user ==========================
 router.post("/", async function (req, res, next) {

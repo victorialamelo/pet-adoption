@@ -74,24 +74,36 @@ export async function backendAddPostPet(userId, newPet) {
 
 // API RESPONSE HELPER
 const handleResponse = async (response) => {
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(errorData?.message || `API error: ${response.status}`);
-  }
-  console.log(response);
-  return response.json();
-};
+    console.log("API Response Status:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      console.error("API Error:", errorData);
+      throw new Error(errorData?.message || `API error: ${response.status}`);
+    }
+
+    return response.json();
+  };
 
 // FETCH USER PROFILE
 export const fetchUserProfile = async (userId) => {
-  const token = localStorage.getItem("token");
-  const response = await fetch(`http://localhost:5001/users/${userId}`, {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
-  return handleResponse(response);
-};
+    // Debugging
+    console.log("Fetching user profile for ID:", userId);
+    console.log("Full URL being called:", `http://localhost:5001/users/${userId}`);
+
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No authentication token found");
+
+    const response = await fetch(`http://localhost:5001/users/${userId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    console.log("fetchUserProfile response:", response);
+
+    return handleResponse(response);
+  };
 
 // UPDATE USER PROFILE
 export const updateUserProfile = async (userId, profileData) => {

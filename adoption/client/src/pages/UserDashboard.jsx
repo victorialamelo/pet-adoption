@@ -26,10 +26,6 @@ export default function UserDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // User IDs
-  console.log('id', id); // returns id from params
-  // console.log('user', user.user_id);
-
   // User profile state
   const [profile, setProfile] = useState({
     name: "",
@@ -48,8 +44,9 @@ export default function UserDashboard() {
           navigate('/login');
           return;
         }
-
-        const userData = await fetchUserProfile(id);
+        setLoading(true);
+        const response = await fetchUserProfile(id);
+        const userData = response[0]; // address result processing from route helper.js
 
         setProfile({
           name: userData.entity_name || userData.user_name,
@@ -58,20 +55,29 @@ export default function UserDashboard() {
           about: userData.about || ''
         });
 
+        console.log("profile", profile);
+
         setFormData({
           name: userData.entity_name || userData.user_name,
           website: userData.entity_website || '',
           registrationID: userData.entity_registration_id || '',
           about: userData.about || ''
         });
+
+
       } catch (err) {
         console.error("Error fetching user profile:", err);
         setError("Failed to load user profile. Please try again later.");
+      } finally {
+        setLoading(false);
       }
+
     };
 
     loadUserProfile();
-  }, [id, navigate]);
+  }, []);
+  
+  // Edit user profile data
 
   // // Fetch pets posted by the current user
   // useEffect(() => {
