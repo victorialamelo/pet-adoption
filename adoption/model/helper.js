@@ -1,5 +1,5 @@
 require("dotenv").config();
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
 module.exports = async function db(query) {
 	const results = {
@@ -45,20 +45,24 @@ module.exports = async function db(query) {
 						con.end();
 						return;
 					}
+				}
 
-					// push the result (which should be an OkPacket) to data
-					// germinal - removed next line because it returns an array in an array when empty set
-					// results.data.push(result);
-				} else if (result[0].constructor.name == "RowDataPacket") {
-					// push each row (RowDataPacket) to data
-					result.forEach((row) => results.data.push(row));
-				} else if (result[0].constructor.name == "OkPacket") {
-					// push the first item in result list to data (this accounts for situations
-					// such as when the query ends with SELECT LAST_INSERT_ID() and returns an insertId)
-					results.data.push(result[0]);
-					// ✅ If it's an INSERT query, we also add the `insertId`
-					if (result[0].insertId) {
-						results.insertId = result[0].insertId; // Store the inserted ID
+				if (result.constructor.name === "ResultSetHeader") {
+					console.log("ResultSetHeader returned (INSERT/UPDATE/DELETE query)");
+					results.data = result;
+					if (result.affectedRows === 0) {
+					results.error = "No rows affected";
+					console.warn("No rows were affected by the query.");
+					}
+				} else {
+					// Otherwise, handle the case for SELECT queries (result will be an array of rows)
+					if (Array.isArray(result)) {
+					results.data = result;
+					console.log("results.data (array of rows)", results.data);
+					} else if (result.constructor.name === "RowDataPacket") {
+					// Handle if it's a single RowDataPacket
+					results.data = [result];
+					console.log("results.data (single RowDataPacket)", results.data);
 					}
 				}
 

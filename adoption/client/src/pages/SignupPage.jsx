@@ -22,7 +22,7 @@ export default function SignupPage() {
         entity_website: formData.get("website"),
         entity_registration_id: formData.get("registrationid"),
       };
-
+      console.log("newUser", newUser);
       const addedUser = await backendCreateUser(newUser); // Send new user data to backend
       console.log("User created successfully:", addedUser);
 

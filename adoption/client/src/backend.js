@@ -28,20 +28,19 @@ export async function backendLoginUser({ email, password }) {
 
     console.log("Sending login request with:", credentials); //Debugging
 
-    const response = await fetch("http://localhost:5001/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
-    });
-
-    if (!response.ok) {
-        console.log("Login failed");
+    try {
+        const response = await fetch("http://localhost:5001/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
+        });
+        const data = await response.json();
+        return data;
+    } catch(e) {
+        console.log(e.message);
         throw new Error("Login failed");
     }
 
-    const data = await response.json();
-
-    return data;
 }
 
 
@@ -71,5 +70,3 @@ export async function backendAddPostPet(userId, newPet) {
 
     return await response.json();
 }
-
-
