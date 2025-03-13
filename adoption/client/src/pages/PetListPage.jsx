@@ -56,7 +56,6 @@ export default function PetListPage() {
     <>
       <NavBar />
 
-
       <header className="text-center">
         <div className="container">
           <h1 className="display-4 fw-bold">Find your best friend</h1>
@@ -65,8 +64,6 @@ export default function PetListPage() {
             alt="Hero"
           />
         </div>
-    
-
       </header>
 
       <section className="filter">
@@ -248,29 +245,36 @@ export default function PetListPage() {
         <div className="container">
           <h1 className="mb-4">Explore Our Peluditos</h1>
           <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            {[...Array(4)].map((_, index) => (
-              <div key={index} className="col">
-                <div className="card shadow-sm">
-                  <img
-                    src="https://t4.ftcdn.net/jpg/02/66/72/41/360_F_266724172_Iy8gdKgMa7XmrhYYxLCxyhx6J7070Pr8.jpg"
-                    alt="Pet"
-                    className="card-img-top"
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">Pet Name</h5>
-                    <p className="card-text">Quick Facts: Age: 3, Size: Medium, Neutered: Yes</p>
-                    <p className="card-text">This is a lovely pet who loves to play and get lots of attention!</p>
-                    <Link to="/petdetails" className="btn btn-primary w-100">
-                      Learn More
-                    </Link>
+            {pets.length === 0 ? (
+              <p>No pets found matching your criteria.</p>
+            ) : (
+              pets.map((pet) => (
+                <div key={pet.id} className="col">
+                  <div className="card shadow-sm">
+                    <img
+                      src={
+                        pet.image || // pet image placeholder
+                        "https://t4.ftcdn.net/jpg/02/66/72/41/360_F_266724172_Iy8gdKgMa7XmrhYYxLCxyhx6J7070Pr8.jpg"
+                      }
+                      alt={pet.name}
+                      className="card-img-top"
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title">{pet.name}</h5>
+                      <Link
+                        to={`/petdetails/${pet.id}`}
+                        className="btn btn-primary w-100"
+                      >
+                        Learn More
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>
-
     </>
   );
 }
