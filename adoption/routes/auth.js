@@ -29,15 +29,31 @@ router.post("/register", async (req, res) => {
     // allow null values for optional fields
     entity_name = entity_name || null;
     entity_website = entity_website || null;
-    entity_registration_id = entity_registration_id ? parseInt(entity_registration_id) : null;
+    entity_registration_id = entity_registration_id || null;
 
+    console.log("entity_registration_id", entity_registration_id)
     const result = await db(
-      `INSERT INTO Users (user_name, zipcode, city,  date_of_birth, phone, entity_name, entity_website, entity_registration_id, email, password)
-       VALUES ("${user_name}", "${zipcode}", "${city}", "${date_of_birth}", "${phone}",
-               ${entity_name ? `"${entity_name}"` : "NULL"},
-               ${entity_website ? `"${entity_website}"` : "NULL"},
-               ${entity_registration_id !== null ? entity_registration_id : "NULL"},
-               "${email}", "${hash}")`
+      `INSERT INTO Users (
+                user_name,
+                zipcode,
+                city,
+                date_of_birth,
+                phone,
+                entity_name,
+                entity_website,
+                entity_registration_id,
+                email,
+                password)
+       VALUES ("${user_name}",
+               "${zipcode}",
+               "${city}",
+               "${date_of_birth}",
+               "${phone}",
+               "${entity_name}",
+               "${entity_website}",
+               "${entity_registration_id}",
+               "${email}",
+               "${hash}")`
     );
 
     const user_id = result.insertId;
@@ -63,7 +79,7 @@ router.post("/login", async (req, res) => {
 
   try {
     const result = await db(
-      `SELECT user_id, user_name, email, password, entity_name, entity_website, entity_registration_id, zipcode, city, date_of_birth, phone 
+      `SELECT user_id, user_name, email, password, entity_name, entity_website, entity_registration_id, zipcode, city, date_of_birth, phone
        FROM users WHERE email = "${email}"`
     );
 
