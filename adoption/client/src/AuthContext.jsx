@@ -19,10 +19,11 @@ export const AuthProvider = ({ children }) => {
 
   // Function to handle login
   const login = (userData, authToken) => {
+    // this function
     setUser(userData);
     setToken(authToken);
     localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", authToken);
+    localStorage.setItem("token", JSON.stringify(authToken));
   };
 
   // Function to handle logout

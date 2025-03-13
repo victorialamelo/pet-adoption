@@ -5,6 +5,7 @@ const db = require("../model/helper");
 const multer = require("multer");
 
 // Add a Pet to Pets and Posts Table WORKING
+
 router.post('/pet', authenticate, async (req, res) => {
     try {
         const {
@@ -18,7 +19,7 @@ router.post('/pet', authenticate, async (req, res) => {
         if (!animal_type || !name || !weight || !size || !gender || !activity_level ||
             good_with_cats === undefined || good_with_dogs === undefined ||
             good_with_kids === undefined || good_with_smallspaces === undefined ||
-            !img_url || !pet_description) {
+            !pet_description) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
@@ -27,11 +28,11 @@ router.post('/pet', authenticate, async (req, res) => {
                 INSERT INTO Pets
                     (animal_type, name, weight, size, gender, activity_level,
                     good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-                    neutered, has_special_needs, potty_trained, img_url, pet_description, user_id)
+                    neutered, has_special_needs, potty_trained, pet_description, user_id)
                 VALUES
                     ('${animal_type}', '${name}', ${weight}, '${size}', '${gender}', '${activity_level}',
                     ${good_with_cats}, ${good_with_dogs}, ${good_with_kids}, ${good_with_smallspaces},
-                    ${neutered}, ${has_special_needs}, ${potty_trained}, '${img_url}', '${pet_description}', ${user_id})`;
+                    ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id})`;
             const result = await db(insertPetQuery);
             // Debugging
             console.log(result);
@@ -66,7 +67,7 @@ router.put('/:pet_id', authenticate, async (req, res) => {
         const {
             animal_type, name, weight, size, gender, activity_level,
             good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-            neutered, has_special_needs, potty_trained, img_url, pet_description
+            neutered, has_special_needs, potty_trained, pet_description
         } = req.body;
 
         const checkOwnershipQuery = `SELECT user_id FROM Pets WHERE pet_id = ${pet_id}`;
@@ -83,7 +84,7 @@ router.put('/:pet_id', authenticate, async (req, res) => {
         const fields = {
             animal_type, name, weight, size, gender, activity_level,
             good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-            neutered, has_special_needs, potty_trained, img_url, pet_description
+            neutered, has_special_needs, potty_trained, pet_description
         };
 
         const updateFields = Object.entries(fields)
