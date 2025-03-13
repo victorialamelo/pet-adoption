@@ -32,11 +32,11 @@ router.post("/register", async (req, res) => {
     entity_registration_id = entity_registration_id ? parseInt(entity_registration_id) : null;
 
     const result = await db(
-      `INSERT INTO Users (user_name, zipcode, city,  date_of_birth, phone, entity_name, entity_website, entity_registration_id, email, password) 
-       VALUES ("${user_name}", "${zipcode}", "${city}", "${date_of_birth}", "${phone}", 
-               ${entity_name ? `"${entity_name}"` : "NULL"}, 
-               ${entity_website ? `"${entity_website}"` : "NULL"}, 
-               ${entity_registration_id !== null ? entity_registration_id : "NULL"}, 
+      `INSERT INTO Users (user_name, zipcode, city,  date_of_birth, phone, entity_name, entity_website, entity_registration_id, email, password)
+       VALUES ("${user_name}", "${zipcode}", "${city}", "${date_of_birth}", "${phone}",
+               ${entity_name ? `"${entity_name}"` : "NULL"},
+               ${entity_website ? `"${entity_website}"` : "NULL"},
+               ${entity_registration_id !== null ? entity_registration_id : "NULL"},
                "${email}", "${hash}")`
     );
 
