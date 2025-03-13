@@ -73,6 +73,33 @@ export async function backendAddPostPet(petData) {
 }
 
 
+//API for Posting a Pet (only logged-in users can access)
+export async function backendAddPostPet(userId, newPet) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        throw new Error("User not authenticated");
+    }
+
+    console.log("Sending request to add pet:", newPet);
+
+    const response = await fetch("http://localhost:5001/pets/pet", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(newPet),
+    });
+
+    if (!response.ok) {
+        const errorMessage = await response.json();
+        console.error("Error adding pet:", errorMessage);
+        throw new Error(errorMessage.message || "Failed to add pet");
+    }
+
+    return await response.json();
+}
+
 
 export async function backendCreateUserPokemon(userId, pokemonId) {
     const response = await fetch("/api/userpokemon", {

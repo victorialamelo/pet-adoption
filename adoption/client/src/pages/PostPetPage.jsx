@@ -1,18 +1,24 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import "../App.css";
+import { useAuth } from "../AuthContext";
 // import axios from 'axios'
 
-// import { backendCreateUserPet } from "../backend";
-// import { hasSession, saveSession, getCurrentSession } from "../session";
+import { backendAddPostPet } from "../backend";
 
 export default function PostPetPage() {
-  const params = useParams();
+  const { user } = useAuth(); //from AuthContext
   const navigate = useNavigate();
   const [photo, setPhoto] = useState(null);
   // const [uploadSuccess, setUploadSuccess] = useState(false);
+
   const createPet = async (formData) => {
+    if (!user) {
+      console.error("User not authenticated");
+      return;
+    }
+
     const newPet = {
       name: formData.get("name"),
       animal_type: formData.get("animaltype"),
@@ -23,7 +29,7 @@ export default function PostPetPage() {
       neutered: Number(formData.get("neutered")), // transform to number due to boolean 0 or 1
       has_special_needs: Number(formData.get("specialNeeds")),
       potty_trained: Number(formData.get("pottyTrained")),
-      img_url: formData.get("image"),
+      img_url: formData.get("image") || null, // accepts if photo is not uploaded
       pet_description: formData.get("story"),
       good_with_cats: Number(formData.get("goodwithcats")),
       good_with_dogs: Number(formData.get("goodwithdogs")),
@@ -31,46 +37,61 @@ export default function PostPetPage() {
       good_with_smallspaces: Number(formData.get("goodwithsmallspaces")),
     };
 
-    // TODO: create backendCreateUserPet function in backend.js
-    const addedPet = await backendCreateUserPet(params.user_id, newPet); // are we using params here? --> send the new object (with all the input for new pet) to backend
+    try {
+      const addedPet = await backendAddPostPet(user.user_id, newPet); //from Auth Context
+      console.log("Pet added:", addedPet); //Debugging
 
-    // await backendCreateUserPokemon(user.id, pokebud.pokeid);
-    // const { token } = await backendAuthLogin({ email, password });
-    // saveSession(token);
-
-    console.log("Pet added");
-
-    // redirect user to petdetails/pet_id
-    navigate(`/petdetails/${addedPet.pet_id}`);
+      //redirect ot pet details page
+      navigate(`/petdetatils/${addedPet.pet_id}`);
+    } catch (error) {
+      console.error("Error adding pet:", error);
+    }
   };
 
-  // NOT WORKING
   const handleFileChange = (e) => {
     setPhoto(e.target.files[0]);
   };
 
-  // photo upload need photo filename in the async request NOT WORKING
-  const handleUpload = async () => {
-    // Send the form data with the file to the server
-    const formData = new FormData();
+  // TODO: create backendCreateUserPet function in backend.js
+  //const addedPet = await backendAddPostPet(params.user_id, newPet); // are we using params here? --> send the new object (with all the input for new pet) to backend
 
-    // Add the file to the form data with the key 'photo'
-    //formData.append('photo', photo) adds the file (photo)
-    //to the form data with the key 'photo'.
-    //This key ('photo') should match the field name expected
-    //by the server. In our case, it matches the field name 'photo'
-    //in the Express route: upload.single('photo').
-    formData.append('photo', photo);
-    // try {
-    //   const res = await axios.post('/api/photo', formData);
-    //   console.log(res);
-    //   //show a success notification
-    //   setUploadSuccess(true);
-    //   setTimeout(() => setUploadSuccess(false), 3000); // Hide notification after 3 seconds
-    // } catch (err) {
-    //   console.error(err);
-    // }
-  };
+  // await backendCreateUserPokemon(user.id, pokebud.pokeid);
+  // const { token } = await backendAuthLogin({ email, password });
+  // saveSession(token);
+
+  //console.log("Pet added");
+
+  // redirect user to petdetails/pet_id
+  //navigate(`/petdetails/${addedPet.pet_id}`);
+  //};
+
+  // NOT WORKING
+  //const handleFileChange = (e) => {
+  //setPhoto(e.target.files[0]);
+  //};
+
+  // photo upload need photo filename in the async request NOT WORKING
+  //const handleUpload = async () => {
+  // Send the form data with the file to the server
+  //const formData = new FormData();
+
+  // Add the file to the form data with the key 'photo'
+  //formData.append('photo', photo) adds the file (photo)
+  //to the form data with the key 'photo'.
+  //This key ('photo') should match the field name expected
+  //by the server. In our case, it matches the field name 'photo'
+  //in the Express route: upload.single('photo').
+  //formData.append("photo", photo);
+  // try {
+  //   const res = await axios.post('/api/photo', formData);
+  //   console.log(res);
+  //   //show a success notification
+  //   setUploadSuccess(true);
+  //   setTimeout(() => setUploadSuccess(false), 3000); // Hide notification after 3 seconds
+  // } catch (err) {
+  //   console.error(err);
+  // }
+  //};
 
   return (
     <>
@@ -86,7 +107,10 @@ export default function PostPetPage() {
           <h1 className="display-4 text-center mb-4">
             Post a Pet for Adoption
           </h1>
-          <form className="form-postpet" action={createPet}>
+          <form
+            className="form-postpet"
+            onSubmit={((e) => e.preventDefault(), createPet())}
+          >
             <div className="row">
               {/* Left Column: Pet Details */}
               <div className="col-md-12">
@@ -132,9 +156,13 @@ export default function PostPetPage() {
                     id="image"
                     name="image"
                     onChange={handleFileChange}
-                    required
                   />
-                  <button className="btn btn-primary btn-block mt-3" onClick={handleUpload}>Upload Photo</button>
+                  <button
+                    className="btn btn-primary btn-block mt-3"
+                    onClick={handleUpload}
+                  >
+                    Upload Photo
+                  </button>
                 </div>
 
                 {/* {uploadSuccess && (
