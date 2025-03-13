@@ -14,7 +14,7 @@ import {
   updateRequestStatus
 } from "../backend";
 
-export default function UserDashboard({ userType }) {
+export default function UserDashboard() {
   const navigate = useNavigate();
   const [selectedPet, setSelectedPet] = useState(null);
   const [editing, setEditing] = useState(false);
