@@ -134,7 +134,7 @@ router.get('/posts', async (req, res) => {
 });
 
 
-// Get Pet By ID WORKING (Logged in users can access, fe filters should work.)
+// Get Pet By ID WORKING (Logged in users can access, fe filters should work.) (Click on a button on post to open a pet page)
 router.get("/:pet_id", async (req, res) => {
     try {
         const petId = req.params.pet_id;
