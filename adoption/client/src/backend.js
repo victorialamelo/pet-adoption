@@ -23,8 +23,8 @@ export async function backendCreateUser(inputs) {
 
 
 //API for User Login
-export async function backendLoginUser({email, password}) {
-    const credentials = {email, password};
+export async function backendLoginUser({ email, password }) {
+    const credentials = { email, password };
 
     console.log("Sending login request with:", credentials); //Debugging
 
@@ -45,32 +45,32 @@ export async function backendLoginUser({email, password}) {
 }
 
 
-//API for Posting a Pet (only logged-in users can access)
-export async function backendAddPostPet(petData) {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        throw new Error("User not authenticated");
-    }
+// //API for Posting a Pet (only logged-in users can access)
+// export async function backendAddPostPet(petData) {
+//     const token = localStorage.getItem("token");
+//     if (!token) {
+//         throw new Error("User not authenticated");
+//     }
 
-    console.log("Sending request to add pet:", petData);
+//     console.log("Sending request to add pet:", petData);
 
-    const response = await fetch("http://localhost:5001/pets/pet", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(petData),
-    });
+//     const response = await fetch("http://localhost:5001/pets/pet", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Authorization": `Bearer ${token}`
+//         },
+//         body: JSON.stringify(petData),
+//     });
 
-    if (!response.ok) {
-        const errorMessage = await response.json();
-        console.error("Error adding pet:", errorMessage);
-        throw new Error(errorMessage.message || "Failed to add pet");
-    }
+//     if (!response.ok) {
+//         const errorMessage = await response.json();
+//         console.error("Error adding pet:", errorMessage);
+//         throw new Error(errorMessage.message || "Failed to add pet");
+//     }
 
-    return await response.json();
-}
+//     return await response.json();
+// }
 
 
 //API for Posting a Pet (only logged-in users can access)
@@ -101,45 +101,45 @@ export async function backendAddPostPet(userId, newPet) {
 }
 
 
-export async function backendCreateUserPokemon(userId, pokemonId) {
-    const response = await fetch("/api/userpokemon", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            user_id: userId,
-            pokemon_id: pokemonId,
-        }),
-    });
-    if (!response.ok) {
-        throw new Error("UserPokemon creation failed");
-    }
+// export async function backendCreateUserPokemon(userId, pokemonId) {
+//     const response = await fetch("/api/userpokemon", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//             user_id: userId,
+//             pokemon_id: pokemonId,
+//         }),
+//     });
+//     if (!response.ok) {
+//         throw new Error("UserPokemon creation failed");
+//     }
 
-    await response.json();
-}
+//     await response.json();
+// }
 
-export async function externalGetPokemonDetails(pokemonId) {
-    const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${pokemonId}`
-    );
-    if (!response.ok) {
-        throw new Error("Failed to load Pokémon details");
-    }
+// export async function externalGetPokemonDetails(pokemonId) {
+//     const response = await fetch(
+//         `https://pokeapi.co/api/v2/pokemon/${pokemonId}`
+//     );
+//     if (!response.ok) {
+//         throw new Error("Failed to load Pokémon details");
+//     }
 
-    const data = await response.json();
+//     const data = await response.json();
 
-    return data;
-}
+//     return data;
+// }
 
-export async function backendDeleteUserPokemon(pokemonId) {
-    const response = await fetch(`/api/userpokemon/${pokemonId}`, {
-        method: "DELETE",
-    });
-    if (!response.ok) {
-        throw new Error("UserPokemon creation failed");
-    }
+// export async function backendDeleteUserPokemon(pokemonId) {
+//     const response = await fetch(`/api/userpokemon/${pokemonId}`, {
+//         method: "DELETE",
+//     });
+//     if (!response.ok) {
+//         throw new Error("UserPokemon creation failed");
+//     }
 
-    await response.json();
-}
+//     await response.json();
+// }
 
 // const TOKEN_STORAGE_KEY = "token";
 
