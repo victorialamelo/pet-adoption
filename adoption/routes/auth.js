@@ -4,12 +4,9 @@ const jwt = require("jsonwebtoken");
 const db = require("../model/helper");
 require('dotenv').config();
 
-
 const supersecret = process.env.SUPER_SECRET;
-
 const router = express.Router();
 const saltRounds = 10;
-
 
 // user registration with duplicate email check
 router.post("/register", async (req, res) => {
@@ -70,8 +67,6 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ error: "Server error: " + err.message });
   }
 });
-
-
 
 // User Login WORKING
 router.post("/login", async (req, res) => {
