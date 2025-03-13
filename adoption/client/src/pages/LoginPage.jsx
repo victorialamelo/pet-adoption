@@ -5,7 +5,7 @@ import { useAuth } from "../AuthContext";
 import { backendLoginUser } from "../backend";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login } = useAuth(); // this function
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -28,7 +28,7 @@ export default function LoginPage() {
 
     try {
       const data = await backendLoginUser({ email, password });
-      login(data.token, data.user_details);
+      login(data.user_details, data.token);
       console.log("Login successful:", data);
     } catch (error) {
       console.error("Login failed:", error.message);
