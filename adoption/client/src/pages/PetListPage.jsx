@@ -82,7 +82,7 @@ export default function PetListPage() {
                   value={filters.animal_type}
                   onChange={handleFilterChange}
                 >
-                  <option value="">Select Type</option>
+                  <option value="">Select type</option>
                   <option value="dog">Cat</option>
                   <option value="cat">Dog</option>
                 </select>
