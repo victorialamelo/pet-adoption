@@ -13,10 +13,10 @@ export async function backendCreateUser(inputs) {
         body: JSON.stringify(inputs),
     });
     if (!response.ok) {
-        console.log("User creation failed");
-        //const errorText = await response.text(); // Get more details from the server
-        //console.log("Server response:", errorText);
-        throw new Error("User creation failed");
+        const errorData = await response.json();
+        const errorMessage = errorData.error || "User creation failed";
+        console.error("User creation failed:", errorMessage);
+        throw new Error(errorMessage); // throw error with specific message
     }
 
     const data = await response.json();
