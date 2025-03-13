@@ -28,8 +28,8 @@ export default function SignupPage() {
 
       navigate(`/userdashboard/${addedUser.user_id}`);
     } catch (error) {
-      console.error("Error creating user:", error);
-      alert("Failed to create account. Please try again.");
+      console.error("Error creating user:", error.message);
+      alert(error.message);
     }
   };
 
