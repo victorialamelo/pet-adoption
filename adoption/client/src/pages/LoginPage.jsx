@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { useAuth } from "../AuthContext";
 import { backendLoginUser } from "../backend";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const { login } = useAuth(); // this function
@@ -12,6 +13,7 @@ export default function LoginPage() {
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const navigate = useNavigate();
   // const [serverError, setServerError] = useState("");
 
   const handleSubmit = async (event) => {
@@ -30,6 +32,7 @@ export default function LoginPage() {
       const data = await backendLoginUser({ email, password });
       login(data.user_details, data.token);
       console.log("Login successful:", data);
+      navigate(`/userdashboard/${data.user_details.user_id}`);
     } catch (error) {
       console.error("Login failed:", error.message);
     }

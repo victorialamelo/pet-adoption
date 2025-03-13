@@ -35,6 +35,7 @@ export async function backendLoginUser({ email, password }) {
             body: JSON.stringify(credentials),
         });
         const data = await response.json();
+
         return data;
     } catch(e) {
         console.log(e.message);
@@ -70,3 +71,38 @@ export async function backendAddPostPet(userId, newPet) {
 
     return await response.json();
 }
+
+// API RESPONSE HELPER
+const handleResponse = async (response) => {
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.message || `API error: ${response.status}`);
+  }
+  console.log(response);
+  return response.json();
+};
+
+// FETCH USER PROFILE
+export const fetchUserProfile = async (userId) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`http://localhost:5001/users/${userId}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+  return handleResponse(response);
+};
+
+// UPDATE USER PROFILE
+export const updateUserProfile = async (userId, profileData) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`/api/users/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(profileData)
+  });
+  return handleResponse(response);
+};

@@ -1,26 +1,34 @@
 import { useState, useEffect } from "react";
 import { Accordion, AccordionItem } from "react-bootstrap";
 import { Image, Card, Button, Dropdown, DropdownButton, Form } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 import NavBar from "../components/NavBar";
+
 import "../App.css";
 
 // Import backend helper functions
 import {
-//fetchUserProfile,
-//updateUserProfile,
+fetchUserProfile,
+updateUserProfile
 //fetchPetsWithRequests,
 //updatePetStatus,
 //updateRequestStatus
 } from "../backend";
 
-export default function UserDashboard({ userType }) {
+export default function UserDashboard() {
+  const { user } = useAuth();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [selectedPet, setSelectedPet] = useState(null);
   const [editing, setEditing] = useState(false);
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // User IDs
+  console.log('id', id); // returns id from params
+  // console.log('user', user.user_id);
 
   // User profile state
   const [profile, setProfile] = useState({
@@ -36,16 +44,12 @@ export default function UserDashboard({ userType }) {
   useEffect(() => {
     const loadUserProfile = async () => {
       try {
-        // Get the user ID from local storage or context
-        const userId = localStorage.getItem('userId');
-
-        if (!userId) {
-          // Redirect to login if not authenticated
+        if (!id) {
           navigate('/login');
           return;
         }
 
-        const userData = await fetchUserProfile(userId);
+        const userData = await fetchUserProfile(id);
 
         setProfile({
           name: userData.entity_name || userData.user_name,
@@ -67,26 +71,26 @@ export default function UserDashboard({ userType }) {
     };
 
     loadUserProfile();
-  }, [navigate]);
+  }, [id, navigate]);
 
-  // Fetch pets posted by the current user
-  useEffect(() => {
-    const loadUserPets = async () => {
-      try {
-        setLoading(true);
+  // // Fetch pets posted by the current user
+  // useEffect(() => {
+  //   const loadUserPets = async () => {
+  //     try {
+  //       setLoading(true);
 
-        const petsWithRequests = await fetchPetsWithRequests();
-        setPets(petsWithRequests);
-      } catch (err) {
-        console.error("Error fetching pets:", err);
-        setError("Failed to load pets. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       const petsWithRequests = await fetchPetsWithRequests();
+  //       setPets(petsWithRequests);
+  //     } catch (err) {
+  //       console.error("Error fetching pets:", err);
+  //       setError("Failed to load pets. Please try again later.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    loadUserPets();
-  }, []);
+  //   loadUserPets();
+  // }, []);
 
   // Update user profile
   const handleSubmit = async (e) => {
@@ -111,42 +115,42 @@ export default function UserDashboard({ userType }) {
     }
   };
 
-  // Update pet status
-  const handlePetStatusChange = async (petId, newStatus) => {
-    try {
-      await updatePetStatus(petId, newStatus);
+  // // Update pet status
+  // const handlePetStatusChange = async (petId, newStatus) => {
+  //   try {
+  //     await updatePetStatus(petId, newStatus);
 
-      // Update the local state to reflect the change
-      setPets(prevPets => prevPets.map(pet =>
-        pet.id === petId ? { ...pet, status: newStatus } : pet
-      ));
-    } catch (err) {
-      console.error("Error updating pet status:", err);
-      alert("Failed to update pet status. Please try again.");
-    }
-  };
+  //     // Update the local state to reflect the change
+  //     setPets(prevPets => prevPets.map(pet =>
+  //       pet.id === petId ? { ...pet, status: newStatus } : pet
+  //     ));
+  //   } catch (err) {
+  //     console.error("Error updating pet status:", err);
+  //     alert("Failed to update pet status. Please try again.");
+  //   }
+  // };
 
-  // Update adoption request status
-  const handleRequestStatusChange = async (requestId, newStatus) => {
-    try {
-      await updateRequestStatus(requestId, newStatus);
+  // // Update adoption request status
+  // const handleRequestStatusChange = async (requestId, newStatus) => {
+  //   try {
+  //     await updateRequestStatus(requestId, newStatus);
 
-      // Update the local state
-      setPets(prevPets =>
-        prevPets.map(pet => ({
-          ...pet,
-          applicants: pet.applicants.map(applicant =>
-            applicant.id === requestId
-              ? { ...applicant, status: newStatus }
-              : applicant
-          )
-        }))
-      );
-    } catch (err) {
-      console.error("Error updating request status:", err);
-      alert("Failed to update application status. Please try again.");
-    }
-  };
+  //     // Update the local state
+  //     setPets(prevPets =>
+  //       prevPets.map(pet => ({
+  //         ...pet,
+  //         applicants: pet.applicants.map(applicant =>
+  //           applicant.id === requestId
+  //             ? { ...applicant, status: newStatus }
+  //             : applicant
+  //         )
+  //       }))
+  //     );
+  //   } catch (err) {
+  //     console.error("Error updating request status:", err);
+  //     alert("Failed to update application status. Please try again.");
+  //   }
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -179,7 +183,7 @@ export default function UserDashboard({ userType }) {
     );
   }
 
- 
+
   return (
     <>
       <NavBar />
@@ -355,4 +359,3 @@ export default function UserDashboard({ userType }) {
     </>
   );
 }
-
