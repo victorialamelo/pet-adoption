@@ -6,13 +6,13 @@ import NavBar from "../components/NavBar";
 import "../App.css";
 
 // Import backend helper functions
-// import {
-//   fetchUserProfile,
-//   updateUserProfile,
-//   fetchPetsWithRequests,
-//   updatePetStatus,
-//   updateRequestStatus
-// } from "../backend";
+import {
+//fetchUserProfile,
+//updateUserProfile,
+//fetchPetsWithRequests,
+//updatePetStatus,
+//updateRequestStatus
+} from "../backend";
 
 export default function UserDashboard() {
   const navigate = useNavigate();
@@ -178,6 +178,7 @@ export default function UserDashboard() {
       </>
     );
   }
+
 
   return (
     <>
@@ -354,3 +355,4 @@ export default function UserDashboard() {
     </>
   );
 }
+

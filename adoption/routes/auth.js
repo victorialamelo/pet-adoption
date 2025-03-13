@@ -11,16 +11,22 @@ const router = express.Router();
 const saltRounds = 10;
 
 
-// User Registration WORKING
+// user registration with duplicate email check
 router.post("/register", async (req, res) => {
   const { email, password, user_name, ...otherDetails } = req.body;
 
   try {
+    // check if the email already exists
+    const existingUser = await db(`SELECT * FROM Users WHERE email = "${email}"`);
+    if (existingUser.data.length > 0) {
+      return res.status(400).json({ error: "Email already registered" });
+    }
+
     const hash = await bcrypt.hash(password, saltRounds);
 
     let { zipcode, city, date_of_birth, phone, entity_name, entity_website, entity_registration_id } = otherDetails;
 
-    //Issue: Must accept null values for these fields. FIXED.
+    // allow null values for optional fields
     entity_name = entity_name || null;
     entity_website = entity_website || null;
     entity_registration_id = entity_registration_id ? parseInt(entity_registration_id) : null;
@@ -39,15 +45,16 @@ router.post("/register", async (req, res) => {
     const token = jwt.sign(
       { user_id, email },
       supersecret,
-      { expiresIn: '1h' }
+      { expiresIn: "1h" }
     );
 
     res.send({ message: "User registration successful", user_id, token });
 
   } catch (err) {
-    res.status(400).send({ message: err.message });
+    res.status(500).json({ error: "Server error: " + err.message });
   }
 });
+
 
 
 // User Login WORKING
@@ -70,12 +77,12 @@ router.post("/login", async (req, res) => {
       const user_id = user.user_id;
       let userDetails = { ...user };
 
-      var token = jwt.sign({ user_id }, supersecret, {expiresIn: "1h"});
+      var token = jwt.sign({ user_id }, supersecret, { expiresIn: "1h" });
 
       res.send({
         message: "Login successful, here is your token",
+        user_details: userDetails,
         token,
-        user_details: userDetails
       });
     } else {
       throw new Error("User does not exist");
