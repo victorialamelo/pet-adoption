@@ -1,64 +1,68 @@
--- Drop Tables
-DROP TABLE IF EXISTS CurrentOwner;
-DROP TABLE IF EXISTS Adopters;
-DROP TABLE IF EXISTS Pets;
-DROP TABLE IF EXISTS Adoptions;
-CREATE TABLE `CurrentOwner`(
-    `current_owner_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `owner_type` VARCHAR(255) NOT NULL,
+-- Drop existing tables if they exist
+DROP TABLE IF EXISTS `Users`,
+`Pets`,
+`Requests`,
+`Posts`;
+-- Create Users table
+CREATE TABLE `Users` (
+    `user_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_name` VARCHAR(255) NOT NULL,
     `zipcode` VARCHAR(255) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
     `date_of_birth` DATE NOT NULL,
-    `phone` BIGINT NOT NULL,
-    `website` VARCHAR(255) NOT NULL
+    `phone` VARCHAR(20) NOT NULL,
+    `entity_name` VARCHAR(255),
+    `entity_website` VARCHAR(255),
+    `entity_registration_id` VARCHAR(255)
 );
-CREATE TABLE `Adopters`(
-    `adopter_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `password` VARCHAR(255) NULL,
-    `zipcode` BIGINT NOT NULL,
-    `city` VARCHAR(255) NOT NULL,
-    `date_of_birth` DATE NOT NULL,
-    `phone` BIGINT NOT NULL,
-    `quiz_result` VARCHAR(255) NOT NULL
-);
-CREATE TABLE `Pets`(
+-- Create Pets table
+CREATE TABLE `Pets` (
     `pet_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `animal_type` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `weight` BIGINT NOT NULL,
     `size` VARCHAR(255) NOT NULL,
     `gender` VARCHAR(255) NOT NULL,
-    `activity` VARCHAR(255) NOT NULL,
-    `good_with` VARCHAR(255) NOT NULL,
+    `activity_level` VARCHAR(255) NOT NULL,
+    `good_with_cats` BOOLEAN NOT NULL,
+    `good_with_dogs` BOOLEAN NOT NULL,
+    `good_with_kids` BOOLEAN NOT NULL,
+    `good_with_smallspaces` BOOLEAN NOT NULL,
     `neutered` BOOLEAN NOT NULL,
-    `has_especial_needs` BOOLEAN NOT NULL,
+    `has_special_needs` BOOLEAN NOT NULL,
     `potty_trained` BOOLEAN NOT NULL,
     `img_url` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `status` VARCHAR(255) NOT NULL,
-    `current_owner_id` BIGINT UNSIGNED NULL,
-    `adopter_id` BIGINT UNSIGNED NULL,
-    FOREIGN KEY (`current_owner_id`) REFERENCES `CurrentOwner`(`current_owner_id`) ON DELETE CASCADE,
-    FOREIGN KEY (`adopter_id`) REFERENCES `Adopters`(`adopter_id`) ON DELETE CASCADE
+    `pet_description` VARCHAR(255) NOT NULL,
+    `user_id` BIGINT UNSIGNED NOT NULL
 );
-ALTER TABLE `CurrentOwner`
-ADD COLUMN `pet_id` BIGINT UNSIGNED NULL,
-    ADD FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
-ALTER TABLE `Adopters`
-ADD COLUMN `pet_id` BIGINT UNSIGNED NULL,
-    ADD FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
-CREATE TABLE `Adoptions`(
-    `adoption_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+-- Add foreign key constraint for Pets table
+ALTER TABLE `Pets`
+ADD CONSTRAINT `pets_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
+-- Create Requests table
+CREATE TABLE `Requests` (
+    `request_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pet_id` BIGINT UNSIGNED NOT NULL,
-    `adopter_id` BIGINT UNSIGNED NOT NULL,
-    `current_owner_id` BIGINT UNSIGNED NOT NULL,
-    `adoption_date` DATE NOT NULL,
-    `adoption_status` VARCHAR(255) NOT NULL,
-    FOREIGN KEY (`current_owner_id`) REFERENCES `CurrentOwner`(`current_owner_id`) ON DELETE CASCADE,
-    FOREIGN KEY (`adopter_id`) REFERENCES `Adopters`(`adopter_id`) ON DELETE CASCADE,
-    FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE
+    `requester_id` BIGINT UNSIGNED NOT NULL,
+    `request_date` DATE NOT NULL,
+    `request_status` VARCHAR(255) NOT NULL,
+    `request_message` TEXT NOT NULL
 );
+-- Add foreign key constraints for Requests table
+ALTER TABLE `Requests`
+ADD CONSTRAINT `requests_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
+ALTER TABLE `Requests`
+ADD CONSTRAINT `requests_requester_id_foreign` FOREIGN KEY (`requester_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
+-- Create Posts table
+CREATE TABLE `Posts` (
+    `post_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `pet_id` BIGINT UNSIGNED NOT NULL,
+    `post_owner_id` BIGINT UNSIGNED NOT NULL,
+    `post_date` DATETIME NOT NULL
+);
+-- Add foreign key constraints for Posts table
+ALTER TABLE `Posts`
+ADD CONSTRAINT `posts_pet_id_foreign` FOREIGN KEY (`pet_id`) REFERENCES `Pets`(`pet_id`) ON DELETE CASCADE;
+ALTER TABLE `Posts`
+ADD CONSTRAINT `posts_post_owner_id_foreign` FOREIGN KEY (`post_owner_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;

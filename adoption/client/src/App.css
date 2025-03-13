@@ -9,6 +9,7 @@
   --lemon: #FFFACD;
   --sage: #DCE2BD;
   --latte: #FFF8E7;
+  --textshadow: #c4c4ea6e;
 }
 
 * {
@@ -17,46 +18,53 @@
   padding: 0;
 }
 
-h1, h2, h3, .navbar-brand {
+h1, h2, h3,  .navbar-brand {
   font-family: "Shrikhand", serif;
   font-weight: 400;
   font-style: normal;
   text-transform: uppercase;
-  text-shadow:rgba(0, 0, 0, 0.5);
   color: var(--lavender);
+  text-shadow:
+    var(--textshadow) 1px 1px,
+    var(--textshadow) 2px 2px,
+    var(--textshadow) 3px 3px,
+    var(--textshadow) 4px 4px,
+    var(--textshadow) 5px 5px,
+    var(--textshadow) 6px 6px
 }
 
 p, span, li{
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
-  font-size: 1.3em
+  font-size: 1.3em;
+  color: var(--lavender);
 }
 
 body, #root {
   margin: 0 auto;
   width: 100%;
-  background-color: var(--latte);
+  background-color: var(--celeste);
 }
 
 header {
   position: relative;
-  min-height: 400px;
   width: 100%;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Ensures no weird spacing */
+  overflow: hidden;
 }
 
 header img {
-  position: absolute;
-  top: 25px;
+  top: 60px;
   left: 0;
-  width: 100%;
-  height: 600px;
-  object-fit: cover; /* Makes the image fill the space */
+  width: 100vw;
+  height: 100%;
+  object-fit: cover; /* Ensures full width while keeping image proportions */
 }
+
 
 header h1 {
   position: relative;
@@ -67,8 +75,8 @@ header h1 {
 }
 
 nav {
-  height: 60px; /* Adjust if needed */
-  background: var(--latte);
+  height: 100px; /* Adjust if needed */
+  background: var(--lemon);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -78,13 +86,17 @@ nav {
   top: 0;
   left: 0;
   z-index: 10;
+  border-bottom: 10px solid white;
 }
 
-section {
-  background-color: var(--mistyrose);
+.navbar {
+  padding: 20px;
 }
 
+
 section {
+  border-top: 10px solid white;
+  background-color: var(--celeste);
   padding: 50px;
   min-height: 600px;
 }
@@ -93,9 +105,35 @@ section {
   padding: 50px;
 }
 
-input {
-  height: 55px;
+.postapet {
+  margin: 0;
+  padding: 100px 20px 20px 20px;
+  background-color: var(--mistyrose);
 }
+
+.form-postpet {
+  max-width: 500px;
+  margin: 0 auto;
+}
+.form-postpet label {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--lavendar)
+}
+
+.form-postpet input,
+.form-postpet select  {
+  border: 1px solid var(--lavender);
+}
+
+.form-postpet #story.form-control {
+  border: 1px solid var(--lavender);
+}
+
+.form-postpet #image.form-control {
+  height: auto;
+}
+
 
 input:focus {
   border: 4px solid var(--peach) !important;
@@ -114,15 +152,46 @@ input:focus {
   color: var(--skyblue);
 }
 
+.signup, .login {
+  background-color: var(--latte);
+}
+
 .banner {
+  position: relative;
   background-color: var(--sage);
+  background-image: url('../src/assets/whitecat.jpg');
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  width: 100vw;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.259);
+  z-index: 1;
+}
+
+.banner .container-fluid {
+  position: relative;
+  z-index: 2;
+  color: white;
 }
 
 .introduction {
   padding-top: 30px;
   padding-bottom: 30px;
   height: 400px;
-  background-color: var(--celeste);
+  background-color: var(--sage);
 }
 
 .donate {
@@ -136,14 +205,15 @@ input:focus {
 .petgrid {
   background-color: var(--sage);
 }
-.card {
-  background-color: var(--latte);
-  border: 0px;
-}
 
 .postpet {
   max-width: 700px;
   padding: 30px;
+}
+
+.user-dashboard {
+  background-color: var(--celeste);
+  padding: 70px;
 }
 
 .checkbox-span {
@@ -158,4 +228,33 @@ input:focus {
 
 #specialNeeds, #neutered, #pottyTrained {
   margin-left: 10px;
+}
+
+.dashboard-container {
+  background-color: var(--sage);
+  margin: 0 auto;
+}
+
+tbody,th,td {
+  border-bottom: 1px solid var(--lavender)
+}
+
+th {
+  font-size: 1.2em;
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+  font-style: normal;
+  text-transform: uppercase;
+  color: var(--lavender);
+}
+
+.form-applicationstatus {
+  padding: 5px;
+  background-color: var(--latte);
+  height: 43px;
+  border-radius: 7px;
+  font-size: 1.2em;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--lavender);
 }
