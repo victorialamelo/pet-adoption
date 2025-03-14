@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mysql = require("mysql2");
 
-module.exports = async function db(query) {
+module.exports = async function db(query, values = []) {
 	const results = {
 		data: [],
 		error: null,
@@ -24,7 +24,7 @@ module.exports = async function db(query) {
 			if (err) throw err;
 			console.log("Connected!");
 
-			con.query(query, function (err, result) {
+			con.query(query, values, function (err, result) {
 				if (err) {
 					results.error = err;
 					console.log(err);
@@ -51,18 +51,18 @@ module.exports = async function db(query) {
 					console.log("ResultSetHeader returned (INSERT/UPDATE/DELETE query)");
 					results.data = result;
 					if (result.affectedRows === 0) {
-					results.error = "No rows affected";
-					console.warn("No rows were affected by the query.");
+						results.error = "No rows affected";
+						console.warn("No rows were affected by the query.");
 					}
 				} else {
 					// Otherwise, handle the case for SELECT queries (result will be an array of rows)
 					if (Array.isArray(result)) {
-					results.data = result;
-					console.log("results.data (array of rows)", results.data);
+						results.data = result;
+						console.log("results.data (array of rows)", results.data);
 					} else if (result.constructor.name === "RowDataPacket") {
-					// Handle if it's a single RowDataPacket
-					results.data = [result];
-					console.log("results.data (single RowDataPacket)", results.data);
+						// Handle if it's a single RowDataPacket
+						results.data = [result];
+						console.log("results.data (single RowDataPacket)", results.data);
 					}
 				}
 

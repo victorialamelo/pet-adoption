@@ -58,7 +58,7 @@ router.post('/pet', authenticate, async (req, res) => {
                 INSERT INTO Posts (pet_id, post_owner_id, post_date)
                 VALUES (${pet_id}, ${user_id}, NOW())`;
 
-            const postresult =  await db(insertPostQuery);
+            const postresult = await db(insertPostQuery);
             console.log(postresult);
 
             res.status(201).json({
@@ -128,6 +128,45 @@ router.put('/:pet_id', authenticate, async (req, res) => {
     }
 });
 
+// Get all pets with filters
+router.get("/pet", async (req, res) => {
+    try {
+        const filters = req.query;
+        let query = "SELECT * FROM Pets WHERE 1=1";
+        let values = [];
+
+        // map frontend filters to database column names
+        const filterMappings = {
+            animal_type: "animal_type",
+            size: "size",
+            gender: "gender",
+            activity_level: "activity_level",
+            neutered: "neutered",
+            has_special_needs: "has_special_needs",
+            potty_trained: "potty_trained",
+            good_with_cats: "good_with_cats",
+            good_with_dogs: "good_with_dogs",
+            good_with_kids: "good_with_kids",
+            good_with_smallspaces: "good_with_smallspaces"
+        };
+
+        Object.keys(filters).forEach((key) => {
+            if (filterMappings[key] !== undefined && filters[key] !== "") {
+                query += ` AND ${filterMappings[key]} = ?`;
+                values.push(filters[key]);
+            }
+        });
+
+        console.log("Executing query:", query, values);
+
+        const result = await db(query, values);
+        res.status(200).json(result.data);
+    } catch (error) {
+        console.error("Database Error:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
 // Get All Posts WORKING (Logged in users can access)
 router.get('/posts', async (req, res) => {
     try {
@@ -155,7 +194,7 @@ router.get('/posts', async (req, res) => {
 
 
 // Get Pet By ID WORKING (Logged in users can access, fe filters should work.) (Click on a button on post to open a pet page)
-router.get("/:pet_id", async (req, res) => {
+router.get("pets/:pet_id", async (req, res) => {
     try {
         const petId = req.params.pet_id;
 
