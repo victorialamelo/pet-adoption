@@ -155,7 +155,7 @@ router.get('/posts', async (req, res) => {
 
 
 // Get Pet By ID WORKING (Logged in users can access, fe filters should work.) (Click on a button on post to open a pet page)
-router.get("/:pet_id", async (req, res) => {
+router.get("/:pet_id", authenticate, async (req, res) => {
     try {
         const petId = req.params.pet_id;
 
@@ -172,6 +172,31 @@ router.get("/:pet_id", async (req, res) => {
         }
 
         res.json(result.data[0]);
+    } catch (error) {
+        console.error("Database Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+//Get all of current user´s posted pets.
+router.get("/allpostedpets/:user_id", authenticate, async (req, res) => {
+    try {
+        const { user_id } = req.params;
+
+        const query = `
+            SELECT Pets.*, Posts.post_id, Posts.post_date
+            FROM Pets
+            LEFT JOIN Posts ON Pets.pet_id = Posts.pet_id
+            WHERE Pets.user_id = ${user_id}`;
+
+        const result = await db(query);
+
+        if (!result || !result.data || result.data.length === 0) {
+            return res.status(404).json({ message: "No pets found for this user" });
+        }
+
+        res.json(result.data);
     } catch (error) {
         console.error("Database Error:", error);
         res.status(500).json({ error: "Internal Server Error" });
