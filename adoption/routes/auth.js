@@ -65,9 +65,9 @@ router.post("/register", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ 
-      message: "User registration successful", 
-      token, 
+    res.json({
+      message: "User registration successful",
+      token,
       user: newUser // Return the full user object
     });
 
@@ -83,7 +83,7 @@ router.post("/login", async (req, res) => {
   try {
     const result = await db(
       `SELECT user_id, user_name, email, password, entity_name, entity_website, entity_registration_id, zipcode, city, date_of_birth, phone
-       FROM users WHERE email = "${email}"`
+       FROM Users WHERE email = "${email}"`
     );
 
     const user = result.data[0];
