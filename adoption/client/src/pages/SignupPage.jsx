@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { backendCreateUser } from "../backend";
+import { useAuth } from "../AuthContext";
 
 export default function SignupPage() {
+  const { login } = useAuth();
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
@@ -23,10 +25,12 @@ export default function SignupPage() {
         entity_registration_id: formData.get("registrationid"),
       };
       console.log("newUser", newUser);
-      const addedUser = await backendCreateUser(newUser); // Send new user data to backend
+      const addedUser = await backendCreateUser(newUser);
+      login(addedUser, addedUser.token);
+      // Send new user data to backend
       console.log("User created successfully:", addedUser);
 
-      navigate(`/userdashboard/${addedUser.user_id}`);
+      navigate(`/userdashboard/${addedUser.user.user_id}`);
     } catch (error) {
       console.error("Error creating user:", error.message);
       alert(error.message);

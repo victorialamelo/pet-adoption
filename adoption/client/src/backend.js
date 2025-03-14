@@ -36,6 +36,8 @@ export async function backendLoginUser({ email, password }) {
         });
         const data = await response.json();
 
+        console.log("API Response from Backend:", data); // Debugging
+
         return data;
     } catch(e) {
         console.log(e.message);
@@ -46,13 +48,13 @@ export async function backendLoginUser({ email, password }) {
 
 
 //API for Posting a Pet (only logged-in users can access)
-export async function backendAddPostPet(userId, newPet) {
+export async function backendAddPostPet(newPet) {
     const token = localStorage.getItem("token");
     if (!token) {
         throw new Error("User not authenticated");
     }
 
-    console.log("Sending request to add pet:", newPet);
+    console.log("Sending request to add pet:", JSON.stringify(newPet, null, 2));
 
     const response = await fetch("http://localhost:5001/pets/pet", {
         method: "POST",
@@ -63,14 +65,43 @@ export async function backendAddPostPet(userId, newPet) {
         body: JSON.stringify(newPet),
     });
 
+    console.log("response", response)
+
     if (!response.ok) {
-        const errorMessage = await response.json();
-        console.error("Error adding pet:", errorMessage);
-        throw new Error(errorMessage.message || "Failed to add pet");
-    }
+      try {
+          const errorMessage = await response.json();
+          console.error("Error adding pet:", errorMessage);
+          throw new Error(errorMessage.message || "Failed to add pet");
+      } catch (err) {
+          console.error("Failed to parse error response:", err);
+          throw new Error(`Failed to add pet: ${response.status} ${response.statusText}`);
+      }
+  }
 
     return await response.json();
 }
+
+//API for Fetching a Pet Details (only logged-in users can access)
+export async function backendFetchPetDetails(petId) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+      throw new Error("User not authenticated");
+  }
+
+  console.log(`Fetching details for pet with ID: ${petId}`);
+
+  const response = await fetch(`http://localhost:5001/pets/${petId}`, {
+      method: "GET",
+      headers: {
+          "Authorization": `Bearer ${token}`
+      }
+  });
+
+  console.log("Response:", response);
+
+  return handleResponse(response);
+}
+
 
 // API RESPONSE HELPER
 const handleResponse = async (response) => {

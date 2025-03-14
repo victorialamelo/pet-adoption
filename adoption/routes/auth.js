@@ -55,13 +55,21 @@ router.post("/register", async (req, res) => {
 
     const user_id = result.insertId;
 
+    // Fetch the newly created user from the database
+    const userQuery = await db(`SELECT user_id, user_name, email, city, zipcode, date_of_birth, phone, entity_name, entity_website, entity_registration_id FROM Users WHERE user_id = ${user_id}`);
+    const newUser = userQuery.data[0];
+
     const token = jwt.sign(
       { user_id, email },
       supersecret,
       { expiresIn: "1h" }
     );
 
-    res.send({ message: "User registration successful", user_id, token });
+    res.json({
+      message: "User registration successful",
+      token,
+      user: newUser // Return the full user object
+    });
 
   } catch (err) {
     res.status(500).json({ error: "Server error: " + err.message });
@@ -75,7 +83,7 @@ router.post("/login", async (req, res) => {
   try {
     const result = await db(
       `SELECT user_id, user_name, email, password, entity_name, entity_website, entity_registration_id, zipcode, city, date_of_birth, phone
-       FROM users WHERE email = "${email}"`
+       FROM Users WHERE email = "${email}"`
     );
 
     const user = result.data[0];

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 
+
 export default function PetListPage() {
   const [filters, setFilters] = useState({
     animal_type: "",
