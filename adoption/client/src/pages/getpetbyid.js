@@ -1,4 +1,4 @@
-//API to fetch all posted pets by current user´s id. 
+//API to fetch all posted pets by current user´s id.
 
 export const getUserPostedPets = async (user_id) => {
     try {
@@ -9,7 +9,9 @@ export const getUserPostedPets = async (user_id) => {
                 "Authorization": `Bearer ${localStorage.getItem("token")}`//Stored token.
             }
         });
-        
+
+        console.log("response.data",  response);
+
         if (!response.ok) {
             throw new Error("Failed to fetch user posted pets");
         }

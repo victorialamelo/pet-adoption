@@ -192,6 +192,9 @@ router.get("/allpostedpets/:user_id", authenticate, async (req, res) => {
 
         const result = await db(query);
 
+        // DEBUGGING
+        console.log("ROUTER /allpostedpets/:user_id result", result);
+
         if (!result || !result.data || result.data.length === 0) {
             return res.status(404).json({ message: "No pets found for this user" });
         }

@@ -16,6 +16,10 @@ updateUserProfile
 //updateRequestStatus
 } from "../backend";
 
+import {
+  getUserPostedPets
+} from "../pages/getpetbyid"
+
 export default function UserDashboard() {
   const { user } = useAuth();
   const { id } = useParams();
@@ -81,24 +85,24 @@ export default function UserDashboard() {
 
   // Edit user profile data
 
-  // // Fetch pets posted by the current user
-  // useEffect(() => {
-  //   const loadUserPets = async () => {
-  //     try {
-  //       setLoading(true);
+  // Fetch pets posted by the current user
+  useEffect(() => {
+    const loadUserPets = async () => {
+      try {
+        setLoading(true);
 
-  //       const petsWithRequests = await fetchPetsWithRequests();
-  //       setPets(petsWithRequests);
-  //     } catch (err) {
-  //       console.error("Error fetching pets:", err);
-  //       setError("Failed to load pets. Please try again later.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+        const petsWithRequests = await getUserPostedPets(id);
+        setPets(petsWithRequests);
+      } catch (err) {
+        console.error("Error fetching pets:", err);
+        setError("Failed to load pets. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   loadUserPets();
-  // }, []);
+    loadUserPets();
+  }, []);
 
   // Update user profile
   const handleSubmit = async (e) => {
@@ -300,7 +304,7 @@ export default function UserDashboard() {
                         <p><strong>Activity:</strong> {pet.activity}</p>
                         <p><strong>Special Needs:</strong> {pet.specialNeeds}</p>
                         <p><strong>Potty Trained:</strong> {pet.pottyTrained ? "Yes" : "No"} | <strong>Neutered:</strong> {pet.neutered ? "Yes" : "No"}</p>
-                        <p><strong>Good with:</strong> {pet.goodWith.join(', ')}</p>
+                        {/* <p><strong>Good with:</strong> {pet.goodWith.join(', ')}</p> */}
                         <div className="d-flex gap-2 mt-3">
                           <Button
                             variant="outline-secondary"
@@ -308,9 +312,9 @@ export default function UserDashboard() {
                           >
                             Edit
                           </Button>
-                          <Button variant="primary" onClick={() => setSelectedPet(pet)}>
+                          {/* <Button variant="primary" onClick={() => setSelectedPet(pet)}>
                             View Applicants {pet.applicants.length > 0 && `(${pet.applicants.length})`}
-                          </Button>
+                          </Button> */}
                         </div>
                       </div>
                     </Accordion.Body>
