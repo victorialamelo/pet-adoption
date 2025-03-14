@@ -48,8 +48,8 @@ router.post('/pet', authenticate, async (req, res) => {
                     ('${animal_type}', '${name}', ${weight}, '${size}', '${gender}', '${activity_level}',
                     ${good_with_cats}, ${good_with_dogs}, ${good_with_kids}, ${good_with_smallspaces},
                     ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id}, '${img_url}')`;
+
             const result = await db(insertPetQuery);
-            // Debugging
             console.log("result", result);
 
             const pet_id = result.insertId;
@@ -76,7 +76,6 @@ router.post('/pet', authenticate, async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-
 
 // Update Pet Information WORKING
 router.put('/:pet_id', authenticate, async (req, res) => {
@@ -132,10 +131,10 @@ router.put('/:pet_id', authenticate, async (req, res) => {
 router.get("/pet", async (req, res) => {
     try {
         const filters = req.query;
-        let query = "SELECT * FROM Pets WHERE 1=1";
+        let query = "SELECT Pets.*, Posts.post_id, Posts.post_date FROM Pets LEFT JOIN Posts ON Pets.pet_id = Posts.pet_id WHERE 1=1"; // Start with a valid base query
         let values = [];
 
-        // map frontend filters to database column names
+        // Map frontend filters to database column names
         const filterMappings = {
             animal_type: "animal_type",
             size: "size",
@@ -150,51 +149,30 @@ router.get("/pet", async (req, res) => {
             good_with_smallspaces: "good_with_smallspaces"
         };
 
+        // Loop over the filters and dynamically add them to the query
         Object.keys(filters).forEach((key) => {
+            // Ensure that the key is part of the filter mappings and the value is valid
             if (filterMappings[key] !== undefined && filters[key] !== "") {
-                query += ` AND ${filterMappings[key]} = ?`;
-                values.push(filters[key]);
+                query += ` AND ${filterMappings[key]} = ?`;  // Dynamically append condition
+                values.push(filters[key]);  // Push corresponding filter value
             }
         });
 
-        console.log("Executing query:", query, values);
+        // Debugging the query string and values
+        console.log("Final query:", query);
+        console.log("Query values:", values);
 
         const result = await db(query, values);
-        res.status(200).json(result.data);
+        res.status(200).json(result.data);  // Send back the results
     } catch (error) {
         console.error("Database Error:", error);
         res.status(500).json({ message: "Server error" });
     }
 });
 
-// Get All Posts WORKING (Logged in users can access)
-router.get('/posts', async (req, res) => {
-    try {
-        const filters = req.query;
-        let query = `
-            SELECT Posts.post_id, Posts.post_date, Pets.*
-            FROM Posts
-            JOIN Pets ON Posts.pet_id = Pets.pet_id
-            WHERE 1=1`;
 
-        const values = [];
-
-        Object.keys(filters).forEach((key, index) => {
-            query += ` AND ${key} = ?`;
-            values.push(filters[key]);
-        });
-
-        const posts = await db(query, values);
-        res.status(200).json(posts);
-    } catch (error) {
-        console.error('Database Error:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-
-// Get Pet By ID WORKING (Logged in users can access, fe filters should work.) (Click on a button on post to open a pet page)
-router.get("pets/:pet_id", async (req, res) => {
+// Get Pet By ID WORKING (Logged in users can access, fe filters should work.)
+router.get("/:pet_id", authenticate, async (req, res) => {
     try {
         const petId = req.params.pet_id;
 
@@ -217,5 +195,31 @@ router.get("pets/:pet_id", async (req, res) => {
     }
 });
 
+// Get all of current user's posted pets.
+router.get("/allpostedpets/:user_id", authenticate, async (req, res) => {
+    try {
+        const { user_id } = req.params;
+
+        const query = `
+            SELECT Pets.*, Posts.post_id, Posts.post_date
+            FROM Pets
+            LEFT JOIN Posts ON Pets.pet_id = Posts.pet_id
+            WHERE Pets.user_id = ${user_id}`;
+
+        const result = await db(query);
+
+        // Debugging
+        console.log("ROUTER /allpostedpets/:user_id result", result);
+
+        if (!result || !result.data || result.data.length === 0) {
+            return res.status(404).json({ message: "No pets found for this user" });
+        }
+
+        res.json(result.data);
+    } catch (error) {
+        console.error("Database Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 module.exports = router;

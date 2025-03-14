@@ -8,13 +8,13 @@ export default function PetListPage() {
     size: "",
     gender: "",
     activity_level: "",
-    neutered: false,
-    has_special_needs: false,
-    potty_trained: false,
-    good_with_cats: false,
-    good_with_dogs: false,
-    good_with_kids: false,
-    good_with_smallspaces: false,
+    neutered: 0, // Change initial state to 0 for checkboxes
+    has_special_needs: 0,
+    potty_trained: 0,
+    good_with_cats: 0,
+    good_with_dogs: 0,
+    good_with_kids: 0,
+    good_with_smallspaces: 0,
   });
 
   const [pets, setPets] = useState([]);
@@ -25,7 +25,8 @@ export default function PetListPage() {
         // Convert filters to query string
         const queryParams = new URLSearchParams(
           Object.entries(filters).reduce((acc, [key, value]) => {
-            if (value !== "" && value !== false) acc[key] = value;
+            // Only add parameters with non-falsy values (including '0' for unchecked checkboxes)
+            if (value !== "" && value !== 0) acc[key] = value;
             return acc;
           }, {})
         );
@@ -35,23 +36,27 @@ export default function PetListPage() {
           `http://localhost:5001/pets/pet?${queryParams}`
         );
         if (!response.ok) throw new Error("Failed to fetch pets");
-        console.log(response);
         const data = await response.json();
-        setPets(data);
         console.log(data);
+        // Check if the response data is an array
+        if (Array.isArray(data)) {
+          setPets(data); // Set pets if the data is an array
+        } else {
+          console.error("Data is not an array:", data);
+        }
       } catch (error) {
         console.error("Error fetching pets:", error);
       }
     };
 
     fetchPets();
-  }, [filters]); // Fetch pets when filters change
+  }, [filters]); // fetch pets when filters change
 
   const handleFilterChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, type, checked } = e.target;
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? (checked ? 1 : 0) : e.target.value, // set 1 for checked, 0 for unchecked
     }));
   };
 
@@ -147,7 +152,7 @@ export default function PetListPage() {
                         id={key}
                         name={key}
                         className="form-check-input"
-                        checked={filters[key]}
+                        checked={filters[key] === 1}
                         onChange={handleFilterChange}
                       />
                       <label className="form-check-label" htmlFor={key}>
@@ -166,7 +171,7 @@ export default function PetListPage() {
                       id={`good_with_${key}`}
                       name={`good_with_${key}`}
                       className="form-check-input"
-                      checked={filters[`good_with_${key}`]}
+                      checked={filters[`good_with_${key}`] === 1}
                       onChange={handleFilterChange}
                     />
                     <label
