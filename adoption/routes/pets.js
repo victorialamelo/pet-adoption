@@ -16,29 +16,25 @@ router.post('/pet', authenticate, async (req, res) => {
             neutered, has_special_needs, potty_trained, pet_description, img_url
         } = req.body;
 
-        console.log("Extracted fields:", {
-            animal_type, name, weight, size, gender, activity_level,
-            good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-            neutered, has_special_needs, potty_trained, pet_description, img_url
-        });
-
         const user_id = req.user.user_id;
-        console.log(user_id);
 
-        if (!animal_type ||
-            !name ||
-            !weight ||
-            !size ||
-            !gender ||
-            !activity_level ||
-            !potty_trained ||
-            !neutered ||
-            !pet_description ||
-            !has_special_needs ||
-            good_with_cats === null ||
-            good_with_dogs === null ||
-            good_with_kids === null ||
-            good_with_smallspaces === null 
+        if (
+            animal_type === undefined ||
+            name === undefined ||
+            weight === undefined ||
+            size === undefined ||
+            gender === undefined ||
+            activity_level === undefined ||
+            potty_trained === undefined ||
+            neutered === undefined ||
+            pet_description === undefined ||
+            has_special_needs === undefined ||
+            img_url === undefined ||
+            good_with_cats === undefined ||
+            good_with_dogs === undefined ||
+            good_with_kids === undefined ||
+            good_with_smallspaces === undefined ||
+            user_id === undefined  // Ensure user_id is included
         ) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
@@ -48,11 +44,11 @@ router.post('/pet', authenticate, async (req, res) => {
                 INSERT INTO Pets
                     (animal_type, name, weight, size, gender, activity_level,
                     good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-                    neutered, has_special_needs, potty_trained, pet_description, user_id)
+                    neutered, has_special_needs, potty_trained, pet_description, user_id, img_url)
                 VALUES
                     ('${animal_type}', '${name}', ${weight}, '${size}', '${gender}', '${activity_level}',
                     ${good_with_cats}, ${good_with_dogs}, ${good_with_kids}, ${good_with_smallspaces},
-                    ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id})`;
+                    ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id}, '${img_url}')`;
             const result = await db(insertPetQuery);
             // Debugging
             console.log(result);

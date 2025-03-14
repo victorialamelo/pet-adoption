@@ -29,7 +29,7 @@ export default function PostPetPage() {
       neutered: Number(formData.get("neutered")) || 0,
       has_special_needs: Number(formData.get("specialNeeds")) || 0,
       potty_trained: Number(formData.get("pottyTrained")) || 0,
-      // img_url: photo ? URL.createObjectURL(photo) : null,
+      img_url: "imageplaceholder",
       pet_description: formData.get("story"),
       good_with_cats: Number(formData.get("goodwithcats")) || 0,
       good_with_dogs: Number(formData.get("goodwithdogs")) || 0,

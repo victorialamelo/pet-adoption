@@ -50,9 +50,6 @@ export async function backendLoginUser({ email, password }) {
 //API for Posting a Pet (only logged-in users can access)
 export async function backendAddPostPet(newPet) {
     const token = localStorage.getItem("token");
-
-    console.log("T O K E NNNNNN being sent:", token);
-
     if (!token) {
         throw new Error("User not authenticated");
     }
