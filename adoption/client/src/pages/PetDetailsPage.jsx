@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
-import {backendFetchPetDetails} from "../backend";
+import { backendFetchPetDetails } from "../backend";
 
 export default function PetDetailsPage() {
   const { pet_id } = useParams();
@@ -12,9 +12,7 @@ export default function PetDetailsPage() {
   useEffect(() => {
     const fetchPetDetails = async () => {
       try {
-        const response = await fetch(`/pets/${pet_id}`);
-        if (!response.ok) throw new Error("Failed to fetch pet details");
-        const data = await response.json();
+        const data = await backendFetchPetDetails(pet_id);
         setPetDetails(data);
       } catch (err) {
         setError(err.message);
