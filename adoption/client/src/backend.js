@@ -46,8 +46,11 @@ export async function backendLoginUser({ email, password }) {
 
 
 //API for Posting a Pet (only logged-in users can access)
-export async function backendAddPostPet(userId, newPet) {
+export async function backendAddPostPet(newPet) {
     const token = localStorage.getItem("token");
+
+    console.log("T O K E NNNNNN being sent:", token);
+
     if (!token) {
         throw new Error("User not authenticated");
     }
@@ -62,12 +65,20 @@ export async function backendAddPostPet(userId, newPet) {
         },
         body: JSON.stringify(newPet),
     });
+    console.log("Received Authorization header:", response.headers.authorization);
+
+    console.log("response", response)
 
     if (!response.ok) {
-        const errorMessage = await response.json();
-        console.error("Error adding pet:", errorMessage);
-        throw new Error(errorMessage.message || "Failed to add pet");
-    }
+      try {
+          const errorMessage = await response.json();
+          console.error("Error adding pet:", errorMessage);
+          throw new Error(errorMessage.message || "Failed to add pet");
+      } catch (err) {
+          console.error("Failed to parse error response:", err);
+          throw new Error(`Failed to add pet: ${response.status} ${response.statusText}`);
+      }
+  }
 
     return await response.json();
 }

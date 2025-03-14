@@ -16,10 +16,21 @@ router.post('/pet', authenticate, async (req, res) => {
 
         const user_id = req.user.user_id;
 
-        if (!animal_type || !name || !weight || !size || !gender || !activity_level ||
-            good_with_cats === undefined || good_with_dogs === undefined ||
-            good_with_kids === undefined || good_with_smallspaces === undefined ||
-            !pet_description) {
+        if (!animal_type ||
+            !name ||
+            !weight ||
+            !size ||
+            !gender ||
+            !activity_level ||
+            !potty_trained ||
+            !neutered ||
+            !pet_description ||
+            !has_special_needs ||
+            good_with_cats === undefined ||
+            good_with_dogs === undefined ||
+            good_with_kids === undefined ||
+            good_with_smallspaces === undefined
+        ) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 

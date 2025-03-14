@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import "../App.css";
@@ -39,7 +38,7 @@ export default function PostPetPage() {
     };
 
     try {
-      const addedPet = await backendAddPostPet(user.user_id, newPet);
+      const addedPet = await backendAddPostPet(newPet);
       console.log("Pet added:", addedPet);
       navigate(`/petdetails/${addedPet.pet_id}`);
     } catch (error) {
