@@ -170,8 +170,8 @@ router.get("/:pet_id", authenticate, async (req, res) => {
         if (!result || !result.data || result.data.length === 0) {
             return res.status(404).json({ message: "Pet not found" });
         }
-
-        res.json(result.data[0]);
+        console.log("ROUTE", result.data);
+        res.json(result.data);
     } catch (error) {
         console.error("Database Error:", error);
         res.status(500).json({ error: "Internal Server Error" });
