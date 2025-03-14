@@ -8,22 +8,27 @@ export const AuthProvider = ({ children }) => {
 
   // Check localStorage on first load
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
+    try {
+      const storedToken = localStorage.getItem("token");
+      const storedUser = localStorage.getItem("user");
 
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      if (storedToken && storedUser) {
+        setToken(storedToken); // No need to parse, it's a string
+        setUser(JSON.parse(storedUser)); // Parse only if it exists
+      }
+    } catch (error) {
+      console.error("Error retrieving auth data:", error);
     }
   }, []);
 
   // Function to handle login
   const login = (userData, authToken) => {
-    // this function
     setUser(userData);
     setToken(authToken);
+
+    // Store in localStorage
     localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", JSON.stringify(authToken));
+    localStorage.setItem("token", authToken); // Store token as plain string
   };
 
   // Function to handle logout
