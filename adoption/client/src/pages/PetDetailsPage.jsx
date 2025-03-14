@@ -13,7 +13,7 @@ export default function PetDetailsPage() {
     const fetchPetDetails = async () => {
       try {
         const fetchedPetData = await backendFetchPetDetails(pet_id);
-        console.log("FETCH PET DETAILS data", fetchedPetData[0]);
+        console.log("FETCH PET DETAILS data", fetchedPetData);
         const petData = fetchedPetData[0];
 
         const processedPetDetails = {
