@@ -26,7 +26,7 @@ export default function SignupPage() {
       };
       console.log("newUser", newUser);
       const addedUser = await backendCreateUser(newUser);
-      login(addedUser.user_details, addedUser.token);
+      login(addedUser, addedUser.token);
       // Send new user data to backend
       console.log("User created successfully:", addedUser);
 

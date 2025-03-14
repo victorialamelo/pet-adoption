@@ -36,6 +36,8 @@ export async function backendLoginUser({ email, password }) {
         });
         const data = await response.json();
 
+        console.log("API Response from Backend:", data); // Debugging
+
         return data;
     } catch(e) {
         console.log(e.message);
@@ -55,7 +57,7 @@ export async function backendAddPostPet(newPet) {
         throw new Error("User not authenticated");
     }
 
-    console.log("Sending request to add pet:", newPet);
+    console.log("Sending request to add pet:", JSON.stringify(newPet, null, 2));
 
     const response = await fetch("http://localhost:5001/pets/pet", {
         method: "POST",

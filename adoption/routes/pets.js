@@ -8,11 +8,19 @@ const multer = require("multer");
 
 router.post('/pet', authenticate, async (req, res) => {
     try {
+        console.log("Received request body:", req.body);
+
         const {
             animal_type, name, weight, size, gender, activity_level,
             good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
             neutered, has_special_needs, potty_trained, pet_description
         } = req.body;
+
+        console.log("Extracted fields:", {
+            animal_type, name, weight, size, gender, activity_level,
+            good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
+            neutered, has_special_needs, potty_trained, pet_description
+        });
 
         const user_id = req.user.user_id;
 
@@ -26,10 +34,10 @@ router.post('/pet', authenticate, async (req, res) => {
             !neutered ||
             !pet_description ||
             !has_special_needs ||
-            good_with_cats === undefined ||
-            good_with_dogs === undefined ||
-            good_with_kids === undefined ||
-            good_with_smallspaces === undefined
+            good_with_cats === null ||
+            good_with_dogs === null ||
+            good_with_kids === null ||
+            good_with_smallspaces === null
         ) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
