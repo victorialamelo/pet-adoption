@@ -1,6 +1,5 @@
 // API CLIENT FUNCTIONS - making requests to backend APIs
 
-
 //API to Create User WORKING.
 export async function backendCreateUser(inputs) {
     //console.log("Sending data:", inputs);
@@ -20,7 +19,6 @@ export async function backendCreateUser(inputs) {
     console.log("backendCreateUser data", data)
     return data;
 }
-
 
 //API for User Login
 export async function backendLoginUser({ email, password }) {
@@ -45,7 +43,6 @@ export async function backendLoginUser({ email, password }) {
     }
 
 }
-
 
 //API for Posting a Pet (only logged-in users can access)
 export async function backendAddPostPet(newPet) {
@@ -101,7 +98,6 @@ export async function backendFetchPetDetails(petId) {
 
   return handleResponse(response);
 }
-
 
 // API RESPONSE HELPER
 const handleResponse = async (response) => {
