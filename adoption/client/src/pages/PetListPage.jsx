@@ -156,6 +156,27 @@ export default function PetListPage() {
                     </div>
                   )
                 )}
+
+                {/* Good With Filters */}
+                <h4>Good With</h4>
+                {["cats", "dogs", "kids", "smallspaces"].map((key) => (
+                  <div key={key} className="form-check">
+                    <input
+                      type="checkbox"
+                      id={`good_with_${key}`}
+                      name={`good_with_${key}`}
+                      className="form-check-input"
+                      checked={filters[`good_with_${key}`]}
+                      onChange={handleFilterChange}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor={`good_with_${key}`}
+                    >
+                      Good with {key}
+                    </label>
+                  </div>
+                ))}
               </div>
             </div>
           </form>
