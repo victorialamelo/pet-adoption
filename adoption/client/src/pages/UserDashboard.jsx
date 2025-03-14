@@ -1,20 +1,30 @@
 import { useState, useEffect } from "react";
 import { Accordion, AccordionItem } from "react-bootstrap";
 import { Image, Card, Button, Dropdown, DropdownButton, Form } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 import NavBar from "../components/NavBar";
+
 import "../App.css";
 
 // Import backend helper functions
 import {
-//fetchUserProfile,
-//updateUserProfile,
+fetchUserProfile,
+updateUserProfile
 //fetchPetsWithRequests,
 //updatePetStatus,
 //updateRequestStatus
 } from "../backend";
 
+import {
+  getUserPostedPets
+} from "../pages/getpetbyid"
+
 export default function UserDashboard() {
+  const [editingPetId, setEditingPetId] = useState(null);
+  const [editFormData, setEditFormData] = useState({ name: "", description: "" });
+  const { user } = useAuth();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [selectedPet, setSelectedPet] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -36,16 +46,15 @@ export default function UserDashboard() {
   useEffect(() => {
     const loadUserProfile = async () => {
       try {
-        // Get the user ID from local storage or context
-        const userId = localStorage.getItem('userId');
-
-        if (!userId) {
-          // Redirect to login if not authenticated
+        if (!id) {
           navigate('/login');
           return;
         }
+        setLoading(true);
+        const response = await fetchUserProfile(id);
+        const userData = response; // address result processing from route helper.js
 
-        const userData = await fetchUserProfile(userId);
+        console.log("userData", userData);
 
         setProfile({
           name: userData.entity_name || userData.user_name,
@@ -54,20 +63,29 @@ export default function UserDashboard() {
           about: userData.about || ''
         });
 
+        console.log("profile", profile);
+
         setFormData({
           name: userData.entity_name || userData.user_name,
           website: userData.entity_website || '',
           registrationID: userData.entity_registration_id || '',
           about: userData.about || ''
         });
+
+
       } catch (err) {
         console.error("Error fetching user profile:", err);
         setError("Failed to load user profile. Please try again later.");
+      } finally {
+        setLoading(false);
       }
+
     };
 
     loadUserProfile();
-  }, [navigate]);
+  }, []);
+
+  // Edit user profile data
 
   // Fetch pets posted by the current user
   useEffect(() => {
@@ -75,7 +93,7 @@ export default function UserDashboard() {
       try {
         setLoading(true);
 
-        const petsWithRequests = await fetchPetsWithRequests();
+        const petsWithRequests = await getUserPostedPets(id);
         setPets(petsWithRequests);
       } catch (err) {
         console.error("Error fetching pets:", err);
@@ -111,42 +129,42 @@ export default function UserDashboard() {
     }
   };
 
-  // Update pet status
-  const handlePetStatusChange = async (petId, newStatus) => {
-    try {
-      await updatePetStatus(petId, newStatus);
+  // // Update pet status
+  // const handlePetStatusChange = async (petId, newStatus) => {
+  //   try {
+  //     await updatePetStatus(petId, newStatus);
 
-      // Update the local state to reflect the change
-      setPets(prevPets => prevPets.map(pet =>
-        pet.id === petId ? { ...pet, status: newStatus } : pet
-      ));
-    } catch (err) {
-      console.error("Error updating pet status:", err);
-      alert("Failed to update pet status. Please try again.");
-    }
-  };
+  //     // Update the local state to reflect the change
+  //     setPets(prevPets => prevPets.map(pet =>
+  //       pet.id === petId ? { ...pet, status: newStatus } : pet
+  //     ));
+  //   } catch (err) {
+  //     console.error("Error updating pet status:", err);
+  //     alert("Failed to update pet status. Please try again.");
+  //   }
+  // };
 
-  // Update adoption request status
-  const handleRequestStatusChange = async (requestId, newStatus) => {
-    try {
-      await updateRequestStatus(requestId, newStatus);
+  // // Update adoption request status
+  // const handleRequestStatusChange = async (requestId, newStatus) => {
+  //   try {
+  //     await updateRequestStatus(requestId, newStatus);
 
-      // Update the local state
-      setPets(prevPets =>
-        prevPets.map(pet => ({
-          ...pet,
-          applicants: pet.applicants.map(applicant =>
-            applicant.id === requestId
-              ? { ...applicant, status: newStatus }
-              : applicant
-          )
-        }))
-      );
-    } catch (err) {
-      console.error("Error updating request status:", err);
-      alert("Failed to update application status. Please try again.");
-    }
-  };
+  //     // Update the local state
+  //     setPets(prevPets =>
+  //       prevPets.map(pet => ({
+  //         ...pet,
+  //         applicants: pet.applicants.map(applicant =>
+  //           applicant.id === requestId
+  //             ? { ...applicant, status: newStatus }
+  //             : applicant
+  //         )
+  //       }))
+  //     );
+  //   } catch (err) {
+  //     console.error("Error updating request status:", err);
+  //     alert("Failed to update application status. Please try again.");
+  //   }
+  // };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -178,6 +196,22 @@ export default function UserDashboard() {
       </>
     );
   }
+
+  const handleEditClick = (pet) => {
+    setEditingPetId(pet.id);
+    setEditFormData({ name: pet.name, description: pet.description });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditSubmit = (e, petId) => {
+    e.preventDefault();
+    console.log("Updating pet", petId, editFormData);
+    setEditingPetId(null);
+  };
 
 
   return (
@@ -267,7 +301,7 @@ export default function UserDashboard() {
                   <Accordion.Item eventKey={index.toString()}>
                     <Accordion.Header>
                       <div className="d-flex align-items-center gap-4 w-100">
-                        <Image src={pet.img_url || "../src/assets/dogsvg.svg"} width={80} height={80} alt={pet.name} className="rounded" />
+                        <Image src="../src/assets/dogsvg.svg" width={80} height={80} alt={pet.name} className="rounded" />
                         <div className="flex-1">
                           <h3 className="font-weight-bold">{pet.name}</h3>
                           <p className="text-muted">Age: {pet.age} | Size: {pet.size} | Weight: {pet.weight} lbs</p>
@@ -284,23 +318,35 @@ export default function UserDashboard() {
                       </div>
                     </Accordion.Header>
                     <Accordion.Body>
-                      <div className="p-3">
-                        <p><strong>Activity:</strong> {pet.activity}</p>
-                        <p><strong>Special Needs:</strong> {pet.specialNeeds}</p>
-                        <p><strong>Potty Trained:</strong> {pet.pottyTrained ? "Yes" : "No"} | <strong>Neutered:</strong> {pet.neutered ? "Yes" : "No"}</p>
-                        <p><strong>Good with:</strong> {pet.goodWith.join(', ')}</p>
-                        <div className="d-flex gap-2 mt-3">
-                          <Button
-                            variant="outline-secondary"
-                            onClick={() => navigate(`/editpet/${pet.id}`)}
-                          >
-                            Edit
-                          </Button>
-                          <Button variant="primary" onClick={() => setSelectedPet(pet)}>
-                            View Applicants {pet.applicants.length > 0 && `(${pet.applicants.length})`}
-                          </Button>
-                        </div>
-                      </div>
+                      {editingPetId === pet.id ? (
+                        <Form onSubmit={(e) => handleEditSubmit(e, pet.id)}>
+                          <Form.Group>
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                              type="text"
+                              name="name"
+                              value={editFormData.name}
+                              onChange={handleEditChange}
+                            />
+                          </Form.Group>
+                          <Form.Group>
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                              as="textarea"
+                              name="description"
+                              value={editFormData.description}
+                              onChange={handleEditChange}
+                            />
+                          </Form.Group>
+                          <Button type="submit" className="mt-2">Save</Button>
+                          <Button variant="secondary" onClick={() => setEditingPetId(null)} className="mt-2 ms-2">Cancel</Button>
+                        </Form>
+                      ) : (
+                        <>
+                          <p>{pet.description}</p>
+                          <Button onClick={() => handleEditClick(pet)}>Edit</Button>
+                        </>
+                      )}
                     </Accordion.Body>
                   </Accordion.Item>
                 </Card>
@@ -355,4 +401,3 @@ export default function UserDashboard() {
     </>
   );
 }
-

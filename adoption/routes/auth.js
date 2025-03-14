@@ -4,12 +4,9 @@ const jwt = require("jsonwebtoken");
 const db = require("../model/helper");
 require('dotenv').config();
 
-
 const supersecret = process.env.SUPER_SECRET;
-
 const router = express.Router();
 const saltRounds = 10;
-
 
 // user registration with duplicate email check
 router.post("/register", async (req, res) => {
@@ -29,18 +26,38 @@ router.post("/register", async (req, res) => {
     // allow null values for optional fields
     entity_name = entity_name || null;
     entity_website = entity_website || null;
-    entity_registration_id = entity_registration_id ? parseInt(entity_registration_id) : null;
+    entity_registration_id = entity_registration_id || null;
 
+    console.log("entity_registration_id", entity_registration_id)
     const result = await db(
-      `INSERT INTO Users (user_name, zipcode, city,  date_of_birth, phone, entity_name, entity_website, entity_registration_id, email, password) 
-       VALUES ("${user_name}", "${zipcode}", "${city}", "${date_of_birth}", "${phone}", 
-               ${entity_name ? `"${entity_name}"` : "NULL"}, 
-               ${entity_website ? `"${entity_website}"` : "NULL"}, 
-               ${entity_registration_id !== null ? entity_registration_id : "NULL"}, 
-               "${email}", "${hash}")`
+      `INSERT INTO Users (
+                user_name,
+                zipcode,
+                city,
+                date_of_birth,
+                phone,
+                entity_name,
+                entity_website,
+                entity_registration_id,
+                email,
+                password)
+       VALUES ("${user_name}",
+               "${zipcode}",
+               "${city}",
+               "${date_of_birth}",
+               "${phone}",
+               "${entity_name}",
+               "${entity_website}",
+               "${entity_registration_id}",
+               "${email}",
+               "${hash}")`
     );
 
     const user_id = result.insertId;
+
+    // Fetch the newly created user from the database
+    const userQuery = await db(`SELECT user_id, user_name, email, city, zipcode, date_of_birth, phone, entity_name, entity_website, entity_registration_id FROM Users WHERE user_id = ${user_id}`);
+    const newUser = userQuery.data[0];
 
     const token = jwt.sign(
       { user_id, email },
@@ -48,14 +65,16 @@ router.post("/register", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.send({ message: "User registration successful", user_id, token });
+    res.json({
+      message: "User registration successful",
+      token,
+      user: newUser // Return the full user object
+    });
 
   } catch (err) {
     res.status(500).json({ error: "Server error: " + err.message });
   }
 });
-
-
 
 // User Login WORKING
 router.post("/login", async (req, res) => {
@@ -63,8 +82,8 @@ router.post("/login", async (req, res) => {
 
   try {
     const result = await db(
-      `SELECT user_id, user_name, email, password, entity_name, entity_website, entity_registration_id, zipcode, city, date_of_birth, phone 
-       FROM users WHERE email = "${email}"`
+      `SELECT user_id, user_name, email, password, entity_name, entity_website, entity_registration_id, zipcode, city, date_of_birth, phone
+       FROM Users WHERE email = "${email}"`
     );
 
     const user = result.data[0];

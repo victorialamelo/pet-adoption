@@ -1,6 +1,5 @@
 // API CLIENT FUNCTIONS - making requests to backend APIs
 
-
 //API to Create User WORKING.
 export async function backendCreateUser(inputs) {
     //console.log("Sending data:", inputs);
@@ -17,70 +16,42 @@ export async function backendCreateUser(inputs) {
     }
 
     const data = await response.json();
-
+    console.log("backendCreateUser data", data)
     return data;
 }
 
-
 //API for User Login
-export async function backendLoginUser({email, password}) {
-    const credentials = {email, password};
+export async function backendLoginUser({ email, password }) {
+    const credentials = { email, password };
 
     console.log("Sending login request with:", credentials); //Debugging
 
-    const response = await fetch("http://localhost:5001/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
-    });
+    try {
+        const response = await fetch("http://localhost:5001/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
+        });
+        const data = await response.json();
 
-    if (!response.ok) {
-        console.log("Login failed");
+        console.log("API Response from Backend:", data); // Debugging
+
+        return data;
+    } catch(e) {
+        console.log(e.message);
         throw new Error("Login failed");
     }
 
-    const data = await response.json();
-
-    return data;
 }
 
-
 //API for Posting a Pet (only logged-in users can access)
-export async function backendAddPostPet(petData) {
+export async function backendAddPostPet(newPet) {
     const token = localStorage.getItem("token");
     if (!token) {
         throw new Error("User not authenticated");
     }
 
-    console.log("Sending request to add pet:", petData);
-
-    const response = await fetch("http://localhost:5001/pets/pet", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(petData),
-    });
-
-    if (!response.ok) {
-        const errorMessage = await response.json();
-        console.error("Error adding pet:", errorMessage);
-        throw new Error(errorMessage.message || "Failed to add pet");
-    }
-
-    return await response.json();
-}
-
-
-//API for Posting a Pet (only logged-in users can access)
-export async function backendAddPostPet(userId, newPet) {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        throw new Error("User not authenticated");
-    }
-
-    console.log("Sending request to add pet:", newPet);
+    console.log("Sending request to add pet:", JSON.stringify(newPet, null, 2));
 
     const response = await fetch("http://localhost:5001/pets/pet", {
         method: "POST",
@@ -91,89 +62,82 @@ export async function backendAddPostPet(userId, newPet) {
         body: JSON.stringify(newPet),
     });
 
+    console.log("response", response)
+
     if (!response.ok) {
-        const errorMessage = await response.json();
-        console.error("Error adding pet:", errorMessage);
-        throw new Error(errorMessage.message || "Failed to add pet");
-    }
+      try {
+          const errorMessage = await response.json();
+          console.error("Error adding pet:", errorMessage);
+          throw new Error(errorMessage.message || "Failed to add pet");
+      } catch (err) {
+          console.error("Failed to parse error response:", err);
+          throw new Error(`Failed to add pet: ${response.status} ${response.statusText}`);
+      }
+  }
 
     return await response.json();
 }
 
+//API for Fetching a Pet Details (only logged-in users can access)
+export async function backendFetchPetDetails(petId) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+      throw new Error("User not authenticated");
+  }
 
-export async function backendCreateUserPokemon(userId, pokemonId) {
-    const response = await fetch("/api/userpokemon", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            user_id: userId,
-            pokemon_id: pokemonId,
-        }),
+  console.log(`Fetching details for pet with ID: ${petId}`);
+
+  const response = await fetch(`http://localhost:5001/pets/${petId}`, {
+      method: "GET",
+      headers: {
+          "Authorization": `Bearer ${token}`
+      }
+  });
+
+  console.log("Response:", response);
+
+  return handleResponse(response);
+}
+
+// API RESPONSE HELPER
+const handleResponse = async (response) => {
+    console.log("API Response Status:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      console.error("API Error:", errorData);
+      throw new Error(errorData?.message || `API error: ${response.status}`);
+    }
+
+    return response.json();
+  };
+
+// FETCH USER PROFILE
+export const fetchUserProfile = async (userId) => {
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("No authentication token found");
+
+    const response = await fetch(`http://localhost:5001/users/${userId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
     });
-    if (!response.ok) {
-        throw new Error("UserPokemon creation failed");
-    }
 
-    await response.json();
-}
+    console.log("fetchUserProfile response:", response);
 
-export async function externalGetPokemonDetails(pokemonId) {
-    const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${pokemonId}`
-    );
-    if (!response.ok) {
-        throw new Error("Failed to load Pokémon details");
-    }
+    return handleResponse(response);
+  };
 
-    const data = await response.json();
-
-    return data;
-}
-
-export async function backendDeleteUserPokemon(pokemonId) {
-    const response = await fetch(`/api/userpokemon/${pokemonId}`, {
-        method: "DELETE",
-    });
-    if (!response.ok) {
-        throw new Error("UserPokemon creation failed");
-    }
-
-    await response.json();
-}
-
-// const TOKEN_STORAGE_KEY = "token";
-
-// export function hasSession() {
-//     return localStorage.getItem(TOKEN_STORAGE_KEY) !== null;
-// }
-
-// export function getAuthHeader() {
-//     const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-//     if (!token) {
-//         throw new Error("no session");
-//     }
-//     return {
-//         Authorization: `Bearer ${token}`,
-//     };
-// }
-
-// export function getCurrentSession() {
-//     const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-//     if (!token) {
-//         throw new Error("no session");
-//     }
-
-//     const payload = jwtDecode(token);
-
-//     return {
-//         userId: payload.user_id,
-//     };
-// }
-
-// export function deleteCurrentSession() {
-//     localStorage.removeItem(TOKEN_STORAGE_KEY);
-// }
-
-// export function saveSession(token) {
-//     localStorage.setItem(TOKEN_STORAGE_KEY, token);
-// }
+// UPDATE USER PROFILE
+export const updateUserProfile = async (userId, profileData) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`/api/users/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(profileData)
+  });
+  return handleResponse(response);
+};
