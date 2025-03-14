@@ -13,16 +13,17 @@ router.post('/pet', authenticate, async (req, res) => {
         const {
             animal_type, name, weight, size, gender, activity_level,
             good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-            neutered, has_special_needs, potty_trained, pet_description
+            neutered, has_special_needs, potty_trained, pet_description, img_url
         } = req.body;
 
         console.log("Extracted fields:", {
             animal_type, name, weight, size, gender, activity_level,
             good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-            neutered, has_special_needs, potty_trained, pet_description
+            neutered, has_special_needs, potty_trained, pet_description, img_url
         });
 
         const user_id = req.user.user_id;
+        console.log(user_id);
 
         if (!animal_type ||
             !name ||
@@ -37,7 +38,7 @@ router.post('/pet', authenticate, async (req, res) => {
             good_with_cats === null ||
             good_with_dogs === null ||
             good_with_kids === null ||
-            good_with_smallspaces === null
+            good_with_smallspaces === null 
         ) {
             return res.status(400).json({ message: 'Missing required fields' });
         }

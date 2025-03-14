@@ -67,7 +67,6 @@ export async function backendAddPostPet(newPet) {
         },
         body: JSON.stringify(newPet),
     });
-    console.log("Received Authorization header:", response.headers.authorization);
 
     console.log("response", response)
 
