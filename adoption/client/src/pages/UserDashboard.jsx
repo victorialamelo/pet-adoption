@@ -269,8 +269,8 @@ export default function UserDashboard() {
                 onChange={handleChange}
                 className="form-control"
               />
-              <button type="submit" className="btn btn-success mt-3 w-100">Save</button>
-              <button type="button" onClick={() => setEditing(false)} className="btn btn-secondary mt-2 w-100">Cancel</button>
+              <button type="submit" className="btn btn-primary mt-3 w-100">Save</button>
+              <button type="button" onClick={() => setEditing(false)} className="btn btn-primary mt-2 w-100">Cancel</button>
             </form>
           ) : (
             <>
@@ -339,7 +339,7 @@ export default function UserDashboard() {
                             />
                           </Form.Group>
                           <Button type="submit" className="mt-2">Save</Button>
-                          <Button variant="secondary" onClick={() => setEditingPetId(null)} className="mt-2 ms-2">Cancel</Button>
+                          <Button variant="secondary" onClick={() => setEditingPetId(null)} className="btn-primary mt-2 ms-2">Cancel</Button>
                         </Form>
                       ) : (
                         <>
