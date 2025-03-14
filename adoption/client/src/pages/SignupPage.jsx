@@ -30,7 +30,7 @@ export default function SignupPage() {
       // Send new user data to backend
       console.log("User created successfully:", addedUser);
 
-      navigate(`/userdashboard/${addedUser.user_id}`);
+      navigate(`/userdashboard/${addedUser.user.user_id}`);
     } catch (error) {
       console.error("Error creating user:", error.message);
       alert(error.message);

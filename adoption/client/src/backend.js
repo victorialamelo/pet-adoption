@@ -81,6 +81,28 @@ export async function backendAddPostPet(newPet) {
     return await response.json();
 }
 
+//API for Fetching a Pet Details (only logged-in users can access)
+export async function backendFetchPetDetails(petId) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+      throw new Error("User not authenticated");
+  }
+
+  console.log(`Fetching details for pet with ID: ${petId}`);
+
+  const response = await fetch(`http://localhost:5001/pets/${petId}`, {
+      method: "GET",
+      headers: {
+          "Authorization": `Bearer ${token}`
+      }
+  });
+
+  console.log("Response:", response);
+
+  return handleResponse(response);
+}
+
+
 // API RESPONSE HELPER
 const handleResponse = async (response) => {
     console.log("API Response Status:", response.status);

@@ -5,7 +5,6 @@ const db = require("../model/helper");
 const multer = require("multer");
 
 // Add a Pet to Pets and Posts Table WORKING
-
 router.post('/pet', authenticate, async (req, res) => {
     try {
         console.log("Received request body:", req.body);
@@ -51,16 +50,21 @@ router.post('/pet', authenticate, async (req, res) => {
                     ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id}, '${img_url}')`;
             const result = await db(insertPetQuery);
             // Debugging
-            console.log(result);
+            console.log("result", result);
 
             const pet_id = result.insertId;
 
             const insertPostQuery = `
                 INSERT INTO Posts (pet_id, post_owner_id, post_date)
                 VALUES (${pet_id}, ${user_id}, NOW())`;
-            await db(insertPostQuery);
 
-            res.status(201).json({ message: 'Pet added and post created successfully' });
+            const postresult =  await db(insertPostQuery);
+            console.log(postresult);
+
+            res.status(201).json({
+                message: 'Pet added and post created successfully',
+                pet_id: pet_id  // Send the pet_id back
+            });
 
         } catch (error) {
             console.log(error);
@@ -123,7 +127,6 @@ router.put('/:pet_id', authenticate, async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-
 
 // Get All Posts WORKING (Logged in users can access)
 router.get('/posts', async (req, res) => {

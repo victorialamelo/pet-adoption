@@ -4,7 +4,6 @@ import { Link, useParams } from 'react-router-dom';
 function Navbar() {
   const { user, logout } = useAuth();
   const { id } = useParams();
-  console.log("user", user);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top w-100">
