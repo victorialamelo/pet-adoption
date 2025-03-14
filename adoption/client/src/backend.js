@@ -17,7 +17,7 @@ export async function backendCreateUser(inputs) {
     }
 
     const data = await response.json();
-
+    console.log("backendCreateUser data", data)
     return data;
 }
 
@@ -87,10 +87,6 @@ const handleResponse = async (response) => {
 
 // FETCH USER PROFILE
 export const fetchUserProfile = async (userId) => {
-    // Debugging
-    console.log("Fetching user profile for ID:", userId);
-    console.log("Full URL being called:", `http://localhost:5001/users/${userId}`);
-
     const token = localStorage.getItem("token");
     if (!token) throw new Error("No authentication token found");
 

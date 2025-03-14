@@ -46,7 +46,9 @@ export default function UserDashboard() {
         }
         setLoading(true);
         const response = await fetchUserProfile(id);
-        const userData = response[0]; // address result processing from route helper.js
+        const userData = response; // address result processing from route helper.js
+
+        console.log("userData", userData);
 
         setProfile({
           name: userData.entity_name || userData.user_name,
@@ -76,7 +78,7 @@ export default function UserDashboard() {
 
     loadUserProfile();
   }, []);
-  
+
   // Edit user profile data
 
   // // Fetch pets posted by the current user
