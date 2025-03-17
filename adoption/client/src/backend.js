@@ -16,7 +16,7 @@ export async function backendCreateUser(inputs) {
   }
 
   const data = await response.json();
-  console.log("backendCreateUser data", data)
+
   return data;
 }
 

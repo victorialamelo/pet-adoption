@@ -11,13 +11,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const storedToken = localStorage.getItem("token");
       const storedUser = localStorage.getItem("user");
-  
-      console.log("🔍 Checking localStorage on first load:");
-      console.log("Token from localStorage:", storedToken);
-      console.log("User from localStorage (raw):", storedUser); // Log before parsing
-  
+
       if (storedToken) setToken(storedToken);
-  
+
       if (storedUser && storedUser !== "undefined") {
         try {
           const parsedUser = JSON.parse(storedUser);
@@ -27,7 +23,7 @@ export const AuthProvider = ({ children }) => {
           console.error("❌ Error parsing user from localStorage:", error);
         }
       } else {
-        console.warn("⚠️ No valid user found in localStorage");
+        console.log("⚠️ No user logged in");
       }
     } catch (error) {
       console.error("❌ Error retrieving auth data:", error);
@@ -36,24 +32,19 @@ export const AuthProvider = ({ children }) => {
 
   // Function to handle login
   const login = (userData, authToken) => {
-    console.log("🔑 Attempting login...");
-    console.log("Received userData:", userData);
-    console.log("Received token:", authToken);
-  
     if (!userData || typeof userData !== "object") {
       console.error("❌ Invalid userData provided, not saving to localStorage.");
       return;
     }
-  
+
     setUser(userData);
     setToken(authToken);
-  
+
     // Store in localStorage
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", authToken);
-  
-    console.log("✅ Stored in localStorage - User:", localStorage.getItem("user"));
-    console.log("✅ Stored in localStorage - Token:", localStorage.getItem("token"));
+
+    console.log("✅ Stored in localStorage - User:", userData);
   };
 
   // Function to handle logout

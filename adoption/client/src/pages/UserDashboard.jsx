@@ -30,6 +30,7 @@ export default function UserDashboard() {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const userID = user.user_id;
 
   // User profile state
@@ -94,7 +95,9 @@ export default function UserDashboard() {
 
         const petsWithRequests = await getUserPostedPets(userID);
         console.log("petsWithRequests", petsWithRequests)
+
         setPets(petsWithRequests);
+
       } catch (err) {
         console.error("Error fetching pets:", err);
         setError("Failed to load pets. Please try again later.");
@@ -104,7 +107,7 @@ export default function UserDashboard() {
     };
 
     loadUserPets();
-  }, []);
+  }, [userID]);
 
   // Update user profile
   const handleSubmit = async (e) => {
@@ -197,21 +200,21 @@ export default function UserDashboard() {
     );
   }
 
-  const handleEditClick = (pet) => {
-    setEditingPetId(pet.id);
-    setEditFormData({ name: pet.name, description: pet.description });
-  };
+  // const handleEditClick = (pet) => {
+  //   setEditingPetId(pet.id);
+  //   setEditFormData({ name: pet.name, description: pet.description });
+  // };
 
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  // const handleEditChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setEditFormData((prev) => ({ ...prev, [name]: value }));
+  // };
 
-  const handleEditSubmit = (e, petId) => {
-    e.preventDefault();
-    console.log("Updating pet", petId, editFormData);
-    setEditingPetId(null);
-  };
+  // const handleEditSubmit = (e, petId) => {
+  //   e.preventDefault();
+  //   console.log("Updating pet", petId, editFormData);
+  //   setEditingPetId(null);
+  // };
 
 
   return (
@@ -295,63 +298,64 @@ export default function UserDashboard() {
           {pets === null ? (
             <p>No pets posted yet.</p>
           ) : (
-            <Accordion defaultActiveKey="0">
-              {pets?.map((pet, index) => (
-                <Card key={pet.id}>
-                  <Accordion.Item eventKey={index.toString()}>
-                    <Accordion.Header>
-                      <div className="d-flex align-items-center gap-4 w-100">
-                        <Image src="../src/assets/dogsvg.svg" width={80} height={80} alt={pet.name} className="rounded" />
-                        <div className="flex-1">
-                          <h3 className="font-weight-bold">{pet.name}</h3>
-                          <p className="text-muted">Age: {pet.age} | Size: {pet.size} | Weight: {pet.weight} lbs</p>
-                        </div>
-                        <Form.Select
-                          value={pet.status}
-                          onChange={(e) => handlePetStatusChange(pet.id, e.target.value)}
-                          style={{ width: '130px' }}
-                        >
-                          <option value="Available">Available</option>
-                          <option value="Adopted">Adopted</option>
-                          <option value="Archived">Archived</option>
-                        </Form.Select>
-                      </div>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      {editingPetId === pet.id ? (
-                        <Form onSubmit={(e) => handleEditSubmit(e, pet.id)}>
-                          <Form.Group>
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
-                              type="text"
-                              name="name"
-                              value={editFormData.name}
-                              onChange={handleEditChange}
-                            />
-                          </Form.Group>
-                          <Form.Group>
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                              as="textarea"
-                              name="description"
-                              value={editFormData.description}
-                              onChange={handleEditChange}
-                            />
-                          </Form.Group>
-                          <Button type="submit" className="mt-2">Save</Button>
-                          <Button variant="secondary" onClick={() => setEditingPetId(null)} className="mt-2 ms-2">Cancel</Button>
-                        </Form>
-                      ) : (
-                        <>
-                          <p>{pet.description}</p>
-                          <Button onClick={() => handleEditClick(pet)}>Edit</Button>
-                        </>
-                      )}
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Card>
-              ))}
-            </Accordion>
+            <p></p>
+            // <Accordion defaultActiveKey="0">
+            //   {pets?.map((pet, index) => (
+            //     <Card key={pet.id}>
+            //       <Accordion.Item eventKey={index.toString()}>
+            //         <Accordion.Header>
+            //           <div className="d-flex align-items-center gap-4 w-100">
+            //             <Image src="../src/assets/dogsvg.svg" width={80} height={80} alt={pet.name} className="rounded" />
+            //             <div className="flex-1">
+            //               <h3 className="font-weight-bold">{pet.name}</h3>
+            //               <p className="text-muted">Age: {pet.age} | Size: {pet.size} | Weight: {pet.weight} lbs</p>
+            //             </div>
+            //             <Form.Select
+            //               value={pet.status}
+            //               onChange={(e) => handlePetStatusChange(pet.id, e.target.value)}
+            //               style={{ width: '130px' }}
+            //             >
+            //               <option value="Available">Available</option>
+            //               <option value="Adopted">Adopted</option>
+            //               <option value="Archived">Archived</option>
+            //             </Form.Select>
+            //           </div>
+            //         </Accordion.Header>
+            //         <Accordion.Body>
+            //           {editingPetId === pet.id ? (
+            //             <Form onSubmit={(e) => handleEditSubmit(e, pet.id)}>
+            //               <Form.Group>
+            //                 <Form.Label>Name</Form.Label>
+            //                 <Form.Control
+            //                   type="text"
+            //                   name="name"
+            //                   value={editFormData.name}
+            //                   onChange={handleEditChange}
+            //                 />
+            //               </Form.Group>
+            //               <Form.Group>
+            //                 <Form.Label>Description</Form.Label>
+            //                 <Form.Control
+            //                   as="textarea"
+            //                   name="description"
+            //                   value={editFormData.description}
+            //                   onChange={handleEditChange}
+            //                 />
+            //               </Form.Group>
+            //               <Button type="submit" className="mt-2">Save</Button>
+            //               <Button variant="secondary" onClick={() => setEditingPetId(null)} className="mt-2 ms-2">Cancel</Button>
+            //             </Form>
+            //           ) : (
+            //             <>
+            //               <p>{pet.description}</p>
+            //               <Button onClick={() => handleEditClick(pet)}>Edit</Button>
+            //             </>
+            //           )}
+            //         </Accordion.Body>
+            //       </Accordion.Item>
+            //     </Card>
+            //   ))}
+            // </Accordion>
           )}
 
           {selectedPet && (

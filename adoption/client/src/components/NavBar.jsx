@@ -1,5 +1,5 @@
 import { useAuth } from "../AuthContext";
-import { Link, useParams } from 'react-router-dom';
+import { Link  } from 'react-router-dom';
 
 function Navbar() {
   const { user, logout } = useAuth();
@@ -25,10 +25,10 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="/signup">About Us</Link>
+              <Link className="nav-link" to="/">About Us</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/signup">FAQs</Link>
+              <Link className="nav-link" to="/">FAQs</Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/petlist">Adopt a Friend</Link>
@@ -39,7 +39,7 @@ function Navbar() {
               <Link className="nav-link" to="/postpet">Post a Friend</Link>
             </li>
             <li className="nav-item">
-          <Link className="nav-link" to={`/userdashboard`}>Pet Dashboard</Link>
+            <Link className="nav-link" to={`/userdashboard`}>Pet Dashboard</Link>
             </li>
             </>
             )}

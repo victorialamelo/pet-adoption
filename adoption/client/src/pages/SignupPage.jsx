@@ -24,13 +24,10 @@ export default function SignupPage() {
         entity_website: formData.get("website"),
         entity_registration_id: formData.get("registrationid"),
       };
-      console.log("newUser", newUser);
+
       const addedUser = await backendCreateUser(newUser);
       login(addedUser, addedUser.token);
-      // Send new user data to backend
-      console.log("User created successfully:", addedUser);
-
-      navigate(`/userdashboard/${addedUser.user.user_id}`);
+      navigate(`/userdashboard`);
     } catch (error) {
       console.error("Error creating user:", error.message);
       alert(error.message);
@@ -183,6 +180,7 @@ export default function SignupPage() {
                     id="password"
                     name="password"
                     className="form-control"
+                    autoComplete=""
                     placeholder="••••••••"
                     required
                   />
