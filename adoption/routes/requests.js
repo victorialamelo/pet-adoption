@@ -33,6 +33,7 @@ router.post('/adopt', authenticate, async (req, res) => {
 router.get('/adoption-requests', authenticate, async (req, res) => {
     try {
         const user_id = req.user.user_id; // Logged-in user's ID
+        const { pet_id } = req.query; // Optional pet_id filter (filter on fe needed)
 
         const getRequestsQuery = `
             SELECT Requests.*, Pets.name AS pet_name 
@@ -40,6 +41,10 @@ router.get('/adoption-requests', authenticate, async (req, res) => {
             JOIN Pets ON Requests.pet_id = Pets.pet_id
             WHERE Pets.user_id = ${user_id}
         `;
+
+        if (pet_id) {
+            getRequestsQuery += ` AND Pets.pet_id = ${pet_id}`;
+        } //for pet filter
 
         const adoptionRequests = await db(getRequestsQuery);
         res.status(200).json(adoptionRequests);

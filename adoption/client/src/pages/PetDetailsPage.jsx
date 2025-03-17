@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { backendFetchPetDetails } from "../backend";
 import { useAuth } from "../AuthContext";
+import { createAdoptionRequest } from "./adrequestfuncs";
 
 export default function PetDetailsPage() {
   const { user } = useAuth();
@@ -53,21 +54,12 @@ export default function PetDetailsPage() {
     };
 
     try {
-      const response = await fetch('/api/adopt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`, // Include auth token
-        },
-        body: JSON.stringify(requestData),
-      });
+      const response = await createAdoptionRequest(petDetails.pet_id, requestMessage);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Adoption request submitted successfully!');
+      if (response && response.message) {
+        alert(response.message);
       } else {
-        alert(`Error: ${data.message}`);
+        alert('Failed to submit adoption request.');
       }
     } catch (error) {
       console.error('Request error:', error);

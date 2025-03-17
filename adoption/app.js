@@ -21,6 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth', authRouter);
 app.use('/pets', petsRouter);
+app.use('/requests', requestsRouter)
 app.use('/users', usersRouter);
 
 // app.use('/auth', authenticate, authRouter);
