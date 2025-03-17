@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Accordion, AccordionItem } from "react-bootstrap";
 import { Image, Card, Button, Dropdown, DropdownButton, Form } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import NavBar from "../components/NavBar";
 
@@ -24,13 +24,13 @@ export default function UserDashboard() {
   const [editingPetId, setEditingPetId] = useState(null);
   const [editFormData, setEditFormData] = useState({ name: "", description: "" });
   const { user } = useAuth();
-  const { id } = useParams();
   const navigate = useNavigate();
   const [selectedPet, setSelectedPet] = useState(null);
   const [editing, setEditing] = useState(false);
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const userID = user.user_id;
 
   // User profile state
   const [profile, setProfile] = useState({
@@ -46,13 +46,13 @@ export default function UserDashboard() {
   useEffect(() => {
     const loadUserProfile = async () => {
       try {
-        if (!id) {
+        if (!userID) {
           navigate('/login');
           return;
         }
         setLoading(true);
-        console.log("WHAT IS THE ID?!! ", id)
-        const response = await fetchUserProfile(id);
+        console.log("WHAT IS THE ID?!! ", userID)
+        const response = await fetchUserProfile(userID);
         const userData = response; // address result processing from route helper.js
 
         console.log("userData", userData);
@@ -63,8 +63,6 @@ export default function UserDashboard() {
           registrationID: userData.entity_registration_id || '',
           about: userData.about || ''
         });
-
-        console.log("profile", profile);
 
         setFormData({
           name: userData.entity_name || userData.user_name,
@@ -94,7 +92,7 @@ export default function UserDashboard() {
       try {
         setLoading(true);
 
-        const petsWithRequests = await getUserPostedPets(id);
+        const petsWithRequests = await getUserPostedPets(userID);
         console.log("petsWithRequests", petsWithRequests)
         setPets(petsWithRequests);
       } catch (err) {
