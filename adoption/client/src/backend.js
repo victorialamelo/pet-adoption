@@ -44,6 +44,7 @@ export async function backendLoginUser({ email, password }) {
 
 }
 
+// PETS.JS
 //API for Posting a Pet (only logged-in users can access)
 export async function backendAddPostPet(newPet) {
   const token = localStorage.getItem("token");
@@ -114,6 +115,7 @@ const handleResponse = async (response) => {
   return response.json();
 };
 
+// USERS.JS
 // FETCH USER PROFILE
 export const fetchUserProfile = async (userId) => {
   const token = localStorage.getItem("token");
@@ -131,6 +133,20 @@ export const fetchUserProfile = async (userId) => {
 };
 
 // UPDATE USER PROFILE
+export const updateUserProfile = async (userId, profileData) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`/api/users/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(profileData)
+  });
+  return handleResponse(response);
+};
+
+// REQUESTS.JS
 export const updateUserProfile = async (userId, profileData) => {
   const token = localStorage.getItem("token");
   const response = await fetch(`/api/users/${userId}`, {
