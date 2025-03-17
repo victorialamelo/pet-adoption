@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { backendFetchPetDetails } from "../backend";
+import { useAuth } from "../AuthContext";
 
 export default function PetDetailsPage() {
+  const { user } = useAuth();
   const { pet_id } = useParams();
   const [petDetails, setPetDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -79,6 +81,32 @@ export default function PetDetailsPage() {
           </div>
         </div>
       </section>
+      {user && (
+        <section className="mb-10">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-6">
+                <h2 className="display-4">ASK ABOUT {petDetails.name}</h2>
+                <p className="lead">{petDetails.pet_description}</p>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="message" className="form-label">Your Message</label>
+                    <textarea
+                      className="form-control"
+                      id="message"
+                      name="message"
+                      rows="4"
+                      placeholder="Write your message to the pet's owner... hi.. I want to adopt"
+                      required
+                    ></textarea>
+                  </div>
+                  <button type="submit" className="btn btn-primary">Send Request</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }
