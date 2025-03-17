@@ -48,8 +48,8 @@ router.post('/pet', authenticate, async (req, res) => {
                     ('${animal_type}', '${name}', ${weight}, '${size}', '${gender}', '${activity_level}',
                     ${good_with_cats}, ${good_with_dogs}, ${good_with_kids}, ${good_with_smallspaces},
                     ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id}, '${img_url}')`;
+
             const result = await db(insertPetQuery);
-            // Debugging
             console.log("result", result);
 
             const pet_id = result.insertId;
@@ -58,7 +58,7 @@ router.post('/pet', authenticate, async (req, res) => {
                 INSERT INTO Posts (pet_id, post_owner_id, post_date)
                 VALUES (${pet_id}, ${user_id}, NOW())`;
 
-            const postresult =  await db(insertPostQuery);
+            const postresult = await db(insertPostQuery);
             console.log(postresult);
 
             res.status(201).json({
@@ -76,7 +76,6 @@ router.post('/pet', authenticate, async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-
 
 // Update Pet Information WORKING
 router.put('/:pet_id', authenticate, async (req, res) => {
@@ -128,34 +127,52 @@ router.put('/:pet_id', authenticate, async (req, res) => {
     }
 });
 
-// Get All Posts WORKING (Logged in users can access)
-router.get('/posts', async (req, res) => {
+// Get all pets with filters
+router.get("/pet", async (req, res) => {
     try {
         const filters = req.query;
-        let query = `
-            SELECT Posts.post_id, Posts.post_date, Pets.*
-            FROM Posts
-            JOIN Pets ON Posts.pet_id = Pets.pet_id
-            WHERE 1=1`;
+        let query = "SELECT Pets.*, Posts.post_id, Posts.post_date FROM Pets LEFT JOIN Posts ON Pets.pet_id = Posts.pet_id WHERE 1=1"; // Start with a valid base query
+        let values = [];
 
-        const values = [];
+        // Map frontend filters to database column names
+        const filterMappings = {
+            animal_type: "animal_type",
+            size: "size",
+            gender: "gender",
+            activity_level: "activity_level",
+            neutered: "neutered",
+            has_special_needs: "has_special_needs",
+            potty_trained: "potty_trained",
+            good_with_cats: "good_with_cats",
+            good_with_dogs: "good_with_dogs",
+            good_with_kids: "good_with_kids",
+            good_with_smallspaces: "good_with_smallspaces"
+        };
 
-        Object.keys(filters).forEach((key, index) => {
-            query += ` AND ${key} = ?`;
-            values.push(filters[key]);
+        // Loop over the filters and dynamically add them to the query
+        Object.keys(filters).forEach((key) => {
+            // Ensure that the key is part of the filter mappings and the value is valid
+            if (filterMappings[key] !== undefined && filters[key] !== "") {
+                query += ` AND ${filterMappings[key]} = ?`;  // Dynamically append condition
+                values.push(filters[key]);  // Push corresponding filter value
+            }
         });
 
-        const posts = await db(query, values);
-        res.status(200).json(posts);
+        // Debugging the query string and values
+        console.log("Final query:", query);
+        console.log("Query values:", values);
+
+        const result = await db(query, values);
+        res.status(200).json(result.data);  // Send back the results
     } catch (error) {
-        console.error('Database Error:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.error("Database Error:", error);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
 
-// Get Pet By ID WORKING (Logged in users can access, fe filters should work.) (Click on a button on post to open a pet page)
-router.get("/:pet_id", authenticate, async (req, res) => {
+// Get Pet By ID WORKING (Logged in users can access, fe filters should work.)
+router.get("/:pet_id", authenticate, authenticate, async (req, res) => {
     try {
         const petId = req.params.pet_id;
 
