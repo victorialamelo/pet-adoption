@@ -145,17 +145,3 @@ export const updateUserProfile = async (userId, profileData) => {
   });
   return handleResponse(response);
 };
-
-// REQUESTS.JS
-export const updateUserProfile = async (userId, profileData) => {
-  const token = localStorage.getItem("token");
-  const response = await fetch(`/api/users/${userId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      "Authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify(profileData)
-  });
-  return handleResponse(response);
-};

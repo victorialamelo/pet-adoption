@@ -42,6 +42,39 @@ export default function PetDetailsPage() {
     fetchPetDetails();
   }, [pet_id]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const requestMessage = e.target.message.value;
+
+    const requestData = {
+      pet_id: petDetails.pet_id, // Assuming petDetails contains pet_id
+      request_message: requestMessage,
+    };
+
+    try {
+      const response = await fetch('/api/adopt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`, // Include auth token
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Adoption request submitted successfully!');
+      } else {
+        alert(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('Request error:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  };
+
   if (loading) return <p>Loading pet details...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!petDetails) return <p>Pet not found.</p>;
