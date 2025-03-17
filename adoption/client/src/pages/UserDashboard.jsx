@@ -51,6 +51,7 @@ export default function UserDashboard() {
           return;
         }
         setLoading(true);
+        console.log("WHAT IS THE ID?!! ", id)
         const response = await fetchUserProfile(id);
         const userData = response; // address result processing from route helper.js
 
@@ -94,6 +95,7 @@ export default function UserDashboard() {
         setLoading(true);
 
         const petsWithRequests = await getUserPostedPets(id);
+        console.log("petsWithRequests", petsWithRequests)
         setPets(petsWithRequests);
       } catch (err) {
         console.error("Error fetching pets:", err);
@@ -292,11 +294,11 @@ export default function UserDashboard() {
       <section className="dashboard-container row">
         <h1>Posted Peluditos</h1>
         <div className="space-y-4">
-          {pets.length === 0 ? (
+          {pets === null ? (
             <p>No pets posted yet.</p>
           ) : (
             <Accordion defaultActiveKey="0">
-              {pets.map((pet, index) => (
+              {pets?.map((pet, index) => (
                 <Card key={pet.id}>
                   <Accordion.Item eventKey={index.toString()}>
                     <Accordion.Header>

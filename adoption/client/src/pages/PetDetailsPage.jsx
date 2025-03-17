@@ -2,21 +2,18 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { backendFetchPetDetails } from "../backend";
-import { useAuth } from "../AuthContext"
 
 export default function PetDetailsPage() {
-  const { user } = useAuth();
   const { pet_id } = useParams();
   const [petDetails, setPetDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  console.log("is user logged in?", user);
-
   useEffect(() => {
     const fetchPetDetails = async () => {
       try {
         const fetchedPetData = await backendFetchPetDetails(pet_id);
+        console.log("FETCH PET DETAILS data", fetchedPetData[0]);
         const petData = fetchedPetData[0];
 
         const processedPetDetails = {
@@ -25,10 +22,10 @@ export default function PetDetailsPage() {
           has_special_needs: Boolean(petData.has_special_needs),
           potty_trained: Boolean(petData.potty_trained),
           goodWith: [
-            petData.good_with_cats === 1 ? "Cats" : null,
-            petData.good_with_dogs === 1  ? "Dogs" : null,
-            petData.good_with_kids  === 1  ? "Kids" : null,
-            petData.good_with_smallspaces  === 1  ? "Small Spaces" : null,
+            petData.good_with_cats ? "Cats" : null,
+            petData.good_with_dogs ? "Dogs" : null,
+            petData.good_with_kids ? "Kids" : null,
+            petData.good_with_smallspaces ? "Small Spaces" : null,
           ].filter(Boolean),
         };
         console.log("processedPetDetails", processedPetDetails)
@@ -42,39 +39,6 @@ export default function PetDetailsPage() {
 
     fetchPetDetails();
   }, [pet_id]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const requestMessage = e.target.message.value;
-
-    const requestData = {
-      pet_id: petDetails.pet_id, // Assuming petDetails contains pet_id
-      request_message: requestMessage,
-    };
-
-    try {
-      const response = await fetch('/api/adopt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`, // Include auth token
-        },
-        body: JSON.stringify(requestData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Adoption request submitted successfully!');
-      } else {
-        alert(`Error: ${data.message}`);
-      }
-    } catch (error) {
-      console.error('Request error:', error);
-      alert('Something went wrong. Please try again.');
-    }
-  };
 
   if (loading) return <p>Loading pet details...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -115,32 +79,6 @@ export default function PetDetailsPage() {
           </div>
         </div>
       </section>
-      {user && (
-      <section className="mb-10">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6">
-              <h2 className="display-4">ASK ABOUT {petDetails.name}</h2>
-              <p className="lead">{petDetails.pet_description}</p>
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="message" className="form-label">Your Message</label>
-                  <textarea
-                    className="form-control"
-                    id="message"
-                    name="message"
-                    rows="4"
-                    placeholder="Write your message to the pet's owner... hi.. I want to adopt"
-                    required
-                  ></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary">Send Request</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-    )}
     </>
   );
 }
