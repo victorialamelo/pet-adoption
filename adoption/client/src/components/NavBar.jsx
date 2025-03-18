@@ -1,5 +1,5 @@
 import { useAuth } from "../AuthContext";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from "react-router-dom";
 
 function Navbar() {
   const { user, logout } = useAuth();
@@ -10,7 +10,9 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top w-100">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">Peluditos</Link>
+        <Link className="navbar-brand" to="/">
+          Peluditos
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -25,42 +27,56 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="/signup">About Us</Link>
+              <Link className="nav-link" to="/aboutus">
+                About Us
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/signup">FAQs</Link>
+              <Link className="nav-link" to="/faqs">
+                FAQs
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/petlist">Adopt a Friend</Link>
+              <Link className="nav-link" to="/petlist">
+                Adopt a Friend
+              </Link>
             </li>
             {user && (
-            <>
-            <li className="nav-item">
-              <Link className="nav-link" to="/postpet">Post a Friend</Link>
-            </li>
-            <li className="nav-item">
-          <Link className="nav-link" to={`/userdashboard`}>Pet Dashboard</Link>
-            </li>
-            </>
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/postpet">
+                    Post a Friend
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to={`/userdashboard`}>
+                    Pet Dashboard
+                  </Link>
+                </li>
+              </>
             )}
             {/* IF USER IS LOGGED IN DONT SHOW THIS */}
             {!user && (
-            <>
-            <li className="nav-item">
-              <Link className="nav-link" to="/signup">Sign Up</Link>
-            </li>
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/signup">
+                    Sign Up
+                  </Link>
+                </li>
 
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">Log In</Link>
-            </li>
-            </>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">
+                    Log In
+                  </Link>
+                </li>
+              </>
             )}
             {user && (
-            <li className="nav-item">
-              <Link className="nav-link" to="/" onClick={logout}>
-                Log Out
-              </Link>
-            </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/" onClick={logout}>
+                  Log Out
+                </Link>
+              </li>
             )}
           </ul>
         </div>
