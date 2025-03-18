@@ -27,9 +27,9 @@ export default function AdoptionRequests({ petId }) {
       try {
         console.log(`Fetching adoption requests for petId: ${petId}`);
         const response = await getAdoptionRequests(petId);
-        console.log("Adoption Requests Response:", response);
+        console.log("Adoption Requests Response:", response.data);
 
-        setRequests(response || []);
+        setRequests(response.data || []);
       } catch (err) {
         console.error("Error fetching adoption requests:", err);
       }
