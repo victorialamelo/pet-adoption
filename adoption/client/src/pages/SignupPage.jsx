@@ -6,12 +6,14 @@ import { useAuth } from "../AuthContext";
 
 export default function SignupPage() {
   const { login, token } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
   // Function to handle user creation
   const createUser = async (formData) => {
     try {
+      setLoading(true);
       const newUser = {
         user_name: formData.get("name"),
         date_of_birth: formData.get("date"),
@@ -26,24 +28,16 @@ export default function SignupPage() {
       };
 
       const addedUser = await backendCreateUser(newUser);
-      login(addedUser, addedUser.token);
-<<<<<<< HEAD
-      console.log("user created and logged in", token);
-||||||| 2c1bf6a
-      // Send new user data to backend
-      console.log("User created successfully:", addedUser);
-
-      navigate(`/userdashboard/${addedUser.user.user_id}`);
-=======
-      // Send new user data to backend
-      console.log("User created successfully:", addedUser);
-
-      navigate(`/userdashboard`);
->>>>>>> 5a166eb17ad198a99b0fcaf957803623c50ef2ae
+      console.log("CREATED USER, ADDED USER ID", addedUser.user.user_id);
+      login(addedUser.user.user_id, addedUser.token);
+      console.log("user created and logged in", addedUser.user.user_id);
     } catch (error) {
       console.error("Error creating user:", error.message);
       alert(error.message);
+    } finally {
+      setLoading(false);
     }
+    if(loading) return <div>Loading...</div>
     navigate(`/userdashboard`);
   };
 

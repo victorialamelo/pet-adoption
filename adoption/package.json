@@ -8,12 +8,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-<<<<<<< HEAD
     "cloudinary": "^2.6.0",
-||||||| 2c1bf6a
-=======
-    "cloudinary": "^1.41.3",
->>>>>>> 5a166eb17ad198a99b0fcaf957803623c50ef2ae
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",

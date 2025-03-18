@@ -30,7 +30,6 @@ export default function UserDashboard() {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   // User profile state
   const [profile, setProfile] = useState({
     name: "",
@@ -44,18 +43,19 @@ export default function UserDashboard() {
   // Fetch user profile data
   useEffect(() => {
     const loadUserProfile = async () => {
+      console.log("loadUserProfile", user);
       try {
-        if (!token) {
+        if (!user) {
           navigate('/login');
           return;
         }
 
         setLoading(true);
-        console.log("WHAT IS THE ID?!! ", user.user_id)
-        const response = await fetchUserProfile(user.user_id);
+
+        const response = await fetchUserProfile(user);
         const userData = response; // address result processing from route helper.js
 
-        console.log("userData", userData);
+        console.log("userData", response);
 
         setProfile({
           name: userData.entity_name || userData.user_name,

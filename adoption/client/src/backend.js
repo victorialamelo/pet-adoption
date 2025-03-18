@@ -34,9 +34,6 @@ export async function backendLoginUser({ email, password }) {
     });
     const data = await response.json();
 
-    console.log("API Response from Backend:", data); // Debugging
-    console.log("Returned Login Data", data);
-
     return data;
   } catch (e) {
     console.log(e.message);
