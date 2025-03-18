@@ -30,7 +30,7 @@ export default function PetDetailsPage() {
             petData.good_with_smallspaces ? "Small Spaces" : null,
           ].filter(Boolean),
         };
-        console.log("processedPetDetails", processedPetDetails)
+        console.log("processedPetDetails", processedPetDetails);
         setPetDetails(processedPetDetails);
       } catch (err) {
         setError(err.message);
@@ -53,10 +53,10 @@ export default function PetDetailsPage() {
     };
 
     try {
-      const response = await fetch('/api/adopt', {
-        method: 'POST',
+      const response = await fetch("/api/adopt", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${user.token}`, // Include auth token
         },
         body: JSON.stringify(requestData),
@@ -65,13 +65,13 @@ export default function PetDetailsPage() {
       const data = await response.json();
 
       if (response.ok) {
-        alert('Adoption request submitted successfully!');
+        alert("Adoption request submitted successfully!");
       } else {
         alert(`Error: ${data.message}`);
       }
     } catch (error) {
-      console.error('Request error:', error);
-      alert('Something went wrong. Please try again.');
+      console.error("Request error:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
 
@@ -92,23 +92,42 @@ export default function PetDetailsPage() {
               <h2 className="display-4">{petDetails.name}</h2>
               <p className="lead">{petDetails.pet_description}</p>
               <ul className="list-unstyled">
-                <li><strong>Size:</strong> {petDetails.size}</li>
-                <li><strong>Weight:</strong> {petDetails.weight} kg</li>
-                <li><strong>Gender:</strong> {petDetails.gender}</li>
-                <li><strong>Activity Level:</strong> {petDetails.activity_level}</li>
-                <li><strong>Neutered:</strong> {petDetails.neutered ? "Yes" : "No"}</li>
-                <li><strong>Special Needs:</strong> {petDetails.specialNeeds ? "Yes" : "No"}</li>
-                <li><strong>Potty Trained:</strong> {petDetails.pottyTrained ? "Yes" : "No"}</li>
+                <li>
+                  <strong>Size:</strong> {petDetails.size}
+                </li>
+                <li>
+                  <strong>Weight:</strong> {petDetails.weight} kg
+                </li>
+                <li>
+                  <strong>Gender:</strong> {petDetails.gender}
+                </li>
+                <li>
+                  <strong>Activity Level:</strong> {petDetails.activity_level}
+                </li>
+                <li>
+                  <strong>Neutered:</strong>{" "}
+                  {petDetails.neutered ? "Yes" : "No"}
+                </li>
+                <li>
+                  <strong>Special Needs:</strong>{" "}
+                  {petDetails.specialNeeds ? "Yes" : "No"}
+                </li>
+                <li>
+                  <strong>Potty Trained:</strong>{" "}
+                  {petDetails.pottyTrained ? "Yes" : "No"}
+                </li>
                 {petDetails.goodWith.length > 0 && (
-                <li><strong>Good With:</strong> {petDetails.goodWith.join(", ")}</li>
-              )}
+                  <li>
+                    <strong>Good With:</strong> {petDetails.goodWith.join(", ")}
+                  </li>
+                )}
               </ul>
             </div>
             <div className="col-md-6">
               <img
-                src={petDetails.image_url || "../src/assets/bluedog.jpg"}
+                src={petDetails.img_url || "https://via.placeholder.com/150"}
                 alt={petDetails.name}
-                className="img-fluid rounded"
+                className="img-fluid pet-detail-image"
               />
             </div>
           </div>
@@ -123,7 +142,9 @@ export default function PetDetailsPage() {
                 <p className="lead">{petDetails.pet_description}</p>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <label htmlFor="message" className="form-label">Your Message</label>
+                    <label htmlFor="message" className="form-label">
+                      Your Message
+                    </label>
                     <textarea
                       className="form-control"
                       id="message"
@@ -133,7 +154,9 @@ export default function PetDetailsPage() {
                       required
                     ></textarea>
                   </div>
-                  <button type="submit" className="btn btn-primary">Send Request</button>
+                  <button type="submit" className="btn btn-primary">
+                    Send Request
+                  </button>
                 </form>
               </div>
             </div>
