@@ -2,17 +2,29 @@ const express = require("express");
 const router = express.Router();
 const authenticate = require('./middleware/authentication');
 const db = require("../model/helper");
-const multer = require("multer");
+const upload = require('./middleware/upload');
+const cloudinary = require('cloudinary').v2;
 
 // Add a Pet to Pets and Posts Table WORKING
-router.post('/pet', authenticate, async (req, res) => {
+router.post('/pet', authenticate, upload.single('photo'), async (req, res) => {
     try {
         console.log("Received request body:", req.body);
+        console.log("Received file:", req.file);
+
+        // Cloudinary upload logic
+        let img_url = null;
+
+        if (req.file) {
+            // When using multer-storage-cloudinary, the file is already uploaded to cloudinary
+            // and the cloudinary data is available in req.file
+            img_url = req.file.path || req.file.secure_url;
+            console.log("Image uploaded to:", img_url);
+        }
 
         const {
             animal_type, name, weight, size, gender, activity_level,
             good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-            neutered, has_special_needs, potty_trained, pet_description, img_url
+            neutered, has_special_needs, potty_trained, pet_description
         } = req.body;
 
         const user_id = req.user.user_id;
@@ -28,55 +40,45 @@ router.post('/pet', authenticate, async (req, res) => {
             neutered === undefined ||
             pet_description === undefined ||
             has_special_needs === undefined ||
-            img_url === undefined ||
+            img_url === undefined || // to check if the image URL was received
             good_with_cats === undefined ||
             good_with_dogs === undefined ||
             good_with_kids === undefined ||
             good_with_smallspaces === undefined ||
-            user_id === undefined  // Ensure user_id is included
+            user_id === undefined
         ) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
-        try {
-            const insertPetQuery = `
-                INSERT INTO Pets
-                    (animal_type, name, weight, size, gender, activity_level,
-                    good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-                    neutered, has_special_needs, potty_trained, pet_description, user_id, img_url)
-                VALUES
-                    ('${animal_type}', '${name}', ${weight}, '${size}', '${gender}', '${activity_level}',
-                    ${good_with_cats}, ${good_with_dogs}, ${good_with_kids}, ${good_with_smallspaces},
-                    ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id}, '${img_url}')`;
-            const result = await db(insertPetQuery);
-            // Debugging
-            console.log("result", result);
+        const insertPetQuery = `
+        INSERT INTO Pets
+          (animal_type, name, weight, size, gender, activity_level,
+          good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
+          neutered, has_special_needs, potty_trained, pet_description, user_id, img_url)
+        VALUES
+          ('${animal_type}', '${name}', ${weight}, '${size}', '${gender}', '${activity_level}',
+          ${good_with_cats}, ${good_with_dogs}, ${good_with_kids}, ${good_with_smallspaces},
+          ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id}, '${img_url}')`;
 
-            const pet_id = result.insertId;
+        const result = await db(insertPetQuery);
+        const pet_id = result.insertId;
 
-            const insertPostQuery = `
-                INSERT INTO Posts (pet_id, post_owner_id, post_date)
-                VALUES (${pet_id}, ${user_id}, NOW())`;
+        const insertPostQuery = `
+        INSERT INTO Posts (pet_id, post_owner_id, post_date)
+        VALUES (${pet_id}, ${user_id}, NOW())`;
 
-            const postresult =  await db(insertPostQuery);
-            console.log(postresult);
+        const postresult = await db(insertPostQuery);
 
-            res.status(201).json({
-                message: 'Pet added and post created successfully',
-                pet_id: pet_id  // Send the pet_id back
-            });
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: 'Error adding pet' });
-        }
+        res.status(201).json({
+            message: 'Pet added and post created successfully',
+            pet_id: pet_id // Send back the pet_id
+        });
 
     } catch (error) {
         console.error('Database Error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
-
 
 // Update Pet Information WORKING
 router.put('/:pet_id', authenticate, async (req, res) => {
@@ -128,34 +130,52 @@ router.put('/:pet_id', authenticate, async (req, res) => {
     }
 });
 
-// Get All Posts WORKING (Logged in users can access)
-router.get('/posts', async (req, res) => {
+// Get all pets with filters
+router.get("/pet", async (req, res) => {
     try {
         const filters = req.query;
-        let query = `
-            SELECT Posts.post_id, Posts.post_date, Pets.*
-            FROM Posts
-            JOIN Pets ON Posts.pet_id = Pets.pet_id
-            WHERE 1=1`;
+        let query = "SELECT Pets.*, Posts.post_id, Posts.post_date FROM Pets LEFT JOIN Posts ON Pets.pet_id = Posts.pet_id WHERE 1=1"; // Start with a valid base query
+        let values = [];
 
-        const values = [];
+        // Map frontend filters to database column names
+        const filterMappings = {
+            animal_type: "animal_type",
+            size: "size",
+            gender: "gender",
+            activity_level: "activity_level",
+            neutered: "neutered",
+            has_special_needs: "has_special_needs",
+            potty_trained: "potty_trained",
+            good_with_cats: "good_with_cats",
+            good_with_dogs: "good_with_dogs",
+            good_with_kids: "good_with_kids",
+            good_with_smallspaces: "good_with_smallspaces"
+        };
 
-        Object.keys(filters).forEach((key, index) => {
-            query += ` AND ${key} = ?`;
-            values.push(filters[key]);
+        // Loop over the filters and dynamically add them to the query
+        Object.keys(filters).forEach((key) => {
+            // Ensure that the key is part of the filter mappings and the value is valid
+            if (filterMappings[key] !== undefined && filters[key] !== "") {
+                query += ` AND ${filterMappings[key]} = ?`;  // Dynamically append condition
+                values.push(filters[key]);  // Push corresponding filter value
+            }
         });
 
-        const posts = await db(query, values);
-        res.status(200).json(posts);
+        // Debugging the query string and values
+        console.log("Final query:", query);
+        console.log("Query values:", values);
+
+        const result = await db(query, values);
+        res.status(200).json(result.data);  // Send back the results
     } catch (error) {
-        console.error('Database Error:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.error("Database Error:", error);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
 
-// Get Pet By ID WORKING (Logged in users can access, fe filters should work.) (Click on a button on post to open a pet page)
-router.get("/:pet_id", authenticate, async (req, res) => {
+// Get Pet By ID WORKING (Logged in users can access, fe filters should work.)
+router.get("/:pet_id", authenticate, authenticate, async (req, res) => {
     try {
         const petId = req.params.pet_id;
 
@@ -205,6 +225,15 @@ router.get("/allpostedpets/:user_id", authenticate, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+// handle image uploads
+// router.post('/upload', upload.single('image'), (req, res) => {
+//     if (!req.file) {
+//         return res.status(400).json({ error: 'No file uploaded' });
+//     }
+
+//     res.json({ imageUrl: req.file.path });  // send Cloudinary image URL
+// });
 
 
 module.exports = router;
