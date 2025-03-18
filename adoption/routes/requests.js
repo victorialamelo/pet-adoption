@@ -50,7 +50,8 @@ router.get('/adoption-requests', authenticate, async (req, res) => {
         console.log("Query parameter pet_id:", pet_id);
 
         let query = `
-            SELECT Requests.*, 
+            SELECT Requests.*,
+            Requests.request_status,
             Pets.name AS pet_name,
             Users.user_name AS requester_name
             FROM Requests
@@ -74,8 +75,7 @@ router.get('/adoption-requests', authenticate, async (req, res) => {
         console.log("🛠 Full DB Response:", result);
 
         //Fixing result check
-        if (!result || result.length === 0) {
-            console.warn("⚠️ No adoption requests found for this user.");
+        if (!result.data || result.data.length === 0) {
             return res.status(404).json({ message: "No adoption requests found" });
         }
 
@@ -94,30 +94,40 @@ router.put('/request-status/:request_id', authenticate, async (req, res) => {
     try {
         const { request_id } = req.params;
         const { request_status } = req.body;
-        const requester_id = req.user.user_id;
+        const user_id = req.user.user_id; // Logged-in user (pet owner)
 
         if (!request_status) {
             return res.status(400).json({ message: 'Missing request status' });
         }
 
-        const checkRequestQuery = `SELECT requester_id FROM Requests WHERE request_id = ${request_id}`;
+        // Fetch the pet owner based on the adoption request
+        const checkRequestQuery = `
+            SELECT p.user_id AS pet_owner_id
+            FROM Requests r
+            JOIN Pets p ON r.pet_id = p.pet_id
+            WHERE r.request_id = ${request_id}
+        `;
         const requestResult = await db(checkRequestQuery);
 
         if (!requestResult || !requestResult.data || requestResult.data.length === 0) {
             return res.status(404).json({ message: 'Request not found' });
         }
 
-        if (requestResult.data[0].requester_id != requester_id) {
+        const { pet_owner_id } = requestResult.data[0];
+
+        // Only allow the pet owner to update the status
+        if (user_id !== pet_owner_id) {
             return res.status(403).json({ message: 'Unauthorized to update this request' });
         }
 
+        // Update the request status
         const updateRequestQuery = `
             UPDATE Requests 
             SET request_status = '${request_status}'
             WHERE request_id = ${request_id}
         `;
-
         await db(updateRequestQuery);
+
         res.status(200).json({ message: 'Adoption request status updated successfully' });
 
     } catch (error) {
