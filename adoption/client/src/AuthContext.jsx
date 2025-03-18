@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
       const storedUser = localStorage.getItem("user");
 
       if (storedToken) setToken(storedToken);
-
+      console.log("✅ Token set in state:", storedToken);
       if (storedUser && storedUser !== "undefined") {
         try {
           const parsedUser = JSON.parse(storedUser);

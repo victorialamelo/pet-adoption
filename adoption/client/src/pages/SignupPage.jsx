@@ -5,7 +5,7 @@ import { backendCreateUser } from "../backend";
 import { useAuth } from "../AuthContext";
 
 export default function SignupPage() {
-  const { login } = useAuth();
+  const { login, token } = useAuth();
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
@@ -27,11 +27,12 @@ export default function SignupPage() {
 
       const addedUser = await backendCreateUser(newUser);
       login(addedUser, addedUser.token);
-      navigate(`/userdashboard`);
+      console.log("user created and logged in", token);
     } catch (error) {
       console.error("Error creating user:", error.message);
       alert(error.message);
     }
+    navigate(`/userdashboard`);
   };
 
   // Form submission handler

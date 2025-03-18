@@ -2,7 +2,7 @@ import { useAuth } from "../AuthContext";
 import { Link  } from 'react-router-dom';
 
 function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, token, logout } = useAuth();
   // console.log("NAV BARRRRRRR id", id);
   // console.log("NAV BARRRRRRR user", user);
   // console.log("NAV BARRRRRRR user.user_id", user.user.user_id);
@@ -33,7 +33,7 @@ function Navbar() {
             <li className="nav-item">
               <Link className="nav-link" to="/petlist">Adopt a Friend</Link>
             </li>
-            {user && (
+            {token && (
             <>
             <li className="nav-item">
               <Link className="nav-link" to="/postpet">Post a Friend</Link>
@@ -44,7 +44,7 @@ function Navbar() {
             </>
             )}
             {/* IF USER IS LOGGED IN DONT SHOW THIS */}
-            {!user && (
+            {!token && (
             <>
             <li className="nav-item">
               <Link className="nav-link" to="/signup">Sign Up</Link>
@@ -55,7 +55,7 @@ function Navbar() {
             </li>
             </>
             )}
-            {user && (
+            {token && (
             <li className="nav-item">
               <Link className="nav-link" to="/" onClick={logout}>
                 Log Out
