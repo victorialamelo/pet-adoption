@@ -53,18 +53,28 @@ export async function backendAddPostPet(newPet) {
     throw new Error("User not authenticated");
   }
 
-  console.log("Sending request to add pet:", JSON.stringify(newPet, null, 2));
+  // Create FormData object to handle file uploads
+  const formData = new FormData();
+
+  // Add all properties from newPet to formData
+  Object.keys(newPet).forEach(key => {
+    if (key === 'photo' && newPet[key]) {
+      formData.append('photo', newPet[key]);
+    } else {
+      formData.append(key, newPet[key]);
+    }
+  });
+
+  console.log("Sending request to add pet with form data");
 
   const response = await fetch("http://localhost:5001/pets/pet", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      // Don't set Content-Type when using FormData - browser will set it with boundary
       "Authorization": `Bearer ${token}`
     },
-    body: JSON.stringify(newPet),
+    body: formData,
   });
-
-  console.log("response", response)
 
   if (!response.ok) {
     try {

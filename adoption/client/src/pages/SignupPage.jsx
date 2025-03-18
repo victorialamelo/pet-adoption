@@ -27,7 +27,19 @@ export default function SignupPage() {
 
       const addedUser = await backendCreateUser(newUser);
       login(addedUser, addedUser.token);
+<<<<<<< HEAD
       console.log("user created and logged in", token);
+||||||| 2c1bf6a
+      // Send new user data to backend
+      console.log("User created successfully:", addedUser);
+
+      navigate(`/userdashboard/${addedUser.user.user_id}`);
+=======
+      // Send new user data to backend
+      console.log("User created successfully:", addedUser);
+
+      navigate(`/userdashboard`);
+>>>>>>> 5a166eb17ad198a99b0fcaf957803623c50ef2ae
     } catch (error) {
       console.error("Error creating user:", error.message);
       alert(error.message);

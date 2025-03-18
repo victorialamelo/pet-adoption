@@ -22,6 +22,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth', authRouter);
 app.use('/pets', petsRouter);
 app.use('/users', usersRouter);
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5001");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next();
+});
 
 // app.use('/auth', authenticate, authRouter);
 // app.use('/pets', authenticate, petsRouter);

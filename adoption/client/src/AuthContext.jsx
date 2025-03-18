@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true)
 
   // Check localStorage on first load
   useEffect(() => {
@@ -12,8 +13,12 @@ export const AuthProvider = ({ children }) => {
       const storedToken = localStorage.getItem("token");
       const storedUser = localStorage.getItem("user");
 
+      console.log("🔍 Checking localStorage on first load:");
+      console.log("Token from localStorage:", storedToken);
+      console.log("User from localStorage (raw):", storedUser); // Log before parsing
+
       if (storedToken) setToken(storedToken);
-      console.log("✅ Token set in state:", storedToken);
+
       if (storedUser && storedUser !== "undefined") {
         try {
           const parsedUser = JSON.parse(storedUser);
@@ -28,10 +33,17 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("❌ Error retrieving auth data:", error);
     }
+    finally{
+      setLoading(false)
+    }
   }, []);
 
   // Function to handle login
   const login = (userData, authToken) => {
+    console.log("🔑 Attempting login...");
+    console.log("Received userData:", userData);
+    console.log("Received token:", authToken);
+
     if (!userData || typeof userData !== "object") {
       console.error("❌ Invalid userData provided, not saving to localStorage.");
       return;
@@ -44,7 +56,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", authToken);
 
-    console.log("✅ Stored in localStorage - User:", userData);
+    console.log("✅ Stored in localStorage - User:", localStorage.getItem("user"));
+    console.log("✅ Stored in localStorage - Token:", localStorage.getItem("token"));
   };
 
   // Function to handle logout
@@ -55,6 +68,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
+  if(loading) return <div>Loading...</div>
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
