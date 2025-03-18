@@ -4,6 +4,8 @@ import { Image, Card, Button, Dropdown, DropdownButton, Form } from "react-boots
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import NavBar from "../components/NavBar";
+import AdoptionRequests from "./AdoptionRequests";
+
 
 import "../App.css";
 
@@ -321,6 +323,8 @@ export default function UserDashboard() {
                     </Accordion.Header>
                     <Accordion.Body>
                       {editingPetId === pet.id ? (
+                  
+                        <>{console.log("Editing Pet ID:", editingPetId)}
                         <Form onSubmit={(e) => handleEditSubmit(e, pet.id)}>
                           <Form.Group>
                             <Form.Label>Name</Form.Label>
@@ -343,19 +347,23 @@ export default function UserDashboard() {
                           <Button type="submit" className="mt-2">Save</Button>
                           <Button variant="secondary" onClick={() => setEditingPetId(null)} className="mt-2 ms-2">Cancel</Button>
                         </Form>
+                        </>
                       ) : (
                         <>
                           <p>{pet.description}</p>
                           <Button onClick={() => handleEditClick(pet)}>Edit</Button>
                         </>
                       )}
+                        <div className="mt-4">
+                          <h4>Adoption Requests</h4>
+                          <AdoptionRequests petId={pet.id} />
+                        </div>
                     </Accordion.Body>
                   </Accordion.Item>
                 </Card>
               ))}
             </Accordion>
           )}
-
           {selectedPet && (
             <div className="p-4 border rounded-lg shadow-sm mt-4">
               <h3 className="font-weight-bold">Applicants for {selectedPet.name}</h3>

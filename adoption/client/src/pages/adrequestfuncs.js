@@ -30,20 +30,15 @@ export const createAdoptionRequest = async (pet_id, request_message) => {
 //Get All or By ID the Adoption Requests
 export const getAdoptionRequests = async (pet_id = null) => {
     try {
-        const token = localStorage.getItem("token"); // Get token
-        let url = "http://localhost:5001/requests/adoption-requests";
-
-        if (pet_id) {
-            url += `?pet_id=${pet_id}`; // Add pet_id if provided
-        }
-
-        const response = await fetch(url, {
+        const response = await fetch(`http://localhost:5001/requests/adoption-requests${pet_id ? `?pet_id=${pet_id}` : ""}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${localStorage.getItem("token")}` // Stored token.
             }
         });
+
+        console.log("response.data", response);
 
         if (!response.ok) {
             throw new Error("Failed to fetch adoption requests");

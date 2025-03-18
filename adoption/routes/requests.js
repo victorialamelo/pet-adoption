@@ -7,10 +7,12 @@ const db = require("../model/helper");
 //Create Adoption Request WORKING
 router.post('/adopt', authenticate, async (req, res) => {
     try {
+        console.log("ADOPTION REQUEST DETAILS:", req.body);
         const { pet_id, request_message } = req.body;
         const requester_id = req.user.user_id;
 
         if (!pet_id || !request_message) {
+            console.log("Validation failed: Missing required fields");
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
@@ -19,7 +21,15 @@ router.post('/adopt', authenticate, async (req, res) => {
             VALUES (${pet_id}, ${requester_id}, NOW(), 'pending', '${request_message}')
         `;
 
+        console.log("Executing SQL Query:", insertRequestQuery);
+
         await db(insertRequestQuery);
+
+        const checkQuery = `SELECT * FROM Requests WHERE pet_id = ${pet_id} AND requester_id = ${requester_id}`;
+        const checkResult = await db(checkQuery);
+        console.log("Inserted Request:", checkResult);
+
+        console.log("Adoption request submitted successfully");
         res.status(201).json({ message: 'Adoption request submitted successfully' });
 
     } catch (error) {
@@ -32,25 +42,46 @@ router.post('/adopt', authenticate, async (req, res) => {
 //Get Adoption Requests (Users can only see their own pets.)
 router.get('/adoption-requests', authenticate, async (req, res) => {
     try {
-        const user_id = req.user.user_id; // Logged-in user's ID
-        const { pet_id } = req.query; // Optional pet_id filter (filter on fe needed)
+        const { user_id } = req.user; // Logged-in user's ID
+        const { pet_id } = req.query; // Optional pet_id filter
 
-        const getRequestsQuery = `
+        console.log("Incoming request to /adoption-requests");
+        console.log("Authenticated user_id:", user_id);
+        console.log("Query parameter pet_id:", pet_id);
+
+        let query = `
             SELECT Requests.*, Pets.name AS pet_name 
             FROM Requests
             JOIN Pets ON Requests.pet_id = Pets.pet_id
-            WHERE Pets.user_id = ${user_id}
-        `;
+            WHERE Pets.user_id = ?`;
+
+        const queryParams = [user_id];
 
         if (pet_id) {
-            getRequestsQuery += ` AND Pets.pet_id = ${pet_id}`;
-        } //for pet filter
+            query += ` AND Pets.pet_id = ?`;
+            queryParams.push(pet_id);
+        }
 
-        const adoptionRequests = await db(getRequestsQuery);
-        res.status(200).json(adoptionRequests);
+        console.log("Executing SQL Query:", query);
+        console.log("With parameters:", queryParams);
+
+        const result = await db(query, queryParams);
+
+        //Debugging: Check what we get back
+        console.log("🛠 Full DB Response:", result);
+
+        //Fixing result check
+        if (!result || result.length === 0) {
+            console.warn("⚠️ No adoption requests found for this user.");
+            return res.status(404).json({ message: "No adoption requests found" });
+        }
+
+        console.log("Adoption requests fetched successfully:", result);
+        res.json(result);
+
     } catch (error) {
-        console.error('Database Error:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.error("Database Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
