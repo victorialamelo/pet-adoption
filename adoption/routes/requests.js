@@ -50,9 +50,12 @@ router.get('/adoption-requests', authenticate, async (req, res) => {
         console.log("Query parameter pet_id:", pet_id);
 
         let query = `
-            SELECT Requests.*, Pets.name AS pet_name 
+            SELECT Requests.*, 
+            Pets.name AS pet_name,
+            Users.user_name AS requester_name
             FROM Requests
             JOIN Pets ON Requests.pet_id = Pets.pet_id
+            JOIN Users ON Requests.requester_id = Users.user_id
             WHERE Pets.user_id = ?`;
 
         const queryParams = [user_id];

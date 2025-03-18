@@ -355,7 +355,7 @@ export default function UserDashboard() {
                         </>
                       )}
                         <div className="mt-4">
-                          <h4>Adoption Requests</h4>
+                          {/*<h4>Adoption Requests</h4>*/}
                           <AdoptionRequests petId={pet.pet_id} />
                         </div>
                     </Accordion.Body>
