@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Accordion, AccordionItem } from "react-bootstrap";
 import { Image, Card, Button, Dropdown, DropdownButton, Form } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import NavBar from "../components/NavBar";
 
@@ -23,15 +23,13 @@ import {
 export default function UserDashboard() {
   const [editingPetId, setEditingPetId] = useState(null);
   const [editFormData, setEditFormData] = useState({ name: "", description: "" });
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const navigate = useNavigate();
   const [selectedPet, setSelectedPet] = useState(null);
   const [editing, setEditing] = useState(false);
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const userID = user.user_id;
-
   // User profile state
   const [profile, setProfile] = useState({
     name: "",
@@ -45,17 +43,19 @@ export default function UserDashboard() {
   // Fetch user profile data
   useEffect(() => {
     const loadUserProfile = async () => {
+      console.log("loadUserProfile", user);
       try {
-        if (!userID) {
+        if (!user) {
           navigate('/login');
           return;
         }
+
         setLoading(true);
-        console.log("WHAT IS THE ID?!! ", userID)
-        const response = await fetchUserProfile(userID);
+
+        const response = await fetchUserProfile(user);
         const userData = response; // address result processing from route helper.js
 
-        console.log("userData", userData);
+        console.log("userData", response);
 
         setProfile({
           name: userData.entity_name || userData.user_name,
@@ -63,6 +63,8 @@ export default function UserDashboard() {
           registrationID: userData.entity_registration_id || '',
           about: userData.about || ''
         });
+
+        console.log("profile", profile);
 
         setFormData({
           name: userData.entity_name || userData.user_name,
@@ -87,24 +89,23 @@ export default function UserDashboard() {
   // Edit user profile data
 
   // Fetch pets posted by the current user
-  useEffect(() => {
-    const loadUserPets = async () => {
-      try {
-        setLoading(true);
+  // useEffect(() => {
+  //   const loadUserPets = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const petsWithRequests = await getUserPostedPets(id);
+  //       console.log("petsWithRequests", petsWithRequests);
+  //       setPets(petsWithRequests || []); // Ensure pets is always an array
+  //     } catch (err) {
+  //       console.error("Error fetching pets:", err);
+  //       setError("Failed to load pets. Please try again later.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-        const petsWithRequests = await getUserPostedPets(userID);
-        console.log("petsWithRequests", petsWithRequests)
-        setPets(petsWithRequests);
-      } catch (err) {
-        console.error("Error fetching pets:", err);
-        setError("Failed to load pets. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUserPets();
-  }, []);
+  //   loadUserPets();
+  // }, [id]);
 
   // Update user profile
   const handleSubmit = async (e) => {
@@ -319,6 +320,8 @@ export default function UserDashboard() {
                     </Accordion.Header>
                     <Accordion.Body>
                       {editingPetId === pet.id ? (
+
+                        <>{console.log("Editing Pet ID:", editingPetId)}
                         <Form onSubmit={(e) => handleEditSubmit(e, pet.id)}>
                           <Form.Group>
                             <Form.Label>Name</Form.Label>
@@ -341,19 +344,23 @@ export default function UserDashboard() {
                           <Button type="submit" className="mt-2">Save</Button>
                           <Button variant="secondary" onClick={() => setEditingPetId(null)} className="mt-2 ms-2">Cancel</Button>
                         </Form>
+                        </>
                       ) : (
                         <>
                           <p>{pet.description}</p>
                           <Button onClick={() => handleEditClick(pet)}>Edit</Button>
                         </>
                       )}
+                        <div className="mt-4">
+                          <h4>Adoption Requests</h4>
+                          <AdoptionRequests petId={pet.id} />
+                        </div>
                     </Accordion.Body>
                   </Accordion.Item>
                 </Card>
               ))}
             </Accordion>
           )}
-
           {selectedPet && (
             <div className="p-4 border rounded-lg shadow-sm mt-4">
               <h3 className="font-weight-bold">Applicants for {selectedPet.name}</h3>

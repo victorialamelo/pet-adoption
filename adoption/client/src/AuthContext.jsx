@@ -5,32 +5,36 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true)
 
   // Check localStorage on first load
   useEffect(() => {
     try {
       const storedToken = localStorage.getItem("token");
       const storedUser = localStorage.getItem("user");
-  
+
       console.log("🔍 Checking localStorage on first load:");
       console.log("Token from localStorage:", storedToken);
       console.log("User from localStorage (raw):", storedUser); // Log before parsing
-  
+
       if (storedToken) setToken(storedToken);
-  
+
       if (storedUser && storedUser !== "undefined") {
         try {
-          const parsedUser = JSON.parse(storedUser);
+          const parsedUser = JSON.parse(storedUser.user_id);
           setUser(parsedUser);
           console.log("✅ User set in state:", parsedUser);
         } catch (error) {
           console.error("❌ Error parsing user from localStorage:", error);
         }
       } else {
-        console.warn("⚠️ No valid user found in localStorage");
+        console.log("⚠️ No user logged in");
       }
     } catch (error) {
       console.error("❌ Error retrieving auth data:", error);
+    }
+    finally{
+      setLoading(false)
     }
   }, []);
 
@@ -39,19 +43,14 @@ export const AuthProvider = ({ children }) => {
     console.log("🔑 Attempting login...");
     console.log("Received userData:", userData);
     console.log("Received token:", authToken);
-  
-    if (!userData || typeof userData !== "object") {
-      console.error("❌ Invalid userData provided, not saving to localStorage.");
-      return;
-    }
-  
+
     setUser(userData);
     setToken(authToken);
-  
+
     // Store in localStorage
-    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("user", userData);
     localStorage.setItem("token", authToken);
-  
+
     console.log("✅ Stored in localStorage - User:", localStorage.getItem("user"));
     console.log("✅ Stored in localStorage - Token:", localStorage.getItem("token"));
   };
@@ -64,6 +63,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
+  if(loading) return <div>Loading...</div>
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}

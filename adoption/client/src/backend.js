@@ -16,7 +16,7 @@ export async function backendCreateUser(inputs) {
   }
 
   const data = await response.json();
-  console.log("backendCreateUser data", data)
+  console.log("Returned Sign Up Data", data);
   return data;
 }
 
@@ -33,8 +33,6 @@ export async function backendLoginUser({ email, password }) {
       body: JSON.stringify(credentials),
     });
     const data = await response.json();
-
-    console.log("API Response from Backend:", data); // Debugging
 
     return data;
   } catch (e) {
