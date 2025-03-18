@@ -202,7 +202,7 @@ export default function PetListPage() {
                     <img
                       src={pet.img_url || "https://via.placeholder.com/150"}
                       alt={pet.name}
-                      className="card-img-top"
+                      className="card-img-top pet-card-image"
                     />
                     <div className="card-body">
                       <h5 className="card-title">{pet.name}</h5>
