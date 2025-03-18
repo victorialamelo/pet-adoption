@@ -22,7 +22,7 @@ export default function App() {
           <Route path="/petlist" element={<PetListPage />} />
           <Route path="/petdetails/:pet_id" element={<PetDetailsPage />} />
           <Route path="/postpet" element={<PostPetPage />} />
-          <Route path="/userdashboard/:id" element={<UserDashboard />} />
+          <Route path="/userdashboard" element={<UserDashboard />} />
         </Routes>
     </AuthProvider>
   );

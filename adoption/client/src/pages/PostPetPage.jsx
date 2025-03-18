@@ -3,11 +3,12 @@ import NavBar from "../components/NavBar";
 import "../App.css";
 import { useAuth } from "../AuthContext";
 import { backendAddPostPet } from "../backend";
+import { useState } from "react";
 
 export default function PostPetPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  // const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState(null);
 
   const createPet = async (event) => {
     event.preventDefault();
@@ -29,12 +30,12 @@ export default function PostPetPage() {
       neutered: Number(formData.get("neutered")) || 0,
       has_special_needs: Number(formData.get("specialNeeds")) || 0,
       potty_trained: Number(formData.get("pottyTrained")) || 0,
-      img_url: "imageplaceholder",
       pet_description: formData.get("story"),
       good_with_cats: Number(formData.get("goodwithcats")) || 0,
       good_with_dogs: Number(formData.get("goodwithdogs")) || 0,
       good_with_kids: Number(formData.get("goodwithkids")) || 0,
       good_with_smallspaces: Number(formData.get("goodwithsmallspaces")) || 0,
+      photo: photo, // Include the file directly
     };
 
     try {
@@ -46,9 +47,10 @@ export default function PostPetPage() {
     }
   };
 
-  // const handleFileChange = (e) => {
-  //   setPhoto(e.target.files[0]);
-  // };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setPhoto(file); // store file for submission
+  };
 
   return (
     <>
@@ -97,7 +99,7 @@ export default function PostPetPage() {
                   </select>
                 </div>
 
-                {/* <div className="mb-3">
+                <div className="mb-3">
                   <label htmlFor="image" className="form-label">
                     Pet Image
                   </label>
@@ -105,11 +107,10 @@ export default function PostPetPage() {
                     type="file"
                     className="form-control"
                     id="image"
-                    name="image"
+                    name="photo"
                     onChange={handleFileChange}
                   />
-                </div> */}
-
+                </div>
                 <div className="mb-3">
                   <label htmlFor="story" className="form-label">
                     Pet's Story

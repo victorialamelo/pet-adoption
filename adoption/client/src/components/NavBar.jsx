@@ -3,8 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 
 function Navbar() {
   const { user, logout } = useAuth();
-  const { id } = useParams();
-  console.log("NAV BARRRRRRR user, id", user, id);
+  // console.log("NAV BARRRRRRR id", id);
+  // console.log("NAV BARRRRRRR user", user);
+  // console.log("NAV BARRRRRRR user.user_id", user.user.user_id);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top w-100">
@@ -38,7 +39,7 @@ function Navbar() {
               <Link className="nav-link" to="/postpet">Post a Friend</Link>
             </li>
             <li className="nav-item">
-          <Link className="nav-link" to={`/userdashboard/${user.user_id}`}>Pet Dashboard</Link>
+          <Link className="nav-link" to={`/userdashboard`}>Pet Dashboard</Link>
             </li>
             </>
             )}

@@ -2,17 +2,29 @@ const express = require("express");
 const router = express.Router();
 const authenticate = require('./middleware/authentication');
 const db = require("../model/helper");
-const multer = require("multer");
+const upload = require('./middleware/upload');
+const cloudinary = require('cloudinary').v2;
 
 // Add a Pet to Pets and Posts Table WORKING
-router.post('/pet', authenticate, async (req, res) => {
+router.post('/pet', authenticate, upload.single('photo'), async (req, res) => {
     try {
         console.log("Received request body:", req.body);
+        console.log("Received file:", req.file);
+
+        // Cloudinary upload logic
+        let img_url = null;
+
+        if (req.file) {
+            // When using multer-storage-cloudinary, the file is already uploaded to cloudinary
+            // and the cloudinary data is available in req.file
+            img_url = req.file.path || req.file.secure_url;
+            console.log("Image uploaded to:", img_url);
+        }
 
         const {
             animal_type, name, weight, size, gender, activity_level,
             good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-            neutered, has_special_needs, potty_trained, pet_description, img_url
+            neutered, has_special_needs, potty_trained, pet_description
         } = req.body;
 
         const user_id = req.user.user_id;
@@ -28,48 +40,39 @@ router.post('/pet', authenticate, async (req, res) => {
             neutered === undefined ||
             pet_description === undefined ||
             has_special_needs === undefined ||
-            img_url === undefined ||
+            img_url === undefined || // to check if the image URL was received
             good_with_cats === undefined ||
             good_with_dogs === undefined ||
             good_with_kids === undefined ||
             good_with_smallspaces === undefined ||
-            user_id === undefined  // Ensure user_id is included
+            user_id === undefined
         ) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
-        try {
-            const insertPetQuery = `
-                INSERT INTO Pets
-                    (animal_type, name, weight, size, gender, activity_level,
-                    good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-                    neutered, has_special_needs, potty_trained, pet_description, user_id, img_url)
-                VALUES
-                    ('${animal_type}', '${name}', ${weight}, '${size}', '${gender}', '${activity_level}',
-                    ${good_with_cats}, ${good_with_dogs}, ${good_with_kids}, ${good_with_smallspaces},
-                    ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id}, '${img_url}')`;
+        const insertPetQuery = `
+        INSERT INTO Pets
+          (animal_type, name, weight, size, gender, activity_level,
+          good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
+          neutered, has_special_needs, potty_trained, pet_description, user_id, img_url)
+        VALUES
+          ('${animal_type}', '${name}', ${weight}, '${size}', '${gender}', '${activity_level}',
+          ${good_with_cats}, ${good_with_dogs}, ${good_with_kids}, ${good_with_smallspaces},
+          ${neutered}, ${has_special_needs}, ${potty_trained}, '${pet_description}', ${user_id}, '${img_url}')`;
 
-            const result = await db(insertPetQuery);
-            console.log("result", result);
+        const result = await db(insertPetQuery);
+        const pet_id = result.insertId;
 
-            const pet_id = result.insertId;
+        const insertPostQuery = `
+        INSERT INTO Posts (pet_id, post_owner_id, post_date)
+        VALUES (${pet_id}, ${user_id}, NOW())`;
 
-            const insertPostQuery = `
-                INSERT INTO Posts (pet_id, post_owner_id, post_date)
-                VALUES (${pet_id}, ${user_id}, NOW())`;
+        const postresult = await db(insertPostQuery);
 
-            const postresult = await db(insertPostQuery);
-            console.log(postresult);
-
-            res.status(201).json({
-                message: 'Pet added and post created successfully',
-                pet_id: pet_id  // Send the pet_id back
-            });
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: 'Error adding pet' });
-        }
+        res.status(201).json({
+            message: 'Pet added and post created successfully',
+            pet_id: pet_id // Send back the pet_id
+        });
 
     } catch (error) {
         console.error('Database Error:', error);
@@ -222,6 +225,15 @@ router.get("/allpostedpets/:user_id", authenticate, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+// handle image uploads
+// router.post('/upload', upload.single('image'), (req, res) => {
+//     if (!req.file) {
+//         return res.status(400).json({ error: 'No file uploaded' });
+//     }
+
+//     res.json({ imageUrl: req.file.path });  // send Cloudinary image URL
+// });
 
 
 module.exports = router;
