@@ -32,7 +32,7 @@ export default function LoginPage() {
       const data = await backendLoginUser({ email, password });
       login(data.user_details, data.token);
       console.log("Login successful:", data);
-      navigate(`/userdashboard/${data.user_details.user_id}`);
+      navigate(`/userdashboard`);
     } catch (error) {
       console.error("Login failed:", error.message);
     }
