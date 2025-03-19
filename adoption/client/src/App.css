@@ -47,6 +47,7 @@ body,
   margin: 0 auto;
   width: 100%;
   background-color: var(--celeste);
+  align-items: baseline;
 }
 
 .header-petlist {
@@ -308,7 +309,71 @@ th {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.h1-petlist {
+  padding-bottom: 300px;
+}
 
+.header-testimonials {
+  background-image: url("https://img.freepik.com/premium-photo/joyful-scene-featuring-happy-dog-its-owner-solid-color-background-pet-is-playfully-interacting-with-owner-showcasing-their-strong-bond-background-offers-ample-copy-space_39704-18675.jpg"); /* Path to your testimonial background image */
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: white;
+  padding: 0 50px;
+  border-top: 10px solid white;
+}
+
+.header-testimonials h2 {
+  color: white;
+  text-shadow: var(--textshadow) 1px 1px, var(--textshadow) 2px 2px,
+    var(--textshadow) 3px 3px;
+}
+
+.header-testimonials p {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  color: var(--lavender);
+  font-size: 1.2em;
+  font-style: italic;
+}
+
+.dashboard-view {
+  margin-top: 100px;
+  height: auto;
+}
+
+.dashboard-view .btn-primary {
+  color: white;
+  margin: 20px;
+}
+
+.adopter-dashboard {
+  border-top: 10px solid white;
+  min-height: 1300px;
+  padding: 20px;
+  background-color: var(--sage);
+}
+
+.sticky-top {
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+}
+
+.list-group-item {
+  border-radius: 8px;
+  font-size: 2em;
+  margin-top: 20px;
+}
+
+.list-group-item.active {
+  background-color: var(--cherrypink);
+  border: none;
+}
 
 /* Custom navbar toggler */
 .custom-toggler {
@@ -348,35 +413,4 @@ th {
     display: inline-block;
     width: 100%;
   }
-.h1-petlist {
-  padding-bottom: 300px;
-}
-
-.header-testimonials {
-  background-image: url("https://img.freepik.com/premium-photo/joyful-scene-featuring-happy-dog-its-owner-solid-color-background-pet-is-playfully-interacting-with-owner-showcasing-their-strong-bond-background-offers-ample-copy-space_39704-18675.jpg"); /* Path to your testimonial background image */
-  background-size: 100% auto;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  color: white;
-  padding: 0 50px;
-  border-top: 10px solid white;
-}
-
-.header-testimonials h2 {
-  color: white;
-  text-shadow: var(--textshadow) 1px 1px, var(--textshadow) 2px 2px,
-    var(--textshadow) 3px 3px;
-}
-
-.header-testimonials p {
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 20px;
-  border-radius: 10px;
-  color: var(--lavender);
-  font-size: 1.2em;
-  font-style: italic;
 }
