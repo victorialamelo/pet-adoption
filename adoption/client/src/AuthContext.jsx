@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   // Check localStorage on first load
   useEffect(() => {
@@ -28,13 +28,12 @@ export const AuthProvider = ({ children }) => {
           console.error("❌ Error parsing user from localStorage:", error);
         }
       } else {
-        console.warn("⚠️ No valid user found in localStorage");
+        console.log("⚠️ No user logged in");
       }
     } catch (error) {
       console.error("❌ Error retrieving auth data:", error);
-    }
-    finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -44,15 +43,10 @@ export const AuthProvider = ({ children }) => {
     console.log("Received userData:", userData);
     console.log("Received token:", authToken);
 
-    if (!userData || typeof userData !== "object") {
-      console.error("❌ Invalid userData provided, not saving to localStorage.");
-      return;
-    }
-
     setUser(userData);
     setToken(authToken);
 
-    // Store in localStorage
+    // Store in localStorage - stringify the userData object
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", authToken);
 
@@ -68,7 +62,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
-  if(loading) return <div>Loading...</div>
+  if (loading) return <div>Loading...</div>;
+
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}

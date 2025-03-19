@@ -1,11 +1,12 @@
 import { useAuth } from "../AuthContext";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 function Navbar() {
   const { user, logout } = useAuth();
-  // console.log("NAV BARRRRRRR id", id);
-  // console.log("NAV BARRRRRRR user", user);
-  // console.log("NAV BARRRRRRR user.user_id", user.user.user_id);
+  const [isNavCollapsed, setIsNavCollapsed] = useState(true);
+
+  const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top w-100">
@@ -14,17 +15,17 @@ function Navbar() {
           Peluditos
         </Link>
         <button
-          className="navbar-toggler"
+          className="navbar-toggler custom-toggler"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
+          onClick={handleNavCollapse}
           aria-controls="navbarNav"
-          aria-expanded="false"
+          aria-expanded={!isNavCollapsed}
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
+
+        <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
               <Link className="nav-link" to="/aboutus">
@@ -55,7 +56,6 @@ function Navbar() {
                 </li>
               </>
             )}
-            {/* IF USER IS LOGGED IN DONT SHOW THIS */}
             {!user && (
               <>
                 <li className="nav-item">
@@ -63,7 +63,6 @@ function Navbar() {
                     Sign Up
                   </Link>
                 </li>
-
                 <li className="nav-item">
                   <Link className="nav-link" to="/login">
                     Log In

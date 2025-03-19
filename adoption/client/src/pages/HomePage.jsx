@@ -144,6 +144,7 @@ function HomePage() {
               </Link>
             </div>
             <div className="col-md-6">
+
               <img
                 src="../src/assets/orangedog.jpg"
                 className="img-fluid rounded"
@@ -156,6 +157,10 @@ function HomePage() {
               <Link to="/adoption" className="btn btn-secondary mb-5">
                 Learn More
               </Link>
+
+              <img src="../src/assets/orangedog.jpg" className="img-fluid rounded" alt="Support our mission" />
+              <p className="mt-3">From the match to the first hug, discover how adoption works in just a few simple steps.</p>
+
             </div>
           </div>
         </div>

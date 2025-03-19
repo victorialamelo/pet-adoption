@@ -5,13 +5,15 @@ import { backendCreateUser } from "../backend";
 import { useAuth } from "../AuthContext";
 
 export default function SignupPage() {
-  const { login } = useAuth();
+  const { login, token } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
   // Function to handle user creation
   const createUser = async (formData) => {
     try {
+      setLoading(true);
       const newUser = {
         user_name: formData.get("name"),
         date_of_birth: formData.get("date"),
@@ -24,17 +26,19 @@ export default function SignupPage() {
         entity_website: formData.get("website"),
         entity_registration_id: formData.get("registrationid"),
       };
-      console.log("newUser", newUser);
-      const addedUser = await backendCreateUser(newUser);
-      login(addedUser, addedUser.token);
-      // Send new user data to backend
-      console.log("User created successfully:", addedUser);
 
-      navigate(`/userdashboard`);
+      const addedUser = await backendCreateUser(newUser);
+      console.log("CREATED USER, ADDED USER ID", addedUser.user.user_id);
+      login(addedUser.user.user_id, addedUser.token);
+      console.log("user created and logged in", addedUser.user.user_id);
     } catch (error) {
       console.error("Error creating user:", error.message);
       alert(error.message);
+    } finally {
+      setLoading(false);
     }
+    if(loading) return <div>Loading...</div>
+    navigate(`/userdashboard`);
   };
 
   // Form submission handler
@@ -183,6 +187,7 @@ export default function SignupPage() {
                     id="password"
                     name="password"
                     className="form-control"
+                    autoComplete=""
                     placeholder="••••••••"
                     required
                   />
