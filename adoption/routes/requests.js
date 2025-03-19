@@ -39,15 +39,15 @@ router.post('/adopt', authenticate, async (req, res) => {
 });
 
 
-//Get Adoption Requests (Users can only see their own pets.)
+// Get Adoption Requests (Users can only see their own pets' adoption requests)
 router.get('/adoption-requests', authenticate, async (req, res) => {
     try {
         const { user_id } = req.user; // Logged-in user's ID
-        const { pet_id } = req.query; // Optional pet_id filter
+        const { pet_id, request_id } = req.query; // Optional filters
 
         console.log("Incoming request to /adoption-requests");
         console.log("Authenticated user_id:", user_id);
-        console.log("Query parameter pet_id:", pet_id);
+        console.log("Query parameters - pet_id:", pet_id, ", request_id:", request_id);
 
         let query = `
             SELECT Requests.*,
@@ -57,13 +57,18 @@ router.get('/adoption-requests', authenticate, async (req, res) => {
             FROM Requests
             JOIN Pets ON Requests.pet_id = Pets.pet_id
             JOIN Users ON Requests.requester_id = Users.user_id
-            WHERE Pets.user_id = ?`;
+            WHERE Pets.user_id = ?`;  // Ensuring only the pet owner's requests are fetched
 
         const queryParams = [user_id];
 
         if (pet_id) {
-            query += ` AND Pets.pet_id = ?`;
+            query += ` AND Requests.pet_id = ?`;
             queryParams.push(pet_id);
+        }
+
+        if (request_id && !isNaN(request_id)) { // Check if request_id exists and is a valid number
+            query += ` AND Requests.request_id = ?`;
+            queryParams.push(request_id);
         }
 
         console.log("Executing SQL Query:", query);
@@ -71,11 +76,10 @@ router.get('/adoption-requests', authenticate, async (req, res) => {
 
         const result = await db(query, queryParams);
 
-        //Debugging: Check what we get back
+        // Debugging: Check what we get back
         console.log("🛠 Full DB Response:", result);
 
-        //Fixing result check
-        if (!result.data || result.data.length === 0) {
+        if (!result || result.length === 0) {
             return res.status(404).json({ message: "No adoption requests found" });
         }
 

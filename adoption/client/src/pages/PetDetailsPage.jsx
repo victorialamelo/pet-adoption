@@ -47,34 +47,42 @@ export default function PetDetailsPage() {
     e.preventDefault();
 
     const requestMessage = e.target.message.value;
+    const token = localStorage.getItem("token");  // Retrieve token
 
-    const requestData = {
-      pet_id: petDetails.pet_id, // Assuming petDetails contains pet_id
-      request_message: requestMessage,
-    };
+    if (!token) {
+      console.error("No token found! User is not authenticated.");
+      alert("You must be logged in to submit an adoption request.");
+      return;
+  }
 
-    try {
-      const response = await fetch("/api/adopt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`, // Include auth token
-        },
-        body: JSON.stringify(requestData),
+  console.log("Token being sent:", token); // Debugging
+
+  try {
+      const response = await fetch("http://localhost:5001/requests/adopt", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}` // Ensure token is included
+          },
+          body: JSON.stringify({
+              pet_id: petDetails?.pet_id,
+              request_message: requestMessage
+          }),
       });
 
       const data = await response.json();
+      console.log("Server Response:", data);
 
       if (response.ok) {
-        alert("Adoption request submitted successfully!");
+          alert("Adoption request submitted successfully!");
       } else {
-        alert('Failed to submit adoption request.');
+          alert(`Failed to submit adoption request: ${data.message}`);
       }
-    } catch (error) {
+  } catch (error) {
       console.error("Request error:", error);
       alert("Something went wrong. Please try again.");
-    }
-  };
+  }
+};
 
   if (loading) return <p>Loading pet details...</p>;
   if (error) return <p>Error: {error}</p>;
