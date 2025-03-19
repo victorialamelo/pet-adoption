@@ -91,9 +91,7 @@ export default function PetDetailsPage() {
   return (
     <>
       <NavBar />
-      <header>
-        <img src="../src/assets/beigekitten.jpg" alt="Pet Banner" />
-      </header>
+
       <section className="mb-10">
         <div className="container">
           <div className="row">
