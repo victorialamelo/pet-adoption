@@ -4,6 +4,37 @@ import NavBar from "../components/NavBar";
 import "../App.css";
 
 function HomePage() {
+  function openDonationPopup() {
+    const popup = window.open("", "DonatePopup", "width=400,height=400");
+
+    if (popup) {
+      popup.document.write(`
+        <html>
+          <head>
+            <title>Choose a Foundation</title>
+            <style>
+              body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+              h2 { color: #333; }
+              a { display: block; margin: 10px 0; font-size: 18px; color: #007bff; text-decoration: none; }
+              a:hover { text-decoration: underline; }
+            </style>
+          </head>
+          <body>
+            <h2>Donate to a Foundation</h2>
+            <a href="https://fundacionanimalrescue.org" target="_blank">Fundación Animal Rescue</a>
+            <a href="https://fundacionelhogar.org" target="_blank">Fundación El Hogar Animal Sanctuary</a>
+            <a href="https://www.fundacionelarcadenoe.com" target="_blank">Fundación El Arca de Noé</a>
+            <a href="https://ayudaanimales.org" target="_blank">Fundación de Ayuda a los Animales (F.A.A.)</a>
+            <p><small>Close this window after selecting a foundation.</small></p>
+          </body>
+        </html>
+      `);
+      popup.document.close();
+    } else {
+      alert("Please allow pop-ups for this site.");
+    }
+  }
+
   return (
     <>
       <NavBar />
@@ -139,12 +170,14 @@ function HomePage() {
                 Every donation supports shelters and organizations in their
                 incredible work. Join the cause!
               </p>
-              <Link to="/donate" className="btn btn-primary me-2 mb-5">
+              <button
+                className="btn btn-primary me-2 mb-5"
+                onClick={openDonationPopup}
+              >
                 Donate Now
-              </Link>
+              </button>
             </div>
             <div className="col-md-6">
-
               <img
                 src="../src/assets/orangedog.jpg"
                 className="img-fluid rounded"
@@ -154,13 +187,9 @@ function HomePage() {
                 From the match to the first hug, discover how adoption works in
                 just a few simple steps.
               </p>
-              <Link to="/adoption" className="btn btn-secondary mb-5">
-                Learn More
+              <Link to="/faqs">
+                <button className="btn btn-primary me-2 mb-5">See FAQs</button>
               </Link>
-
-              <img src="../src/assets/orangedog.jpg" className="img-fluid rounded" alt="Support our mission" />
-              <p className="mt-3">From the match to the first hug, discover how adoption works in just a few simple steps.</p>
-
             </div>
           </div>
         </div>
