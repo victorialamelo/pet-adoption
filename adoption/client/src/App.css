@@ -309,7 +309,6 @@ th {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-
 .h1-petlist {
   padding-bottom: 300px;
 }
@@ -341,6 +340,7 @@ th {
   color: var(--lavender);
   font-size: 1.2em;
   font-style: italic;
+}
 
 .dashboard-view {
   margin-top: 100px;
@@ -374,8 +374,6 @@ th {
   background-color: var(--cherrypink);
   border: none;
 }
-
-
 
 /* Custom navbar toggler */
 .custom-toggler {
@@ -415,5 +413,4 @@ th {
     display: inline-block;
     width: 100%;
   }
-
 }
