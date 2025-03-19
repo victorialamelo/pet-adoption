@@ -4,6 +4,8 @@ import { Image, Card, Button, Dropdown, DropdownButton, Form } from "react-boots
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import NavBar from "../components/NavBar";
+import AdoptionRequests from "./AdoptionRequests";
+
 
 import "../App.css";
 
@@ -322,6 +324,8 @@ export default function UserDashboard() {
                       {editingPetId === pet.id ? (
 
                         <>{console.log("Editing Pet ID:", editingPetId)}
+
+                        <>{console.log("Editing Pet ID:", editingPetId)}
                         <Form onSubmit={(e) => handleEditSubmit(e, pet.id)}>
                           <Form.Group>
                             <Form.Label>Name</Form.Label>
@@ -352,8 +356,8 @@ export default function UserDashboard() {
                         </>
                       )}
                         <div className="mt-4">
-                          <h4>Adoption Requests</h4>
-                          <AdoptionRequests petId={pet.id} />
+                          {/*<h4>Adoption Requests</h4>*/}
+                          <AdoptionRequests petId={pet.pet_id} />
                         </div>
                     </Accordion.Body>
                   </Accordion.Item>

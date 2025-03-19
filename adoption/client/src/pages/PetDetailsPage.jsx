@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { backendFetchPetDetails } from "../backend";
 import { useAuth } from "../AuthContext";
+import { createAdoptionRequest } from "./adrequestfuncs";
 
 export default function PetDetailsPage() {
   const { user } = useAuth();
@@ -67,7 +68,7 @@ export default function PetDetailsPage() {
       if (response.ok) {
         alert("Adoption request submitted successfully!");
       } else {
-        alert(`Error: ${data.message}`);
+        alert('Failed to submit adoption request.');
       }
     } catch (error) {
       console.error("Request error:", error);
