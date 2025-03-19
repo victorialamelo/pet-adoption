@@ -20,29 +20,22 @@ export default function UserDashboard() {
   return (
     <>
       <NavBar />
-      {/* Hero Section */}
-      <header>
-        <img src="../src/assets/rosedog.jpg" alt="Hero" />
-      </header>
 
       {/* Dashboard View Toggle */}
-      <section className="row">
-        <h1>Dashboard</h1>
+      <div className="dashboard-view">
           <button
-            className={`btn ${activeView === "adopt" ? "btn-primary" : "btn-outline-primary"}`}
+            className={`btn-primary ${activeView === "adopt" ? "btn-primary" : "btn-outline-primary"}`}
             onClick={() => setActiveView("adopt")}
           >
-            Adopt a Pet
+            Adopter Dashboard
           </button>
-
           <button
-            className={`btn ${activeView === "post" ? "btn-primary" : "btn-outline-primary"}`}
+            className={`btn-primary ${activeView === "post" ? "btn-primary" : "btn-outline-primary"}`}
             onClick={() => setActiveView("post")}
           >
-            Post a Pet
+            Shelter Dashboard
           </button>
-
-      </section>
+      </div>
 
       {/* Conditional rendering based on active view */}
       {activeView === "adopt" ? (
