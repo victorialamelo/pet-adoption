@@ -49,22 +49,27 @@ body,
   background-color: var(--celeste);
 }
 
-header {
-  position: relative;
-  width: 100%;
-  height: auto;
+.header-petlist {
+  background-image: url("../src/assets/bg3.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 700px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  color: white;
+  text-align: center;
 }
 
 header img {
-  top: 60px;
+  position: absolute;
+  top: 0;
   left: 0;
-  width: 100vw;
-  height: 100%;
-  object-fit: cover; /* Ensures full width while keeping image proportions */
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  object-position: center top;
 }
 
 header h1 {
@@ -102,7 +107,7 @@ section {
 }
 
 .home-content {
-  padding: 50px;
+  padding: 60px;
 }
 
 .postapet {
@@ -200,6 +205,7 @@ input:focus {
 
 .filter {
   background-color: var(--celeste);
+  /* margin-top: 100px; Adjust the value as needed */
 }
 
 .petgrid {
@@ -277,4 +283,37 @@ th {
   object-position: center;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.h1-petlist {
+  padding-bottom: 300px;
+}
+
+.header-testimonials {
+  background-image: url("https://img.freepik.com/premium-photo/joyful-scene-featuring-happy-dog-its-owner-solid-color-background-pet-is-playfully-interacting-with-owner-showcasing-their-strong-bond-background-offers-ample-copy-space_39704-18675.jpg"); /* Path to your testimonial background image */
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: white;
+  padding: 0 50px;
+  border-top: 10px solid white;
+}
+
+.header-testimonials h2 {
+  color: white;
+  text-shadow: var(--textshadow) 1px 1px, var(--textshadow) 2px 2px,
+    var(--textshadow) 3px 3px;
+}
+
+.header-testimonials p {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  color: var(--lavender);
+  font-size: 1.2em;
+  font-style: italic;
 }

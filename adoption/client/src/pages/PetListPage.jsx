@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import "../App.css";
 
 export default function PetListPage() {
   const [filters, setFilters] = useState({
@@ -64,13 +65,11 @@ export default function PetListPage() {
     <>
       <NavBar />
 
-      <header className="text-center">
+      <header className="header-petlist">
         <div className="container">
-          <h1 className="display-4 fw-bold">Find your best friend</h1>
-          <img
-            src="https://i.ytimg.com/vi/fOd16PT1S7A/maxresdefault.jpg"
-            alt="Hero"
-          />
+          <h1 className="display-4 fw-bold h1-petlist">
+            Find your best friend
+          </h1>
         </div>
       </header>
 
