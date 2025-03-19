@@ -80,7 +80,7 @@ export default function PetListPage() {
             <div className="row">
               {/* Animal Type */}
               <div className="col-md-6 mb-3">
-                <label className="form-label">Animal Type</label>
+                <label className="form-label"><h4>Animal Type</h4></label>
                 <select
                   name="animal_type"
                   className="form-select"
@@ -95,7 +95,7 @@ export default function PetListPage() {
 
               {/* Gender */}
               <div className="col-md-6">
-                <label className="form-label">Gender</label>
+                <label className="form-label"><h4>Gender</h4></label>
                 <select
                   name="gender"
                   className="form-select"
@@ -110,7 +110,7 @@ export default function PetListPage() {
 
               {/* Size */}
               <div className="col-md-6 mt-3">
-                <label className="form-label">Size</label>
+                <label className="form-label"><h4>Size</h4></label>
                 <select
                   name="size"
                   className="form-select"
@@ -126,7 +126,7 @@ export default function PetListPage() {
 
               {/* Activity Level */}
               <div className="col-md-6 mt-3">
-                <label className="form-label">Activity Level</label>
+                <label className="form-label"><h4>Activity Level</h4></label>
                 <select
                   name="activity_level"
                   className="form-select"
@@ -160,7 +160,8 @@ export default function PetListPage() {
                     </div>
                   )
                 )}
-
+                </div>
+                <div className="col-md-6 mt-3">
                 {/* Good With Filters */}
                 <h4>Good With</h4>
                 {["cats", "dogs", "kids", "smallspaces"].map((key) => (

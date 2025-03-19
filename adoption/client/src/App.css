@@ -1,7 +1,12 @@
+/* ----------------------------------------
+   VARIABLES
+---------------------------------------- */
 :root {
+  /* Colors */
   --cherrypink: #ffb6c1;
   --mistyrose: #f6dde0;
-  --skyblue: #87ceeb;
+  --skyblue: #39809b;
+  --hoverskyblue: #05455f;
   --celeste: #daf8f8;
   --buff: #d4a373;
   --lavender: #2a2a6a;
@@ -12,34 +17,13 @@
   --textshadow: #c4c4ea6e;
 }
 
+/* ----------------------------------------
+   RESET & BASE STYLES
+---------------------------------------- */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-h1,
-h2,
-h3,
-.navbar-brand {
-  font-family: "Shrikhand", serif;
-  font-weight: 400;
-  font-style: normal;
-  text-transform: uppercase;
-  color: var(--lavender);
-  text-shadow: var(--textshadow) 1px 1px, var(--textshadow) 2px 2px,
-    var(--textshadow) 3px 3px, var(--textshadow) 4px 4px,
-    var(--textshadow) 5px 5px, var(--textshadow) 6px 6px;
-}
-
-p,
-span,
-li {
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
-  font-size: 1.3em;
-  color: var(--lavender);
 }
 
 body,
@@ -51,19 +35,137 @@ body,
   padding-top: 40px;
 }
 
-.header-petlist {
-  background-image: url("../src/assets/bg3.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 700px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-align: center;
+/* ----------------------------------------
+   TYPOGRAPHY
+---------------------------------------- */
+h1,
+h2,
+h3,
+.navbar-brand {
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+  font-style: normal;
+  text-transform: uppercase;
+  color: var(--lavender);
+  line-height: 1.5;
+  text-shadow: var(--textshadow) 1px 1px, var(--textshadow) 2px 2px,
+    var(--textshadow) 3px 3px, var(--textshadow) 4px 4px,
+    var(--textshadow) 5px 5px, var(--textshadow) 6px 6px;
 }
 
+h4 {
+  color: var(--lavender);
+  font-family: "Lexend Deca", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+h5 {
+  color: var(--lavender) !important;
+  font-family: "Shrikhand", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+p,
+span,
+li {
+  font-family: "Lexend Deca", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.3em;
+  color: var(--lavender);
+  line-height: 2;
+}
+
+th {
+  font-size: 1.2em;
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+  font-style: normal;
+  text-transform: uppercase;
+  color: var(--lavender);
+}
+
+label, select, #image {
+  font-family: "Lexend Deca", sans-serif;
+  font-optical-sizing: auto;
+  text-transform: capitalize;
+  font-size: 1.2em;
+  font-weight: 00;
+  font-style: normal;
+  color: var(--lavender);
+}
+
+/* ----------------------------------------
+   NAVIGATION
+---------------------------------------- */
+nav {
+  height: 100px;
+  background: var(--lemon);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+}
+
+.navbar {
+  height: 100px;
+  background-color: var(--lemon);
+  padding: 0 20px;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  padding: 0 10px;
+}
+
+.nav-link {
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+  color: var(--lavender) !important;
+  padding: 10px 15px !important;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--lemon);
+  border-radius: 8px;
+  transform: translateY(-2px);
+}
+
+/* Custom navbar toggler */
+.custom-toggler {
+  border-color: var(--lavender) !important;
+  padding: 8px;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.25rem var(--cherrypink) !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(42, 42, 106, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+.sticky-top {
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+}
+
+/* ----------------------------------------
+   HEADER & BANNER STYLES
+---------------------------------------- */
 header img {
   position: absolute;
   top: 0;
@@ -82,107 +184,46 @@ header h1 {
   z-index: 2;
 }
 
-nav {
-  height: 100px; /* Adjust if needed */
-  background: var(--lemon);
+.header-petlist {
+  background-image: url("../src/assets/bg3.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 700px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  border-bottom: 10px solid white;
+  justify-content: center;
+  color: white;
+  text-align: center;
 }
 
-.navbar {
-  height: 100px;
-  background-color: var(--lemon);
-  padding: 0 20px;
-  border-bottom: 10px solid white;
+.header-testimonials {
+  background-image: url("https://img.freepik.com/premium-photo/joyful-scene-featuring-happy-dog-its-owner-solid-color-background-pet-is-playfully-interacting-with-owner-showcasing-their-strong-bond-background-offers-ample-copy-space_39704-18675.jpg");
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: white;
+  padding: 0 50px;
+  border-top: 10px solid white;
 }
 
-.navbar-brand {
-  font-size: 2rem;
-  padding: 0 10px;
+.header-testimonials h2 {
+  color: white;
+  text-shadow: var(--textshadow) 1px 1px, var(--textshadow) 2px 2px,
+    var(--textshadow) 3px 3px;
 }
 
-.nav-link {
-  font-family: "Shrikhand", serif;
-  font-weight: 400;
-  color: var(--lavender) !important;
-  padding: 10px 15px !important;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
-}
-
-.nav-link:hover {
-  background-color: var(--celeste);
-  border-radius: 8px;
-  transform: translateY(-2px);
-}
-
-section {
-  background-color: var(--celeste);
-  padding: 50px;
-  min-height: 600px;
-}
-
-.home-content {
-  padding: 60px;
-}
-
-.postapet {
-  margin: 0;
+.header-testimonials p {
+  background-color: rgba(255, 255, 255, 0.7);
   padding: 20px;
-  background-color: var(--mistyrose);
-}
-
-.form-postpet {
-  max-width: 500px;
-  margin: 0 auto;
-}
-.form-postpet label {
-  font-size: 20px;
-  font-weight: 600;
+  border-radius: 10px;
   color: var(--lavender);
-}
-
-.form-postpet input,
-.form-postpet select {
-  border: 1px solid var(--lavender);
-}
-
-.form-postpet #story.form-control {
-  border: 1px solid var(--lavender);
-}
-
-.form-postpet #image.form-control {
-  height: auto;
-}
-
-input:focus {
-  border: 4px solid var(--peach) !important;
-  box-shadow: none !important;
-}
-
-.btn-primary {
-  background-color: var(--skyblue);
-  border: none;
-  font-family: "Shrikhand", serif;
-  font-size: 1.3em;
-}
-
-.btn-primary:hover {
-  background-color: var(--celeste);
-  color: var(--skyblue);
-}
-
-.signup,
-.login {
-  background-color: var(--latte);
+  font-size: 1.2em;
+  font-style: italic;
 }
 
 .banner {
@@ -216,10 +257,27 @@ input:focus {
   color: white;
 }
 
+.h1-petlist {
+  padding-bottom: 300px;
+}
+
+/* ----------------------------------------
+   SECTION STYLES
+---------------------------------------- */
+section {
+  background-color: var(--celeste);
+  padding: 50px;
+  min-height: 600px;
+}
+
+.home-content {
+  padding: 60px;
+}
+
 .introduction {
   padding-top: 30px;
   padding-bottom: 30px;
-  height: 400px;
+  min-height: 800px;
   background-color: var(--sage);
   position: static;
   top: 0;
@@ -231,21 +289,55 @@ input:focus {
 
 .filter {
   background-color: var(--celeste);
-  /* margin-top: 100px; Adjust the value as needed */
 }
 
 .petgrid {
   background-color: var(--sage);
 }
 
-.postpet {
-  max-width: 700px;
-  padding: 30px;
+.signup,
+.login {
+  background-color: var(--latte);
 }
 
-.user-dashboard {
-  background-color: var(--celeste);
-  padding: 70px;
+/* ----------------------------------------
+   FORM STYLES
+---------------------------------------- */
+.postapet {
+  margin: 0;
+  padding-top: 100px;
+  background-color: var(--mistyrose);
+  position: relative;
+  min-height: 2000px;
+}
+
+.form-postpet {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form-postpet label {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--lavender); /* Fixed typo from --lavendar */
+}
+
+.form-postpet input,
+.form-postpet select {
+  border: 1px solid var(--lavender);
+}
+
+.form-postpet #story.form-control {
+  border: 1px solid var(--lavender);
+}
+
+.form-postpet #image.form-control {
+  height: auto;
+}
+
+input:focus {
+  border: 4px solid var(--peach) !important;
+  box-shadow: none !important;
 }
 
 .checkbox-span {
@@ -257,31 +349,6 @@ input:focus {
   padding-left: 10px;
 }
 
-#specialNeeds,
-#neutered,
-#pottyTrained {
-  margin-left: 10px;
-}
-
-.dashboard-container {
-  background-color: var(--sage);
-  margin: 0 auto;
-}
-
-tbody,
-th,
-td {
-  border-bottom: 1px solid var(--lavender);
-}
-
-th {
-  font-size: 1.2em;
-  font-family: "Shrikhand", serif;
-  font-weight: 400;
-  font-style: normal;
-  text-transform: uppercase;
-  color: var(--lavender);
-}
 
 .form-applicationstatus {
   padding: 5px;
@@ -294,6 +361,69 @@ th {
   color: var(--lavender);
 }
 
+/* ----------------------------------------
+   BUTTON STYLES
+---------------------------------------- */
+.btn-primary {
+  background-color: var(--skyblue);
+  border: none;
+  font-family: "Shrikhand", serif;
+  font-size: 1.3em;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--hoverskyblue);
+}
+
+.dashboard-view .btn-primary {
+  margin: 20px;
+}
+
+/* ----------------------------------------
+   DASHBOARD STYLES
+---------------------------------------- */
+.postpet {
+  max-width: 700px;
+  padding: 30px;
+}
+
+.user-dashboard {
+  background-color: var(--celeste);
+  padding: 70px;
+}
+
+.dashboard-container {
+  background-color: var(--sage);
+  margin: 0 auto;
+}
+
+.dashboard-view {
+  padding-top: 30px;
+  height: auto;
+  background-color: var(--skyblue);
+  text-align: right;
+}
+
+.adopter-dashboard {
+  border-top: 10px solid white;
+  min-height: 1300px;
+  padding: 20px;
+  background-color: var(--sage);
+}
+
+/* ----------------------------------------
+   TABLE STYLES
+---------------------------------------- */
+tbody,
+th,
+td {
+  border-bottom: 1px solid var(--lavender);
+}
+
+/* ----------------------------------------
+   IMAGE STYLES
+---------------------------------------- */
 .pet-card-image {
   width: 100%;
   height: 220px;
@@ -311,61 +441,9 @@ th {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.h1-petlist {
-  padding-bottom: 300px;
-}
-
-.header-testimonials {
-  background-image: url("https://img.freepik.com/premium-photo/joyful-scene-featuring-happy-dog-its-owner-solid-color-background-pet-is-playfully-interacting-with-owner-showcasing-their-strong-bond-background-offers-ample-copy-space_39704-18675.jpg"); /* Path to your testimonial background image */
-  background-size: 100% auto;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  color: white;
-  padding: 0 50px;
-  border-top: 10px solid white;
-}
-
-.header-testimonials h2 {
-  color: white;
-  text-shadow: var(--textshadow) 1px 1px, var(--textshadow) 2px 2px,
-    var(--textshadow) 3px 3px;
-}
-
-.header-testimonials p {
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 20px;
-  border-radius: 10px;
-  color: var(--lavender);
-  font-size: 1.2em;
-  font-style: italic;
-}
-
-.dashboard-view {
-  margin-top: 0;
-  height: auto;
-}
-
-.dashboard-view .btn-primary {
-  color: white;
-  margin: 20px;
-}
-
-.adopter-dashboard {
-  border-top: 10px solid white;
-  min-height: 1300px;
-  padding: 20px;
-  background-color: var(--sage);
-}
-
-.sticky-top {
-  font-family: "Shrikhand", serif;
-  font-weight: 400;
-}
-
+/* ----------------------------------------
+   LIST GROUP STYLES
+---------------------------------------- */
 .list-group-item {
   border-radius: 8px;
   font-size: 2em;
@@ -377,21 +455,9 @@ th {
   border: none;
 }
 
-/* Custom navbar toggler */
-.custom-toggler {
-  border-color: var(--lavender) !important;
-  padding: 8px;
-}
-
-.navbar-toggler:focus {
-  box-shadow: 0 0 0 0.25rem var(--cherrypink) !important;
-}
-
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(42, 42, 106, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-}
-
-/* Collapsed navbar styles */
+/* ----------------------------------------
+   MEDIA QUERIES
+---------------------------------------- */
 @media (max-width: 991.98px) {
   .navbar-collapse {
     background-color: var(--lemon);

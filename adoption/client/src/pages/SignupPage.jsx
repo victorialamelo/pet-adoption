@@ -56,7 +56,8 @@ export default function SignupPage() {
       alert("Password must be at least 6 characters.");
       return;
     }
-
+    localStorage.setItem("role", role);
+    console.log("role", role);
     createUser(formData);
   };
 
