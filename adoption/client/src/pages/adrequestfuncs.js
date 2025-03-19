@@ -59,6 +59,29 @@ export const getAdoptionRequests = async (pet_id = null, request_id = null) => {
     }
 };
 
+//Get my Adoption Requests as an adopter
+export const getMyAdoptionRequests = async () => {
+    try {
+        const url = "http://localhost:5001/requests/my-requests";
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch your adoption requests");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching your adoption requests:", error);
+        return null;
+    }
+};
+
 //Update Adoption Status
 export const updateAdoptionRequestStatus = async (request_id, request_status) => {
     try {

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, Button, Row, Col, Form } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 import { fetchUserProfile } from "../backend";
+import { getMyAdoptionRequests } from "../pages/adrequestfuncs";
 import ProfileSection from "./ProfileSection";
 
 export default function PetAdopterDashboard() {
@@ -13,10 +14,10 @@ export default function PetAdopterDashboard() {
     about: "",
   });
   const [savedSearches, setSavedSearches] = useState([]);
-  const [applications, setApplications] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("profile"); // profile, searches, applications
+  const [activeTab, setActiveTab] = useState("profile");
 
   // Fetch user profile data
   useEffect(() => {
@@ -25,8 +26,6 @@ export default function PetAdopterDashboard() {
         setLoading(true);
         const response = await fetchUserProfile(user);
         const userData = response;
-
-        console.log("userData", userData);
 
         setProfile({
           name: userData.user_name || "",
@@ -37,17 +36,12 @@ export default function PetAdopterDashboard() {
 
         // In a real implementation, you would also fetch:
         // - Saved pet searches
-        // - Active applications
         // For now, we'll use dummy data
         setSavedSearches([
           { id: 1, name: "Small Dogs Near Me", criteria: "Dogs, Small, <10 miles" },
           { id: 2, name: "Senior Cats", criteria: "Cats, 7+ years" }
         ]);
 
-        setApplications([
-          { id: 101, petName: "Buddy", petImage: "../src/assets/dogsvg.svg", shelterName: "Happy Paws", status: "Pending", appliedDate: "2023-11-15" },
-          { id: 102, petName: "Whiskers", petImage: "../src/assets/dogsvg.svg", shelterName: "Furry Friends", status: "Approved", appliedDate: "2023-11-10" }
-        ]);
 
       } catch (err) {
         console.error("Error fetching adopter profile:", err);
@@ -58,6 +52,27 @@ export default function PetAdopterDashboard() {
     };
 
     loadUserProfile();
+
+    const fetchRequests = async () => {
+      if (!user) return;
+
+      try {
+        setLoading(true);
+        const fetchedRequests = await getMyAdoptionRequests();
+        console.log("fetchedRequests", fetchedRequests)
+        if (fetchedRequests) {
+          setRequests(fetchedRequests.data);
+        }
+      } catch (err) {
+        setError("Failed to load your adoption requests");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequests();
+
   }, [user]);
 
   if (loading) {
@@ -88,10 +103,10 @@ export default function PetAdopterDashboard() {
                 Pawboritas
               </button>
               <button
-                className={`list-group-item list-group-item-action ${activeTab === "applications" ? "active" : ""}`}
-                onClick={() => setActiveTab("applications")}
+                className={`list-group-item list-group-item-action ${activeTab === "requests" ? "active" : ""}`}
+                onClick={() => setActiveTab("requests")}
               >
-                Applications
+                Requests
               </button>
             </div>
             <Button variant="primary" className="w-100 mt-4" href="/petlist">
@@ -131,32 +146,33 @@ export default function PetAdopterDashboard() {
             </div>
           )}
 
-          {activeTab === "applications" && (
+          {activeTab === "requests" && (
             <div>
-              <h2>My Applications</h2>
-              {applications.length === 0 ? (
+              <h2>My Requests</h2>
+              {requests.length === 0 ? (
                 <p>You haven't applied to adopt any pets yet.</p>
               ) : (
-                applications.map(app => (
+                requests.map(app => (
                   <Card key={app.id} className="mb-3">
                     <Card.Body>
                       <Row>
                         <Col md={2}>
-                          <img src={app.petImage} alt={app.petName} className="img-fluid rounded" />
+                          <img src={app.pet_image} alt={app.pet_name} className="img-fluid rounded" />
                         </Col>
                         <Col md={10}>
-                          <Card.Title>{app.petName}</Card.Title>
-                          <Card.Subtitle className="mb-2 text-muted">From: {app.shelterName}</Card.Subtitle>
+                          <Card.Title>{app.pet_name}</Card.Title>
+                          <Card.Subtitle className="mb-2 text-muted">From: {app.owner_name}</Card.Subtitle>
+                          <Card.Subtitle className="mb-2 text-muted">Request Message: {app.request_message}</Card.Subtitle>
                           <div className="d-flex justify-content-between align-items-center mt-3">
                             <div>
                               <span className={`badge ${app.status === 'Approved' ? 'bg-success' : app.status === 'Rejected' ? 'bg-danger' : 'bg-warning'}`}>
-                                {app.status}
+                                {app.request_status}
                               </span>
-                              <small className="text-muted ms-2">Applied: {app.appliedDate}</small>
+                              <small className="text-muted ms-2">Applied: {app.request_date}</small>
                             </div>
                             <div>
                               <Button variant="outline-primary" size="sm" className="me-2">Message</Button>
-                              <Button variant="outline-secondary" size="sm">View Details</Button>
+                              <Button variant="outline-secondary" size="sm" href={`/petdetails/${app.pet_id}`}>View Details</Button>
                             </div>
                           </div>
                         </Col>

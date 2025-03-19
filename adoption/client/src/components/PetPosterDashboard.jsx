@@ -6,6 +6,7 @@ import { fetchUserProfile, backendEditPet } from "../backend";
 import AdoptionRequests from "../pages/AdoptionRequests";
 import ProfileSection from "./ProfileSection";
 import { getUserPostedPets } from "../pages/getpetbyid";
+import EditPetDetails from "./EditPetDetails";
 
 export default function PetPosterDashboard() {
   const [editingPetId, setEditingPetId] = useState(null);
@@ -120,6 +121,8 @@ export default function PetPosterDashboard() {
     } catch (err) {
       console.error("Error updating pet:", err);
       setError(`Failed to update pet: ${err.message}`);
+    } finally {
+      console.log("Update successful:");
     }
   };
 
@@ -182,7 +185,7 @@ export default function PetPosterDashboard() {
                         <div className="flex-1">
                           <h3 className="font-weight-bold">{pet.name}</h3>
                           <p className="text-muted">
-                            Age: {pet.age} | Size: {pet.size} | Weight: {pet.weight} lbs
+                            Animal: {pet.animal_type} | Size: {pet.size} | Weight: {pet.weight} kg
                           </p>
                         </div>
                         <Form.Select
@@ -209,84 +212,6 @@ export default function PetPosterDashboard() {
                             />
                           </Form.Group>
                           <Form.Group className="mb-3">
-                            <Form.Label>Animal Type</Form.Label>
-                            <Form.Control
-                              type="text"
-                              name="animal_type"
-                              value={editFormData.animal_type || ''}
-                              onChange={handleEditChange}
-                            />
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Weight</Form.Label>
-                            <Form.Control
-                              type="number"
-                              name="weight"
-                              value={editFormData.weight || ''}
-                              onChange={handleEditChange}
-                            />
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Size</Form.Label>
-                            <Form.Control
-                              type="text"
-                              name="size"
-                              value={editFormData.size || ''}
-                              onChange={handleEditChange}
-                            />
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Gender</Form.Label>
-                            <Form.Control
-                              type="text"
-                              name="gender"
-                              value={editFormData.gender || ''}
-                              onChange={handleEditChange}
-                            />
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Activity Level</Form.Label>
-                            <Form.Control
-                              type="text"
-                              name="activity_level"
-                              value={editFormData.activity_level || ''}
-                              onChange={handleEditChange}
-                            />
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Neutered</Form.Label>
-                            <Form.Select
-                              name="neutered"
-                              value={editFormData.neutered || 0}
-                              onChange={handleEditChange}
-                            >
-                              <option value={1}>Yes</option>
-                              <option value={0}>No</option>
-                            </Form.Select>
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Has Special Needs</Form.Label>
-                            <Form.Select
-                              name="has_special_needs"
-                              value={editFormData.has_special_needs || 0}
-                              onChange={handleEditChange}
-                            >
-                              <option value={1}>Yes</option>
-                              <option value={0}>No</option>
-                            </Form.Select>
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Potty Trained</Form.Label>
-                            <Form.Select
-                              name="potty_trained"
-                              value={editFormData.potty_trained || 0}
-                              onChange={handleEditChange}
-                            >
-                              <option value={1}>Yes</option>
-                              <option value={0}>No</option>
-                            </Form.Select>
-                          </Form.Group>
-                          <Form.Group className="mb-3">
                             <Form.Label>Pet Description</Form.Label>
                             <Form.Control
                               as="textarea"
@@ -294,50 +219,6 @@ export default function PetPosterDashboard() {
                               value={editFormData.pet_description || ''}
                               onChange={handleEditChange}
                             />
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Good with Cats</Form.Label>
-                            <Form.Select
-                              name="good_with_cats"
-                              value={editFormData.good_with_cats || 0}
-                              onChange={handleEditChange}
-                            >
-                              <option value={1}>Yes</option>
-                              <option value={0}>No</option>
-                            </Form.Select>
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Good with Dogs</Form.Label>
-                            <Form.Select
-                              name="good_with_dogs"
-                              value={editFormData.good_with_dogs || 0}
-                              onChange={handleEditChange}
-                            >
-                              <option value={1}>Yes</option>
-                              <option value={0}>No</option>
-                            </Form.Select>
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Good with Kids</Form.Label>
-                            <Form.Select
-                              name="good_with_kids"
-                              value={editFormData.good_with_kids || 0}
-                              onChange={handleEditChange}
-                            >
-                              <option value={1}>Yes</option>
-                              <option value={0}>No</option>
-                            </Form.Select>
-                          </Form.Group>
-                          <Form.Group className="mb-3">
-                            <Form.Label>Good with Small Spaces</Form.Label>
-                            <Form.Select
-                              name="good_with_smallspaces"
-                              value={editFormData.good_with_smallspaces || 0}
-                              onChange={handleEditChange}
-                            >
-                              <option value={1}>Yes</option>
-                              <option value={0}>No</option>
-                            </Form.Select>
                           </Form.Group>
                           <Form.Group className="mb-3">
                             <Form.Label>Photo</Form.Label>
@@ -357,6 +238,198 @@ export default function PetPosterDashboard() {
                               </div>
                             )}
                           </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Animal Type</Form.Label>
+                            <Form.Select
+                              name="animal_type"
+                              value={editFormData.animal_type || ''}
+                              onChange={handleEditChange}
+                            >
+                              <option value={"Cat"}>Cat</option>
+                              <option value={"Dog"}>Dog</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Weight (kg)</Form.Label>
+                            <Form.Control
+                              type="number"
+                              name="weight"
+                              value={editFormData.weight || ''}
+                              onChange={handleEditChange}
+                            />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Size</Form.Label>
+                            <Form.Select
+                              name="size"
+                              value={editFormData.size || ''}
+                              onChange={handleEditChange}
+                            >
+                              <option value={"Extra Small"}>Extra Small</option>
+                              <option value={"Small"}>Small</option>
+                              <option value={"Medium"}>Medium</option>
+                              <option value={"Large"}>Large</option>
+                              <option value={"Extra Large"}>Extra Large</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Gender</Form.Label>
+                            <Form.Select
+                              name="gender"
+                              value={editFormData.gender || ''}
+                              onChange={handleEditChange}
+                            >
+                              <option value={"Female"}>Female</option>
+                              <option value={"Male"}>Male</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Activity Level</Form.Label>
+                            <Form.Select
+                              name="activity_level"
+                              value={editFormData.activity_level || ''}
+                              onChange={handleEditChange}
+                            >
+                              <option value={"Keep Me Inside"}>Keep Me Inside</option>
+                              <option value={"Some Exercise"}>Some Exercise</option>
+                              <option value={"Lots of Exercise"}>Lots of Exercise</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <h4 className="mb-3 mt-5">Behavior & Care</h4>
+                          <Form.Group className="mb-3">
+                            <Form.Check
+                              type="checkbox"
+                              id="neutered-checkbox"
+                              label="Neutered"
+                              name="neutered"
+                              checked={editFormData.neutered === 1}
+                              onChange={(e) => {
+                                const newValue = e.target.checked ? 1 : 0;
+                                handleEditChange({
+                                  target: {
+                                    name: "neutered",
+                                    value: newValue
+                                  }
+                                });
+                              }}
+                            />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Check
+                              type="checkbox"
+                              id="has_special_needs-checkbox"
+                              label="Has Special Needs"
+                              name="has_special_needs"
+                              checked={editFormData.has_special_needs === 1}
+                              value={editFormData.has_special_needs || 0}
+                              onChange={(e) => {
+                                const newValue = e.target.checked ? 1 : 0;
+                                handleEditChange({
+                                  target: {
+                                    name: "has_special_needs",
+                                    value: newValue
+                                  }
+                                });
+                              }}
+                            />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Check
+                              type="checkbox"
+                              id="potty_trained-checkbox"
+                              label="Potty Trained"
+                              name="potty_trained"
+                              checked={editFormData.potty_trained === 1}
+                              value={editFormData.potty_trained || 0}
+                              onChange={(e) => {
+                                const newValue = e.target.checked ? 1 : 0;
+                                handleEditChange({
+                                  target: {
+                                    name: "potty_trained",
+                                    value: newValue
+                                  }
+                                });
+                              }}
+                            />
+                          </Form.Group>
+                          <h4 className="mb-3 mt-5">Good With</h4>
+                          <Form.Group className="mb-3">
+                            <Form.Check
+                                type="checkbox"
+                                id="good_with_catscheckbox"
+                                label="Good with Cats"
+                                name="good_with_cats"
+                                checked={editFormData.good_with_cats === 1}
+                                value={editFormData.good_with_cats || 0}
+                                onChange={(e) => {
+                                  const newValue = e.target.checked ? 1 : 0;
+                                  handleEditChange({
+                                    target: {
+                                      name: "good_with_cats",
+                                      value: newValue
+                                    }
+                                  });
+                                }}
+                              />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Check
+                                type="checkbox"
+                                id="good_with_dogs-checkbox"
+                                label="Good with Dogs"
+                                name="good_with_dogs"
+                                checked={editFormData.good_with_dogs === 1}
+                                value={editFormData.good_with_dogs || 0}
+                                onChange={(e) => {
+                                  const newValue = e.target.checked ? 1 : 0;
+                                  handleEditChange({
+                                    target: {
+                                      name: "good_with_dogs",
+                                      value: newValue
+                                    }
+                                  });
+                                }}
+                              />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Check
+                                type="checkbox"
+                                id="good_with_kids-checkbox"
+                                label="Good with Kids"
+                                name="good_with_kids"
+                                checked={editFormData.good_with_kids === 1}
+                                value={editFormData.good_with_kids || 0}
+                                onChange={(e) => {
+                                  const newValue = e.target.checked ? 1 : 0;
+                                  handleEditChange({
+                                    target: {
+                                      name: "good_with_kids",
+                                      value: newValue
+                                    }
+                                  });
+                                }}
+                              />
+                          </Form.Group>
+
+                          <Form.Group className="mb-3">
+                            <Form.Check
+                                type="checkbox"
+                                id="good_with_smallspaces-checkbox"
+                                label="Good with Small Spaces"
+                                name="good_with_smallspaces"
+                                checked={editFormData.good_with_smallspaces === 1}
+                                value={editFormData.good_with_smallspaces || 0}
+                                onChange={(e) => {
+                                  const newValue = e.target.checked ? 1 : 0;
+                                  handleEditChange({
+                                    target: {
+                                      name: "good_with_smallspaces",
+                                      value: newValue
+                                    }
+                                  });
+                                }}
+                              />
+                          </Form.Group>
                           <Button type="submit" className="mt-2">Save</Button>
                           <Button
                             variant="secondary"
@@ -369,7 +442,7 @@ export default function PetPosterDashboard() {
                       ) : (
                         <>
                           <p>{pet.pet_description}</p>
-                          <Button onClick={() => handleEditClick(pet)}>Edit</Button>
+                          <Button onClick={() => handleEditClick(pet)}>Edit Pet Details</Button>
                         </>
                       )}
                       <div className="mt-4">

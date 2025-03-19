@@ -10,8 +10,6 @@ export const getUserPostedPets = async (user_id) => {
             }
         });
 
-        console.log("response.data",  response);
-
         if (!response.ok) {
             throw new Error("Failed to fetch user posted pets");
         }
