@@ -91,7 +91,30 @@ nav {
 }
 
 .navbar {
-  padding: 20px;
+  height: 100px;
+  background-color: var(--lemon);
+  padding: 0 20px;
+  border-bottom: 10px solid white;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  padding: 0 10px;
+}
+
+.nav-link {
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+  color: var(--lavender) !important;
+  padding: 10px 15px !important;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--celeste);
+  border-radius: 8px;
+  transform: translateY(-2px);
 }
 
 section {
@@ -277,4 +300,46 @@ th {
   object-position: center;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Custom navbar toggler */
+.custom-toggler {
+  border-color: var(--lavender) !important;
+  padding: 8px;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.25rem var(--cherrypink) !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(42, 42, 106, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* Collapsed navbar styles */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background-color: var(--lemon);
+    padding: 15px;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    border-top: 2px solid white;
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  .nav-item {
+    padding: 5px 0;
+    text-align: center;
+  }
+
+  .nav-link {
+    display: inline-block;
+    width: 100%;
+  }
 }
