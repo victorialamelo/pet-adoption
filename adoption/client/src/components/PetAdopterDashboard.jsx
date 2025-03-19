@@ -67,11 +67,11 @@ export default function PetAdopterDashboard() {
   }
 
   return (
-    <div className="dashboard-container">
+    <div className="adopter-dashboard">
       <Row>
         <Col md={3} className="mb-4">
           <div className="sticky-top pt-3">
-            <h3>{profile.name}'s Adoption Center</h3>
+            <h4>{profile.name}</h4>
             <div className="list-group mt-4">
               <button
                 className={`list-group-item list-group-item-action ${activeTab === "profile" ? "active" : ""}`}
@@ -83,16 +83,16 @@ export default function PetAdopterDashboard() {
                 className={`list-group-item list-group-item-action ${activeTab === "searches" ? "active" : ""}`}
                 onClick={() => setActiveTab("searches")}
               >
-                Saved Searches
+                Pawboritas
               </button>
               <button
                 className={`list-group-item list-group-item-action ${activeTab === "applications" ? "active" : ""}`}
                 onClick={() => setActiveTab("applications")}
               >
-                My Applications
+                Applications
               </button>
             </div>
-            <Button variant="primary" className="w-100 mt-4" href="/search">
+            <Button variant="primary" className="w-100 mt-4" href="/petlist">
               Find Pets
             </Button>
           </div>
