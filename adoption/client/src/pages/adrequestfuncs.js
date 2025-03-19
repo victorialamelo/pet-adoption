@@ -48,8 +48,6 @@ export const getAdoptionRequests = async (pet_id = null, request_id = null) => {
             }
         });
 
-        console.log("API Response:", response);
-
         if (!response.ok) {
             throw new Error("Failed to fetch adoption requests");
         }

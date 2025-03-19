@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { backendFetchPetDetails } from "../backend";
 import { useAuth } from "../AuthContext";
-import { createAdoptionRequest } from "./adrequestfuncs";
+// import { createAdoptionRequest } from "./adrequestfuncs";
 
 export default function PetDetailsPage() {
   const { user } = useAuth();

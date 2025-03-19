@@ -2,20 +2,19 @@ import { useState, useEffect } from "react";
 import { Accordion, AccordionItem, Image, Card, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
-import { fetchUserProfile } from "../backend";
+import { fetchUserProfile, backendEditPet } from "../backend";
 import AdoptionRequests from "../pages/AdoptionRequests";
 import ProfileSection from "./ProfileSection";
 import { getUserPostedPets } from "../pages/getpetbyid";
 
 export default function PetPosterDashboard() {
   const [editingPetId, setEditingPetId] = useState(null);
-  const [editFormData, setEditFormData] = useState({ name: "", description: "" });
+  const [editFormData, setEditFormData] = useState({});
   const { user } = useAuth();
-//   const navigate = useNavigate();
-//   const [selectedPet, setSelectedPet] = useState(null);
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const [profile, setProfile] = useState({
     name: "",
     website: "",
@@ -30,14 +29,12 @@ export default function PetPosterDashboard() {
         setLoading(true);
         const response = await fetchUserProfile(user);
         const userData = response;
-
         setProfile({
           name: userData.entity_name || userData.user_name,
           website: userData.entity_website || '',
           registrationID: userData.entity_registration_id || '',
           about: userData.about || ''
         });
-
         // Fetch pets posted by the user
         const userId = localStorage.getItem('user');
         if (userId) {
@@ -51,32 +48,79 @@ export default function PetPosterDashboard() {
         setLoading(false);
       }
     };
-
     loadData();
-  }, [user]);
+  }, [user, updateSuccess]);
 
   // Handle pet edit form
   const handleEditClick = (pet) => {
-    setEditingPetId(pet.id);
-    setEditFormData({ name: pet.name, description: pet.description });
+    console.log("handleEditClick", pet);
+    setEditingPetId(pet.pet_id);
+    setEditFormData({
+      name: pet.name || '',
+      animal_type: pet.animal_type || '',
+      weight: pet.weight || '',
+      size: pet.size || '',
+      gender: pet.gender || '',
+      activity_level: pet.activity_level || '',
+      neutered: pet.neutered || 0,
+      has_special_needs: pet.has_special_needs || 0,
+      potty_trained: pet.potty_trained || 0,
+      pet_description: pet.pet_description || '',
+      good_with_cats: pet.good_with_cats || 0,
+      good_with_dogs: pet.good_with_dogs || 0,
+      good_with_kids: pet.good_with_kids || 0,
+      good_with_smallspaces: pet.good_with_smallspaces || 0,
+    });
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setEditFormData(prev => ({ ...prev, photo: file }));
+    }
   };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setEditFormData((prev) => ({ ...prev, [name]: value }));
+    setEditFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleEditSubmit = (e, petId) => {
+  const handleEditSubmit = async (e, petId) => {
     e.preventDefault();
-    console.log("Updating pet", petId, editFormData);
-    // Here you would call your API to update the pet
-    // For now we'll just update the UI
-    setPets(prevPets => prevPets.map(pet =>
-      pet.id === petId
-        ? { ...pet, name: editFormData.name, description: editFormData.description }
-        : pet
-    ));
-    setEditingPetId(null);
+    try {
+      // Create a copy of the form data to remove empty values
+      const dataToSubmit = {};
+
+      // Only include fields that have values
+      Object.keys(editFormData).forEach(key => {
+        if (editFormData[key] !== null &&
+            editFormData[key] !== undefined &&
+            editFormData[key] !== '') {
+          dataToSubmit[key] = editFormData[key];
+        }
+      });
+
+      // Check if we have any data to submit
+      if (Object.keys(dataToSubmit).length === 0) {
+        setError("No changes detected. Please modify at least one field.");
+        return;
+      }
+
+      console.log("Submitting data:", dataToSubmit);
+      const updatedPet = await backendEditPet(petId, dataToSubmit);
+      console.log("Update successful:", updatedPet);
+
+      // Update the pets list with the updated pet
+      setPets(prevPets => prevPets.map(pet =>
+        pet.pet_id === petId ? { ...pet, ...updatedPet } : pet
+      ));
+
+      setEditingPetId(null);
+      setUpdateSuccess(prev => !prev); // Toggle to trigger a re-fetch
+    } catch (err) {
+      console.error("Error updating pet:", err);
+      setError(`Failed to update pet: ${err.message}`);
+    }
   };
 
   // Handle pet status change
@@ -84,7 +128,6 @@ export default function PetPosterDashboard() {
     try {
       // await updatePetStatus(petId, newStatus); // Uncomment when API is ready
       console.log("Updating status", petId, newStatus);
-
       // Update the local state to reflect the change
       setPets(prevPets => prevPets.map(pet =>
         pet.id === petId ? { ...pet, status: newStatus } : pet
@@ -112,7 +155,6 @@ export default function PetPosterDashboard() {
           isPoster={true}
         />
       </section>
-
       <section className="dashboard-container row">
         <h1>Posted Peluditos</h1>
         <div className="space-y-4">
@@ -124,17 +166,19 @@ export default function PetPosterDashboard() {
           ) : (
             <Accordion defaultActiveKey="0">
               {pets.map((pet, index) => (
-                <Card key={pet.id || index}>
+                <Card key={pet.pet_id || index}>
                   <Accordion.Item eventKey={index.toString()}>
                     <Accordion.Header>
                       <div className="d-flex align-items-center gap-4 w-100">
-                        <Image
-                          src={pet.img_url}
-                          width={200}
-                          height="auto"
-                          alt={pet.name}
-                          className="rounded"
-                        />
+                        <Link className="nav-link" to={`/petdetails/${pet.pet_id}`}>
+                          <Image
+                            src={pet.img_url}
+                            width={200}
+                            height="auto"
+                            alt={pet.name}
+                            className="rounded"
+                          />
+                        </Link>
                         <div className="flex-1">
                           <h3 className="font-weight-bold">{pet.name}</h3>
                           <p className="text-muted">
@@ -153,25 +197,165 @@ export default function PetPosterDashboard() {
                       </div>
                     </Accordion.Header>
                     <Accordion.Body>
-                      {editingPetId === pet.id ? (
-                        <Form onSubmit={(e) => handleEditSubmit(e, pet.id)}>
-                          <Form.Group>
+                      {editingPetId === pet.pet_id ? (
+                        <Form onSubmit={(e) => handleEditSubmit(e, pet.pet_id)}>
+                          <Form.Group className="mb-3">
                             <Form.Label>Name</Form.Label>
                             <Form.Control
                               type="text"
                               name="name"
-                              value={editFormData.name}
+                              value={editFormData.name || ''}
                               onChange={handleEditChange}
                             />
                           </Form.Group>
-                          <Form.Group>
-                            <Form.Label>Description</Form.Label>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Animal Type</Form.Label>
                             <Form.Control
-                              as="textarea"
-                              name="description"
-                              value={editFormData.description}
+                              type="text"
+                              name="animal_type"
+                              value={editFormData.animal_type || ''}
                               onChange={handleEditChange}
                             />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Weight</Form.Label>
+                            <Form.Control
+                              type="number"
+                              name="weight"
+                              value={editFormData.weight || ''}
+                              onChange={handleEditChange}
+                            />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Size</Form.Label>
+                            <Form.Control
+                              type="text"
+                              name="size"
+                              value={editFormData.size || ''}
+                              onChange={handleEditChange}
+                            />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Gender</Form.Label>
+                            <Form.Control
+                              type="text"
+                              name="gender"
+                              value={editFormData.gender || ''}
+                              onChange={handleEditChange}
+                            />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Activity Level</Form.Label>
+                            <Form.Control
+                              type="text"
+                              name="activity_level"
+                              value={editFormData.activity_level || ''}
+                              onChange={handleEditChange}
+                            />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Neutered</Form.Label>
+                            <Form.Select
+                              name="neutered"
+                              value={editFormData.neutered || 0}
+                              onChange={handleEditChange}
+                            >
+                              <option value={1}>Yes</option>
+                              <option value={0}>No</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Has Special Needs</Form.Label>
+                            <Form.Select
+                              name="has_special_needs"
+                              value={editFormData.has_special_needs || 0}
+                              onChange={handleEditChange}
+                            >
+                              <option value={1}>Yes</option>
+                              <option value={0}>No</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Potty Trained</Form.Label>
+                            <Form.Select
+                              name="potty_trained"
+                              value={editFormData.potty_trained || 0}
+                              onChange={handleEditChange}
+                            >
+                              <option value={1}>Yes</option>
+                              <option value={0}>No</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Pet Description</Form.Label>
+                            <Form.Control
+                              as="textarea"
+                              name="pet_description"
+                              value={editFormData.pet_description || ''}
+                              onChange={handleEditChange}
+                            />
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Good with Cats</Form.Label>
+                            <Form.Select
+                              name="good_with_cats"
+                              value={editFormData.good_with_cats || 0}
+                              onChange={handleEditChange}
+                            >
+                              <option value={1}>Yes</option>
+                              <option value={0}>No</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Good with Dogs</Form.Label>
+                            <Form.Select
+                              name="good_with_dogs"
+                              value={editFormData.good_with_dogs || 0}
+                              onChange={handleEditChange}
+                            >
+                              <option value={1}>Yes</option>
+                              <option value={0}>No</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Good with Kids</Form.Label>
+                            <Form.Select
+                              name="good_with_kids"
+                              value={editFormData.good_with_kids || 0}
+                              onChange={handleEditChange}
+                            >
+                              <option value={1}>Yes</option>
+                              <option value={0}>No</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Good with Small Spaces</Form.Label>
+                            <Form.Select
+                              name="good_with_smallspaces"
+                              value={editFormData.good_with_smallspaces || 0}
+                              onChange={handleEditChange}
+                            >
+                              <option value={1}>Yes</option>
+                              <option value={0}>No</option>
+                            </Form.Select>
+                          </Form.Group>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Photo</Form.Label>
+                            <Form.Control
+                              type="file"
+                              name="photo"
+                              onChange={handleFileChange}
+                            />
+                            {pet.img_url && (
+                              <div className="mt-2">
+                                <small>Current photo:</small>
+                                <img
+                                  src={pet.img_url}
+                                  alt="Current pet"
+                                  style={{ width: '100px', height: 'auto', display: 'block', marginTop: '5px' }}
+                                />
+                              </div>
+                            )}
                           </Form.Group>
                           <Button type="submit" className="mt-2">Save</Button>
                           <Button
@@ -184,13 +368,12 @@ export default function PetPosterDashboard() {
                         </Form>
                       ) : (
                         <>
-                          <p>{pet.description}</p>
+                          <p>{pet.pet_description}</p>
                           <Button onClick={() => handleEditClick(pet)}>Edit</Button>
                         </>
                       )}
-
                       <div className="mt-4">
-                        <AdoptionRequests petId={pet.pet_id || pet.id} />
+                        <AdoptionRequests petId={pet.pet_id} />
                       </div>
                     </Accordion.Body>
                   </Accordion.Item>
@@ -199,7 +382,6 @@ export default function PetPosterDashboard() {
             </Accordion>
           )}
         </div>
-
         <div className="text-center mt-4">
           <Link to="/postpet" className="btn btn-primary">Post a New Pet</Link>
         </div>

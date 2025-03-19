@@ -5,7 +5,7 @@ import { backendCreateUser } from "../backend";
 import { useAuth } from "../AuthContext";
 
 export default function SignupPage() {
-  const { login, token } = useAuth();
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState("");
   const navigate = useNavigate();

@@ -81,19 +81,28 @@ router.post('/pet', authenticate, upload.single('photo'), async (req, res) => {
 });
 
 // Update Pet Information WORKING
-router.put('/:pet_id', authenticate, async (req, res) => {
+router.put('/:pet_id', authenticate, upload.single('photo'), async (req, res) => {
     try {
         const { pet_id } = req.params;
         const user_id = req.user.user_id;
 
+        // Cloudinary photo upload
+        let img_url = null;
+        if (req.file) {
+            img_url = req.file.path || req.file.secure_url;
+            console.log("Updated image uploaded to:", img_url);
+        }
+
+        // Extract fields from req.body
         const {
             animal_type, name, weight, size, gender, activity_level,
             good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
             neutered, has_special_needs, potty_trained, pet_description
         } = req.body;
 
-        const checkOwnershipQuery = `SELECT user_id FROM Pets WHERE pet_id = ${pet_id}`;
-        const ownershipResult = await db(checkOwnershipQuery);
+        // Check pet ownership
+        const checkOwnershipQuery = `SELECT user_id FROM Pets WHERE pet_id = ?`;
+        const ownershipResult = await db(checkOwnershipQuery, [pet_id]);
 
         if (!ownershipResult || !ownershipResult.data || ownershipResult.data.length === 0) {
             return res.status(404).json({ message: 'Pet not found' });
@@ -103,25 +112,26 @@ router.put('/:pet_id', authenticate, async (req, res) => {
             return res.status(403).json({ message: 'Unauthorized to update this pet' });
         }
 
+        // Create update fields dynamically
         const fields = {
             animal_type, name, weight, size, gender, activity_level,
             good_with_cats, good_with_dogs, good_with_kids, good_with_smallspaces,
-            neutered, has_special_needs, potty_trained, pet_description
+            neutered, has_special_needs, potty_trained, pet_description,
+            ...(img_url && { img_url }) // Include img_url if updated
         };
 
         const updateFields = Object.entries(fields)
             .filter(([_, value]) => value !== undefined)
-            .map(([key, value]) =>
-                typeof value === "string" ? `${key} = '${value}'` : `${key} = ${value}`
-            );
+            .map(([key, _]) => `${key} = ?`);
 
         if (updateFields.length === 0) {
             return res.status(400).json({ message: "No valid fields provided for update" });
         }
 
-        const updatePetQuery = `UPDATE Pets SET ${updateFields.join(', ')} WHERE pet_id = ${pet_id}`;
+        const updatePetQuery = `UPDATE Pets SET ${updateFields.join(', ')} WHERE pet_id = ?`;
+        const values = [...Object.values(fields).filter(val => val !== undefined), pet_id];
 
-        await db(updatePetQuery);
+        await db(updatePetQuery, values);
         res.status(200).json({ message: 'Pet information updated successfully' });
 
     } catch (error) {

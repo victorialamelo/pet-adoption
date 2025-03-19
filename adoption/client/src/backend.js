@@ -87,6 +87,70 @@ export async function backendAddPostPet(newPet) {
   return await response.json();
 }
 
+//API for Editing Pet Details (only logged-in users can access)
+export async function backendEditPet(petId, updatedPet) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("User not authenticated");
+  }
+
+  // Create FormData object to handle file uploads
+  const formData = new FormData();
+
+  // Debug: Log the updatedPet object to see what's being passed in
+  console.log("updatedPet object:", updatedPet);
+
+  // Check if updatedPet is empty
+  if (!updatedPet || Object.keys(updatedPet).length === 0) {
+    throw new Error("No data provided for update");
+  }
+
+  // Add all properties from updatedPet to formData
+  Object.keys(updatedPet).forEach(key => {
+    // Skip null, undefined, or empty string values
+    if (updatedPet[key] === null || updatedPet[key] === undefined || updatedPet[key] === '') {
+      console.log(`Skipping empty value for ${key}`);
+      return;
+    }
+
+    if (key === 'photo' && updatedPet[key]) {
+      formData.append('photo', updatedPet[key]);
+      console.log(`Added photo to formData: ${updatedPet[key].name}`);
+    } else {
+      formData.append(key, updatedPet[key]);
+      console.log(`Added ${key}: ${updatedPet[key]} to formData`);
+    }
+  });
+
+  // Debug: Log the contents of formData (FormData is not directly loggable)
+  console.log("FormData entries:");
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
+  }
+
+  console.log(`Sending request to update pet ${petId}`);
+
+  const response = await fetch(`http://localhost:5001/pets/${petId}`, {
+    method: "PUT",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    try {
+      const errorMessage = await response.json();
+      console.error("Error updating pet:", errorMessage);
+      throw new Error(errorMessage.message || "Failed to update pet");
+    } catch (err) {
+      console.error("Failed to parse error response:", err);
+      throw new Error(`Failed to update pet: ${response.status} ${response.statusText}`);
+    }
+  }
+
+  return await response.json();
+}
 
 
 //API for Fetching a Pet Details (only logged-in users can access)
