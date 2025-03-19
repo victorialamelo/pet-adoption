@@ -5,7 +5,7 @@
   /* Colors */
   --cherrypink: #ffb6c1;
   --mistyrose: #f6dde0;
-  --skyblue: #87ceeb;
+  --skyblue: #39809b;
   --hoverskyblue: #05455f;
   --celeste: #daf8f8;
   --buff: #d4a373;
@@ -90,7 +90,7 @@ th {
   color: var(--lavender);
 }
 
-label, select {
+label, select, #image {
   font-family: "Lexend Deca", sans-serif;
   font-optical-sizing: auto;
   text-transform: capitalize;
@@ -306,6 +306,7 @@ section {
   padding-top: 100px;
   background-color: var(--mistyrose);
   position: relative;
+  min-height: 2000px;
 }
 
 .form-postpet {
@@ -398,7 +399,7 @@ input:focus {
 .dashboard-view {
   padding-top: 30px;
   height: auto;
-  background-color: var(--sage);
+  background-color: var(--skyblue);
   text-align: right;
 }
 
