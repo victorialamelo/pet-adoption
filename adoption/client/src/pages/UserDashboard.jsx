@@ -22,18 +22,18 @@ export default function UserDashboard() {
       <NavBar />
 
       {/* Dashboard View Toggle */}
-      <div className="dashboard-view-toggle">
+      <div className="dashboard-view">
           <button
             className={`btn-primary ${activeView === "adopt" ? "btn-primary" : "btn-outline-primary"}`}
             onClick={() => setActiveView("adopt")}
           >
-            Adopt a Pet
+            Adopter Dashboard
           </button>
           <button
             className={`btn-primary ${activeView === "post" ? "btn-primary" : "btn-outline-primary"}`}
             onClick={() => setActiveView("post")}
           >
-            Post a Pet
+            Shelter Dashboard
           </button>
       </div>
 
