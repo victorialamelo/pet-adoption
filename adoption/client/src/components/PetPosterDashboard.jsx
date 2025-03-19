@@ -129,9 +129,9 @@ export default function PetPosterDashboard() {
                     <Accordion.Header>
                       <div className="d-flex align-items-center gap-4 w-100">
                         <Image
-                          src={pet.image_url || "../src/assets/dogsvg.svg"}
-                          width={80}
-                          height={80}
+                          src={pet.img_url}
+                          width={200}
+                          height="auto"
                           alt={pet.name}
                           className="rounded"
                         />
