@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   // Check localStorage on first load
   useEffect(() => {
@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
       if (storedUser && storedUser !== "undefined") {
         try {
-          const parsedUser = JSON.parse(storedUser.user_id);
+          const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
           console.log("✅ User set in state:", parsedUser);
         } catch (error) {
@@ -32,9 +32,8 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("❌ Error retrieving auth data:", error);
-    }
-    finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -47,8 +46,8 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     setToken(authToken);
 
-    // Store in localStorage
-    localStorage.setItem("user", userData);
+    // Store in localStorage - stringify the userData object
+    localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", authToken);
 
     console.log("✅ Stored in localStorage - User:", localStorage.getItem("user"));
@@ -63,7 +62,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
-  if(loading) return <div>Loading...</div>
+  if (loading) return <div>Loading...</div>;
+
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
