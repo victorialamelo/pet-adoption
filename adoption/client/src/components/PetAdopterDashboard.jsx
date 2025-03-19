@@ -26,6 +26,8 @@ export default function PetAdopterDashboard() {
         const response = await fetchUserProfile(user);
         const userData = response;
 
+        console.log("userData", userData);
+
         setProfile({
           name: userData.user_name || "",
           email: userData.email || "",
