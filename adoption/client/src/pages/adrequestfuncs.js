@@ -28,17 +28,27 @@ export const createAdoptionRequest = async (pet_id, request_message) => {
 };
 
 //Get All or By ID the Adoption Requests
-export const getAdoptionRequests = async (pet_id = null) => {
+export const getAdoptionRequests = async (pet_id = null, request_id = null) => {
     try {
-        const response = await fetch(`http://localhost:5001/requests/adoption-requests${pet_id ? `?pet_id=${pet_id}` : ""}`, {
+        let url = "http://localhost:5001/requests/adoption-requests";
+        const queryParams = [];
+
+        if (pet_id) queryParams.push(`pet_id=${pet_id}`);
+        if (request_id) queryParams.push(`request_id=${request_id}`);
+
+        if (queryParams.length > 0) {
+            url += `?${queryParams.join("&")}`;
+        }
+
+        const response = await fetch(url, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}` // Stored token.
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
             }
         });
 
-        console.log("response.data", response);
+        console.log("API Response:", response);
 
         if (!response.ok) {
             throw new Error("Failed to fetch adoption requests");
