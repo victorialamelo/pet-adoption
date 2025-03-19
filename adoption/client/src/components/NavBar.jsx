@@ -2,7 +2,7 @@ import { useAuth } from "../AuthContext";
 import { Link, useParams } from "react-router-dom";
 
 function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, token, logout } = useAuth();
   // console.log("NAV BARRRRRRR id", id);
   // console.log("NAV BARRRRRRR user", user);
   // console.log("NAV BARRRRRRR user.user_id", user.user.user_id);
