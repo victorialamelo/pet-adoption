@@ -53,11 +53,28 @@ h3,
     var(--textshadow) 5px 5px, var(--textshadow) 6px 6px;
 }
 
+h4 {
+  color: var(--lavender);
+  font-family: "Lexend Deca", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+h5 {
+  color: var(--lavender) !important;
+  font-family: "Shrikhand", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
 p,
 span,
 li {
+  font-family: "Lexend Deca", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 600;
+  font-weight: 400;
   font-style: normal;
   font-size: 1.3em;
   color: var(--lavender);
@@ -73,10 +90,12 @@ th {
   color: var(--lavender);
 }
 
-label {
+label, select {
+  font-family: "Lexend Deca", sans-serif;
+  font-optical-sizing: auto;
   text-transform: capitalize;
   font-size: 1.2em;
-  font-weight: 400;
+  font-weight: 00;
   font-style: normal;
   color: var(--lavender);
 }
