@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
@@ -10,6 +10,11 @@ export default function UserDashboard() {
   const [activeView, setActiveView] = useState("post"); // Default to post view (current functionality)
   const { user } = useAuth();
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
+
+  useEffect(() => {
+    setActiveView(role);
+  }, [role]);
 
   // Redirect to login if no user
   if (!user) {
@@ -24,8 +29,8 @@ export default function UserDashboard() {
       {/* Dashboard View Toggle */}
       <div className="dashboard-view">
           <button
-            className={`btn-primary ${activeView === "adopt" ? "btn-primary" : "btn-outline-primary"}`}
-            onClick={() => setActiveView("adopt")}
+            className={`btn-primary ${activeView === "adopting" ? "btn-primary" : "btn-outline-primary"}`}
+            onClick={() => setActiveView("adopting")}
           >
             Adopter Dashboard
           </button>
@@ -38,7 +43,7 @@ export default function UserDashboard() {
       </div>
 
       {/* Conditional rendering based on active view */}
-      {activeView === "adopt" ? (
+      {activeView === "adopting" ? (
         <PetAdopterDashboard />
       ) : (
         <PetPosterDashboard />

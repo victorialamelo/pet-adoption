@@ -55,10 +55,6 @@ export default function PostPetPage() {
   return (
     <>
       <NavBar />
-      <header>
-        <img src="../src/assets/beigekitten.jpg" alt="Pet Banner" />
-      </header>
-
       <section className="postapet mt-10">
         <div className="container">
           <h1 className="display-4 text-center mb-4">
@@ -69,7 +65,7 @@ export default function PostPetPage() {
               <div className="col-md-12">
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">
-                    Pet Name
+                    <h4>Pet Name</h4>
                   </label>
                   <input
                     type="text"
@@ -82,7 +78,7 @@ export default function PostPetPage() {
 
                 <div className="mb-3">
                   <label htmlFor="animaltype" className="form-label">
-                    Animal Type
+                    <h4>Animal Type</h4>
                   </label>
                   <select
                     className="form-select"
@@ -101,7 +97,7 @@ export default function PostPetPage() {
 
                 <div className="mb-3">
                   <label htmlFor="image" className="form-label">
-                    Pet Image
+                    <h4>Pet Image</h4>
                   </label>
                   <input
                     type="file"
@@ -113,12 +109,13 @@ export default function PostPetPage() {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="story" className="form-label">
-                    Pet's Story
+                    <h4>Pet's Story</h4>
                   </label>
                   <textarea
                     className="form-control"
                     id="story"
                     name="story"
+                    placeholder="Tell us the story of your pet"
                     rows="4"
                     required
                   />
@@ -126,7 +123,7 @@ export default function PostPetPage() {
 
                 <div className="mb-3">
                   <label htmlFor="weight" className="form-label">
-                    Weight (kg)
+                    <h4>Weight (kg)</h4>
                   </label>
                   <input
                     type="number"
@@ -139,7 +136,7 @@ export default function PostPetPage() {
 
                 <div className="mb-3">
                   <label htmlFor="size" className="form-label">
-                    Size
+                    <h4>Size</h4>
                   </label>
                   <select
                     className="form-select"
@@ -160,7 +157,7 @@ export default function PostPetPage() {
 
                 <div className="mb-3">
                   <label htmlFor="gender" className="form-label">
-                    Gender
+                    <h4>Gender</h4>
                   </label>
                   <select
                     className="form-select"
@@ -179,7 +176,7 @@ export default function PostPetPage() {
 
                 <div className="mb-3">
                   <label htmlFor="activity" className="form-label">
-                    Activity Level
+                    <h4>Activity Level</h4>
                   </label>
                   <select
                     className="form-select"
@@ -195,7 +192,7 @@ export default function PostPetPage() {
                     <option value="lots of exercise">Lots of Exercise</option>
                   </select>
                 </div>
-
+                <h4 className="mb-3 mt-4">Behavior & Care</h4>
                 <div className="mb-3 form-check">
                   <input
                     type="checkbox"
@@ -233,7 +230,7 @@ export default function PostPetPage() {
                 </div>
 
                 <hr />
-
+                <h4 className="mb-3 mt-4">Good With</h4>
                 <div className="mb-3 form-check">
                   <input
                     type="checkbox"

@@ -15,7 +15,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userId = localStorage.getItem('userId');
+      const userId = localStorage.getItem('user');
 
       // Prepare data based on user type
       let updateData = {};
