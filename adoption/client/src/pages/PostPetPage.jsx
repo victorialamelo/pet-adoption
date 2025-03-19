@@ -55,6 +55,15 @@ export default function PostPetPage() {
   return (
     <>
       <NavBar />
+<<<<<<< HEAD
+||||||| 0a09c6e
+      <header>
+        <img src="../src/assets/beigekitten.jpg" alt="Pet Banner" />
+      </header>
+
+=======
+
+>>>>>>> 8657dddea65af6e789d373fa3abb661331cbf62b
       <section className="postapet mt-10">
         <div className="container">
           <h1 className="display-4 text-center mb-4">
