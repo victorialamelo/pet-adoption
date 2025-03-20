@@ -14,12 +14,10 @@ export default function EditPetDetails({ petId, onSuccess }) {
     const fetchPetData = async () => {
       try {
         setLoading(true);
-        // Import the function dynamically to avoid circular dependencies
+
         const { backendFetchPetDetails } = await import("../backend");
-        console.log(petId);
         const response = await backendFetchPetDetails(petId);
         const petData = response[0];
-        console.log("petData", response[0]);
 
         if (!petData) {
           throw new Error("Pet not found");
@@ -85,9 +83,7 @@ export default function EditPetDetails({ petId, onSuccess }) {
         return;
       }
 
-      console.log("Submitting data:", dataToSubmit);
       const updatedPet = await backendEditPet(petId, dataToSubmit);
-      console.log("Update successful:", updatedPet);
       setPet(prev => ({ ...prev, ...updatedPet }));
       setEditFormData(prev => ({ ...prev, ...updatedPet }));
 

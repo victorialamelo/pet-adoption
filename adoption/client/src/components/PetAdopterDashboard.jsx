@@ -70,7 +70,7 @@ export default function PetAdopterDashboard() {
       try {
         setLoading(true);
         const fetchedRequests = await getMyAdoptionRequests();
-        console.log("fetchedRequests", fetchedRequests)
+
         if (fetchedRequests) {
           setRequests(fetchedRequests.data);
         }
@@ -84,7 +84,13 @@ export default function PetAdopterDashboard() {
 
     fetchRequests();
 
-  }, [user]);
+    // REDIRECT IF USER NOT AUTHENTICATED
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+  }, [user, navigate]);
 
   if (loading) {
     return <div className="text-center mt-5"><h3>Loading...</h3></div>;
@@ -106,7 +112,7 @@ export default function PetAdopterDashboard() {
   const handleOpenDetailsModal = async (request) => {
     setSelectedRequest(request);
     setShowDetailsModal(true); // Show modal first to avoid delay
-    console.log("request",request);
+    console.log("REQUEST DATA",request);
 
     try {
       // First set loading state
@@ -114,7 +120,7 @@ export default function PetAdopterDashboard() {
 
       // Fetch the requester details using the requesterID
       const requestDetails = await fetchUserProfile(request.requester_id);
-      console.log("requestDetails", requestDetails)
+      console.log("OWNER DETAILS", requestDetails)
       // Set the owner details from the fetched data
       setOwnerDetails({
         name: requestDetails.user_name || "Owner Name Not Available",
@@ -233,7 +239,7 @@ export default function PetAdopterDashboard() {
                 <p>You haven't applied to adopt any pets yet.</p>
               ) : (
                 requests.map(app => (
-                  <Card key={app.id} className="mb-3">
+                  <Card key={app.request_id} className="mb-3">
                     <Card.Body>
                       <Row>
                         <Col md={2}>

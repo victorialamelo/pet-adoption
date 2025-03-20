@@ -45,7 +45,6 @@ export default function AdoptionRequests({ petId }) {
       setLoading(true);
       const response = await fetchUserProfile(requesterID);
       const requesterData = response;
-      console.log("requesterData", requesterData);
       setRequester(requesterData);
     } catch (err) {
       console.error("Error fetching adopter profile:", err);
@@ -57,8 +56,6 @@ export default function AdoptionRequests({ petId }) {
 
   const toggleExpand = (requestId) => {
     setExpandedRequest((prev) => (prev === requestId.request_id ? null : requestId.request_id));
-    console.log("requestId", requestId.request_id)
-    console.log("requestId", requestId.requester_id)
     loadRequesterInfo(requestId.requester_id);
   };
 

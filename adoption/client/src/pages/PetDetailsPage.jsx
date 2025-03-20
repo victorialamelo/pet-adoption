@@ -21,7 +21,6 @@ export default function PetDetailsPage() {
     const fetchPetDetails = async () => {
       try {
         const fetchedPetData = await backendFetchPetDetails(pet_id);
-        console.log("FETCH PET DETAILS data", fetchedPetData[0]);
         const petData = fetchedPetData[0];
 
         const processedPetDetails = {
@@ -36,7 +35,6 @@ export default function PetDetailsPage() {
             petData.good_with_smallspaces ? "Small Spaces" : null,
           ].filter(Boolean),
         };
-        console.log("processedPetDetails", processedPetDetails);
         setPetDetails(processedPetDetails);
       } catch (err) {
         setError(err.message);
@@ -52,7 +50,7 @@ export default function PetDetailsPage() {
     e.preventDefault();
 
     const requestMessage = e.target.message.value;
-    const token = localStorage.getItem("token");  // Retrieve token
+    const token = localStorage.getItem("token");
 
     if (!token) {
       console.error("No token found! User is not authenticated.");
@@ -60,14 +58,12 @@ export default function PetDetailsPage() {
       return;
     }
 
-    console.log("Token being sent:", token); // Debugging
-
     try {
       const response = await fetch("http://localhost:5001/requests/adopt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Ensure token is included
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
           pet_id: petDetails?.pet_id,
@@ -76,10 +72,9 @@ export default function PetDetailsPage() {
       });
 
       const data = await response.json();
-      console.log("Server Response:", data);
+      console.log(data.message);
 
       if (response.ok) {
-        // Replace the alert with showing the modal
         setShowSuccessModal(true);
       } else {
         alert(`Failed to submit adoption request: ${data.message}`);
@@ -106,9 +101,8 @@ export default function PetDetailsPage() {
 
   return (
     <>
-      {/*<NavBar />*/}
 
-      {/* Success Modal */}
+      {/* Adoption Request Sent Success */}
       {showSuccessModal && (
         <div className="modal show d-block" tabIndex="-1" role="dialog">
           <div className="modal-dialog" role="document">
@@ -132,9 +126,12 @@ export default function PetDetailsPage() {
         </div>
       )}
 
+      {/* Pet Profile */}
       <section className="mb-10">
         <div className="container">
           <div className="row">
+
+            {/* Pet Name & Details */}
             <div className="col-md-6">
               <h2 className="display-4">{petDetails.name}</h2>
               <p className="lead">{petDetails.pet_description}</p>
@@ -176,12 +173,14 @@ export default function PetDetailsPage() {
                 <EditPetDetails
                   petId={petDetails.pet_id}
                   onSuccess={(updatedPet) => {
-                    console.log("updated pet", updatedPet);
+                    console.log(updatedPet.message);
                     setUpdateSuccess(prev => !prev);
                   }}
                 />
               )}
             </div>
+
+            {/* Pet Image */}
             <div className="col-md-6">
               <img
                 src={petDetails.img_url || "https://via.placeholder.com/150"}
@@ -189,9 +188,12 @@ export default function PetDetailsPage() {
                 className="img-fluid pet-detail-image"
               />
             </div>
+
           </div>
         </div>
       </section>
+
+      {/* Adoption Request */}
       {user !== petDetails.user_id && (
         <section className="mb-10 pet-details">
           <div className="container">

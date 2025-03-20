@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import PetAdopterDashboard from "../components/PetAdopterDashboard";
 import PetPosterDashboard from "../components/PetPosterDashboard";
@@ -7,16 +8,25 @@ import "../App.css";
 export default function UserDashboard() {
   const [activeView, setActiveView] = useState("adopting"); // Default to post view (current functionality)
   const { user } = useAuth();
+  const navigate = useNavigate();
   const role = localStorage.getItem("role");
-  console.log("user id:", user);
+
   useEffect(() => {
     setActiveView(role);
-  }, [role]);
+
+    // REDIRECT IF USER NOT AUTHENTICATED
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+  }, [role, navigate, user]);
 
   const handleViewChange = (view) => {
     setActiveView(view);
     localStorage.setItem("role", view); // Store the selected view in localStorage
   };
+
+
 
   return (
     <>

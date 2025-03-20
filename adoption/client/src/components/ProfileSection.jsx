@@ -6,7 +6,6 @@ import { updateUserProfile } from "../backend";
 export default function ProfileSection({ profile, setProfile, isPoster = false, isAdopter = false }) {
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState(profile);
-  console.log("profile", profile);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +33,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
           phone: formData.phone
         };
       }
-      console.log("updateUserProfile userId, updateData", userId, updateData)
+
       await updateUserProfile(userId, updateData);
 
       // Update local state with the form data

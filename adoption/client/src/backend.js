@@ -16,15 +16,13 @@ export async function backendCreateUser(inputs) {
   }
 
   const data = await response.json();
-  console.log("Returned Sign Up Data", data);
+  console.log(data.message);
   return data;
 }
 
 //API for User Login
 export async function backendLoginUser({ email, password }) {
   const credentials = { email, password };
-
-  console.log("Sending login request with:", credentials); //Debugging
 
   try {
     const response = await fetch("http://localhost:5001/auth/login", {
@@ -34,6 +32,7 @@ export async function backendLoginUser({ email, password }) {
     });
     const data = await response.json();
 
+    console.log(data.message);
     return data;
   } catch (e) {
     console.log(e.message);
@@ -62,8 +61,6 @@ export async function backendAddPostPet(newPet) {
     }
   });
 
-  console.log("Sending request to add pet with form data");
-
   const response = await fetch("http://localhost:5001/pets/pet", {
     method: "POST",
     headers: {
@@ -84,6 +81,7 @@ export async function backendAddPostPet(newPet) {
     }
   }
 
+  console.log(response.message);
   return await response.json();
 }
 
@@ -94,20 +92,13 @@ export async function backendEditPet(petId, updatedPet) {
     throw new Error("User not authenticated");
   }
 
-  // Create FormData object to handle file uploads
   const formData = new FormData();
 
-  // Debug: Log the updatedPet object to see what's being passed in
-  console.log("updatedPet object:", updatedPet);
-
-  // Check if updatedPet is empty
   if (!updatedPet || Object.keys(updatedPet).length === 0) {
     throw new Error("No data provided for update");
   }
 
-  // Add all properties from updatedPet to formData
   Object.keys(updatedPet).forEach(key => {
-    // Skip null, undefined, or empty string values
     if (updatedPet[key] === null || updatedPet[key] === undefined || updatedPet[key] === '') {
       console.log(`Skipping empty value for ${key}`);
       return;
@@ -118,17 +109,8 @@ export async function backendEditPet(petId, updatedPet) {
       console.log(`Added photo to formData: ${updatedPet[key].name}`);
     } else {
       formData.append(key, updatedPet[key]);
-      console.log(`Added ${key}: ${updatedPet[key]} to formData`);
     }
   });
-
-  // Debug: Log the contents of formData (FormData is not directly loggable)
-  console.log("FormData entries:");
-  for (let pair of formData.entries()) {
-    console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
-  }
-
-  console.log(`Sending request to update pet ${petId}`);
 
   const response = await fetch(`http://localhost:5001/pets/${petId}`, {
     method: "PUT",
@@ -160,8 +142,6 @@ export async function backendFetchPetDetails(petId) {
     throw new Error("User not authenticated. To check our pets, please go back to Home Page and login.");
   }
 
-  console.log(`Fetching details for pet with ID: ${petId}`);
-
   const response = await fetch(`http://localhost:5001/pets/${petId}`, {
     method: "GET",
     headers: {
@@ -169,14 +149,12 @@ export async function backendFetchPetDetails(petId) {
     }
   });
 
-  console.log("Response:", response);
 
   return handleResponse(response);
 }
 
 // API RESPONSE HELPER
 const handleResponse = async (response) => {
-  console.log("API Response Status:", response.status);
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
@@ -205,7 +183,7 @@ export const fetchUserProfile = async (userId) => {
 // UPDATE USER PROFILE
 export const updateUserProfile = async (userId, profileData) => {
   const token = localStorage.getItem("token");
-  console.log("updateUserProfile profileData", profileData)
+
   const response = await fetch(`http://localhost:5001/auth/${userId}`, {
     method: 'PUT',
     headers: {

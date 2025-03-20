@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
-          console.log("✅ User set in state:", parsedUser);
+          console.log("✅ User ID:", parsedUser);
         } catch (error) {
           console.error("❌ Error parsing user from localStorage:", error);
         }
@@ -36,8 +36,6 @@ export const AuthProvider = ({ children }) => {
   // Function to handle login
   const login = (userData, authToken) => {
     console.log("🔑 Attempting login...");
-    console.log("Received userData:", userData);
-    console.log("Received token:", authToken);
 
     setUser(userData);
     setToken(authToken);
@@ -46,8 +44,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", authToken);
 
-    console.log("✅ Stored in localStorage - User:", localStorage.getItem("user"));
-    console.log("✅ Stored in localStorage - Token:", localStorage.getItem("token"));
+    console.log("✅ User:", localStorage.getItem("user"));
   };
 
   // Function to handle logout
@@ -57,6 +54,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    console.log("✅ Logged Out");
   };
 
   if (loading) return <div>Loading...</div>;

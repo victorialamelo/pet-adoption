@@ -38,10 +38,9 @@ export default function PetListPage() {
         );
         if (!response.ok) throw new Error("Failed to fetch pets");
         const data = await response.json();
-        console.log(data);
-        // Check if the response data is an array
+
         if (Array.isArray(data)) {
-          setPets(data); // Set pets if the data is an array
+          setPets(data); 
         } else {
           console.error("Data is not an array:", data);
         }

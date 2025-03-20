@@ -29,7 +29,6 @@ export default function PetPosterDashboard() {
         setLoading(true);
         const response = await fetchUserProfile(user);
         const userData = response;
-        console.log("userData", userData);
         setProfile({
           user_name: userData.user_name || '',
           name: userData.entity_name || '',
@@ -43,7 +42,6 @@ export default function PetPosterDashboard() {
         const userId = localStorage.getItem('user');
         if (userId) {
           const userPets = await getUserPostedPets(userId);
-          console.log("pets", userPets);
           setPets(userPets || []);
         }
       } catch (err) {
@@ -58,7 +56,6 @@ export default function PetPosterDashboard() {
 
   // Handle pet edit form
   const handleEditClick = (pet) => {
-    console.log("handleEditClick", pet);
     setEditingPetId(pet.pet_id);
     setEditFormData({
       name: pet.name || '',
@@ -113,7 +110,6 @@ export default function PetPosterDashboard() {
 
       console.log("Submitting data:", dataToSubmit);
       const updatedPet = await backendEditPet(petId, dataToSubmit);
-      console.log("Update successful:", updatedPet);
 
       // Update the pets list with the updated pet
       setPets(prevPets => prevPets.map(pet =>
@@ -126,7 +122,7 @@ export default function PetPosterDashboard() {
       console.error("Error updating pet:", err);
       setError(`Failed to update pet: ${err.message}`);
     } finally {
-      console.log("Update successful:");
+      console.log("Update successful");
     }
   };
 

@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-//import NavBar from "../components/NavBar";
 import "../App.css";
 import { useAuth } from "../AuthContext";
 import { backendAddPostPet } from "../backend";
@@ -43,7 +42,7 @@ export default function PostPetPage() {
 
     try {
       const addedPet = await backendAddPostPet(newPet);
-      console.log("Pet added:", addedPet);
+      console.log(addedPet.message);
       navigate(`/petdetails/${addedPet.pet_id}`);
     } catch (error) {
       console.error("Error adding pet:", error);

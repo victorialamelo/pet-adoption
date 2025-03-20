@@ -27,7 +27,7 @@ export default function LoginPage() {
       const data = await backendLoginUser({ email, password });
       login(data.user.user_id, data.token);
       localStorage.setItem("role", data.user.usertype);
-      console.log("Login successful:", data.user);
+      console.log("Login successful");
 
     } catch (error) {
       console.error("Login failed:", error.message);
@@ -70,7 +70,7 @@ export default function LoginPage() {
             <div className="login p-4">
               <h1 className="text-center mb-3">Welcome Back!</h1>
               <form onSubmit={handleSubmit}>
-                
+
                 {/* Email */}
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">
