@@ -6,7 +6,6 @@ function Navbar() {
   const { user, logout } = useAuth();
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
   const [role] = useState(localStorage.getItem("role"));
-
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
   return (
@@ -43,20 +42,20 @@ function Navbar() {
                 Adopt a Friend
               </Link>
             </li>
-            {user && role !== "post" && (
-              <>
+            {user && role === "posting" && (
                 <li className="nav-item">
                   <Link className="nav-link" to="/postpet">
                     Post a Friend
                   </Link>
                 </li>
+              )}
+              {user && (
                 <li className="nav-item">
                   <Link className="nav-link" to={`/userdashboard`}>
                     Dashboard
                   </Link>
                 </li>
-              </>
-            )}
+                )}
             {!user && (
               <>
                 <li className="nav-item">

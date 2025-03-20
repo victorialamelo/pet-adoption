@@ -207,19 +207,21 @@ header h1 {
   background-size: 100% auto;
   background-position: center;
   background-repeat: no-repeat;
-  height: 400px;
+  min-height: 700px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   color: white;
   padding: 0 50px;
-  border-top: 10px solid white;
 }
 
 .header-testimonials h2 {
+  font-size: 1.4em;
   color: white;
-  text-shadow: var(--textshadow) 1px 1px, var(--textshadow) 2px 2px,
-    var(--textshadow) 3px 3px;
+  text-shadow:
+  var(--textshadow) 1px 1px,
+  var(--textshadow) 2px 2px,
+  var(--textshadow) 3px 3px;
 }
 
 .header-testimonials p {
@@ -243,6 +245,7 @@ header h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 10px solid white;
 }
 
 .banner::before {
@@ -284,7 +287,9 @@ section {
 }
 
 .home-content {
-  padding: 60px;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 30px auto;
 }
 
 .introduction {
@@ -432,7 +437,9 @@ section.posted-peluditos {
   min-height: 1300px;
   padding: 20px;
   margin-top: 100px;
+  margin: 100px auto ;
   background-color: var(--celeste);
+  max-width: 1200px;
 }
 
 /* ----------------------------------------

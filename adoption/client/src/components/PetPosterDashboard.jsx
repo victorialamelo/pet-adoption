@@ -29,6 +29,7 @@ export default function PetPosterDashboard() {
         setLoading(true);
         const response = await fetchUserProfile(user);
         const userData = response;
+        console.log("userData", userData);
         setProfile({
           user_name: userData.user_name || '',
           name: userData.entity_name || '',

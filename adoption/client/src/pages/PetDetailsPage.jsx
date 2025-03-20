@@ -154,7 +154,7 @@ export default function PetDetailsPage() {
           </div>
         </div>
       </section>
-      {user && (
+      {user !== petDetails.user_id && (
         <section className="mb-10 pet-details">
           <div className="container">
             <div className="row">

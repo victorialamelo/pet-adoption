@@ -11,7 +11,7 @@ function FaqsPage() {
         <div className="row home-content">
           <div className="col-md-12">
             <h1 className="header">FAQ - Frequently Asked Questions</h1>
-            <h2 className="mb-4">1. What is Peluditos?</h2>
+            <h2 className="mb-4 mt-5">1. What is Peluditos?</h2>
             <p>
               Peluditos is a platform dedicated to connecting people looking to
               adopt pets with those wishing to rehome them. We bring together
