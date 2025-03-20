@@ -61,7 +61,7 @@ h4 {
   text-transform: capitalize;
 }
 
-h5 {
+h5, .modal-title {
   color: var(--lavender) !important;
   font-family: "Shrikhand", serif;
   font-optical-sizing: auto;
@@ -401,7 +401,11 @@ input:focus {
 /* ----------------------------------------
    BUTTON STYLES
 ---------------------------------------- */
-.btn-primary, .btn-success, .btn-outline-primary {
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-outline-primary,
+.btn-outline-secondary {
   background-color: var(--skyblue);
   border: none;
   font-family: "Shrikhand", serif;
@@ -541,6 +545,11 @@ td {
   border: none;
 }
 
+.badge {
+  font-size: 1em;
+  text-transform: capitalize;
+  border-radius: 8px;
+}
 
 /* ----------------------------------------
    LIST GROUP STYLES
