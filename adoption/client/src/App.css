@@ -491,7 +491,6 @@ td {
   object-position: center;
 }
 
-/* Pet details page main image */
 .pet-detail-image {
   width: 100%;
   height: 600px;
@@ -499,6 +498,10 @@ td {
   object-position: center;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.shelter-dashboard img {
+  width: 80%;
 }
 
 /* ----------------------------------------
