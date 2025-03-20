@@ -6,7 +6,6 @@ function AboutUsPage() {
   return (
     <>
       <NavBar />
-
       <section className="py-5 w-100 introduction">
         <div className="container-fluid">
           <div className="row align-items-center home-content">

@@ -92,6 +92,41 @@ router.get('/adoption-requests', authenticate, async (req, res) => {
     }
 });
 
+router.get('/my-requests', authenticate, async (req, res) => {
+    try {
+        const { user_id } = req.user; // Logged-in user's ID
+        console.log("Incoming request to /my-requests");
+        console.log("Authenticated user_id:", user_id);
+
+        let query = `
+            SELECT Requests.*,
+            Pets.name AS pet_name,
+            Pets.img_url AS pet_image,
+            Users.user_name AS owner_name
+            FROM Requests
+            JOIN Pets ON Requests.pet_id = Pets.pet_id
+            JOIN Users ON Pets.user_id = Users.user_id
+            WHERE Requests.requester_id = ?`;  // Fetching requests made BY the user
+
+        const queryParams = [user_id];
+
+        console.log("Executing SQL Query:", query);
+        console.log("With parameters:", queryParams);
+
+        const result = await db(query, queryParams);
+        console.log("🛠 Full DB Response:", result);
+
+        if (!result || result.length === 0) {
+            return res.status(404).json({ message: "No adoption requests found" });
+        }
+
+        console.log("User's adoption requests fetched successfully:", result);
+        res.json(result);
+    } catch (error) {
+        console.error("Database Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 //Update Adoption Status
 router.put('/request-status/:request_id', authenticate, async (req, res) => {
@@ -126,7 +161,7 @@ router.put('/request-status/:request_id', authenticate, async (req, res) => {
 
         // Update the request status
         const updateRequestQuery = `
-            UPDATE Requests 
+            UPDATE Requests
             SET request_status = '${request_status}'
             WHERE request_id = ${request_id}
         `;

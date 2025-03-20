@@ -199,15 +199,14 @@ export const fetchUserProfile = async (userId) => {
     }
   });
 
-  console.log("fetchUserProfile response:", response);
-
   return handleResponse(response);
 };
 
 // UPDATE USER PROFILE
 export const updateUserProfile = async (userId, profileData) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`/api/users/${userId}`, {
+  console.log("updateUserProfile profileData", profileData)
+  const response = await fetch(`http://localhost:5001/auth/${userId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

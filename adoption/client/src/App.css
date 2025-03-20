@@ -279,6 +279,8 @@ section {
   padding-bottom: 30px;
   min-height: 800px;
   background-color: var(--sage);
+  position: static;
+  top: 0;
 }
 
 .donate {

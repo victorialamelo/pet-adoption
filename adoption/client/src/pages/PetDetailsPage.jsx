@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { backendFetchPetDetails } from "../backend";
 import { useAuth } from "../AuthContext";
+import EditPetDetails from "../components/EditPetDetails";
 // import { createAdoptionRequest } from "./adrequestfuncs";
 
 export default function PetDetailsPage() {
@@ -11,6 +12,7 @@ export default function PetDetailsPage() {
   const [petDetails, setPetDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
   useEffect(() => {
     const fetchPetDetails = async () => {
@@ -41,7 +43,7 @@ export default function PetDetailsPage() {
     };
 
     fetchPetDetails();
-  }, [pet_id]);
+  }, [pet_id, updateSuccess]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,6 +102,9 @@ export default function PetDetailsPage() {
               <p className="lead">{petDetails.pet_description}</p>
               <ul className="list-unstyled">
                 <li>
+                  <strong>Animal Type:</strong> {petDetails.animal_type}
+                </li>
+                <li>
                   <strong>Size:</strong> {petDetails.size}
                 </li>
                 <li>
@@ -117,11 +122,11 @@ export default function PetDetailsPage() {
                 </li>
                 <li>
                   <strong>Special Needs:</strong>{" "}
-                  {petDetails.specialNeeds ? "Yes" : "No"}
+                  {petDetails.has_special_needs ? "Yes" : "No"}
                 </li>
                 <li>
                   <strong>Potty Trained:</strong>{" "}
-                  {petDetails.pottyTrained ? "Yes" : "No"}
+                  {petDetails.potty_trained ? "Yes" : "No"}
                 </li>
                 {petDetails.goodWith.length > 0 && (
                   <li>
@@ -129,6 +134,15 @@ export default function PetDetailsPage() {
                   </li>
                 )}
               </ul>
+              {user && user === petDetails.user_id && (
+              <EditPetDetails
+                petId={petDetails.pet_id}
+                onSuccess={(updatedPet) => {
+                  console.log("updated pet", updatedPet);
+                  setUpdateSuccess(prev => !prev);
+                }}
+              />
+              )}
             </div>
             <div className="col-md-6">
               <img
@@ -146,7 +160,6 @@ export default function PetDetailsPage() {
             <div className="row">
               <div className="col-md-6">
                 <h2 className="display-4">ASK ABOUT {petDetails.name}</h2>
-                <p className="lead">{petDetails.pet_description}</p>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <label htmlFor="message" className="form-label">
