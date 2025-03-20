@@ -10,13 +10,16 @@ export default function PostPetPage() {
   const navigate = useNavigate();
   const [photo, setPhoto] = useState(null);
 
+  // REDIRECT IF USER NOT AUTHENTICATED
+  if (!user) {
+    console.error("User not authenticated");
+    navigate("/login");
+    return;
+  }
+
+  // POST A PET
   const createPet = async (event) => {
     event.preventDefault();
-
-    if (!user) {
-      console.error("User not authenticated");
-      return;
-    }
 
     const formData = new FormData(event.target);
 
@@ -47,6 +50,7 @@ export default function PostPetPage() {
     }
   };
 
+  // FILE UPLOAD HANDLER
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setPhoto(file); // store file for submission
@@ -54,15 +58,18 @@ export default function PostPetPage() {
 
   return (
     <>
-      {/*<NavBar />*/}
       <section className="postapet mt-10">
         <div className="container">
+
           <h1 className="display-4 text-center mb-4">
             Post a Pet for Adoption
           </h1>
+
           <form className="form-postpet" onSubmit={createPet}>
             <div className="row">
               <div className="col-md-12">
+
+                {/* Pet Name */}
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">
                     <h4>Pet Name</h4>
@@ -76,6 +83,7 @@ export default function PostPetPage() {
                   />
                 </div>
 
+                {/* Animal Type */}
                 <div className="mb-3">
                   <label htmlFor="animaltype" className="form-label">
                     <h4>Animal Type</h4>
@@ -95,6 +103,7 @@ export default function PostPetPage() {
                   </select>
                 </div>
 
+                {/* Pet Image */}
                 <div className="mb-3">
                   <label htmlFor="image" className="form-label">
                     <h4>Pet Image</h4>
@@ -107,6 +116,8 @@ export default function PostPetPage() {
                     onChange={handleFileChange}
                   />
                 </div>
+
+                {/* Pet Story */}
                 <div className="mb-3">
                   <label htmlFor="story" className="form-label">
                     <h4>Pet's Story</h4>
@@ -121,6 +132,7 @@ export default function PostPetPage() {
                   />
                 </div>
 
+                {/* Weight */}
                 <div className="mb-3">
                   <label htmlFor="weight" className="form-label">
                     <h4>Weight (kg)</h4>
@@ -134,6 +146,7 @@ export default function PostPetPage() {
                   />
                 </div>
 
+                {/* Size */}
                 <div className="mb-3">
                   <label htmlFor="size" className="form-label">
                     <h4>Size</h4>
@@ -155,6 +168,7 @@ export default function PostPetPage() {
                   </select>
                 </div>
 
+                {/* Gender */}
                 <div className="mb-3">
                   <label htmlFor="gender" className="form-label">
                     <h4>Gender</h4>
@@ -174,6 +188,7 @@ export default function PostPetPage() {
                   </select>
                 </div>
 
+                {/* Activity Level */}
                 <div className="mb-3">
                   <label htmlFor="activity" className="form-label">
                     <h4>Activity Level</h4>
@@ -192,7 +207,11 @@ export default function PostPetPage() {
                     <option value="lots of exercise">Lots of Exercise</option>
                   </select>
                 </div>
+
+                {/* Behavior & Care */}
                 <h4 className="mb-3 mt-4">Behavior & Care</h4>
+
+                {/* Neutered */}
                 <div className="mb-3 form-check">
                   <input
                     type="checkbox"
@@ -205,6 +224,7 @@ export default function PostPetPage() {
                   </label>
                 </div>
 
+                {/* Special Needs */}
                 <div className="mb-3 form-check">
                   <input
                     type="checkbox"
@@ -217,6 +237,7 @@ export default function PostPetPage() {
                   </label>
                 </div>
 
+                {/* Potty Trained */}
                 <div className="mb-3 form-check">
                   <input
                     type="checkbox"
@@ -230,7 +251,11 @@ export default function PostPetPage() {
                 </div>
 
                 <hr />
+
+                {/* Good With */}
                 <h4 className="mb-3 mt-4">Good With</h4>
+
+                {/* Good With Cats*/}
                 <div className="mb-3 form-check">
                   <input
                     type="checkbox"
@@ -243,6 +268,7 @@ export default function PostPetPage() {
                   </label>
                 </div>
 
+                {/* Good With Dogs */}
                 <div className="mb-3 form-check">
                   <input
                     type="checkbox"
@@ -255,6 +281,7 @@ export default function PostPetPage() {
                   </label>
                 </div>
 
+                {/* Good With Kids */}
                 <div className="mb-3 form-check">
                   <input
                     type="checkbox"
@@ -267,6 +294,7 @@ export default function PostPetPage() {
                   </label>
                 </div>
 
+                {/* Good With Small Spaces */}
                 <div className="mb-3 form-check">
                   <input
                     type="checkbox"
