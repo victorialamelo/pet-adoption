@@ -145,8 +145,6 @@ nav {
 }
 
 .nav-link:hover {
-  background-color: var(--lemon);
-  border-radius: 8px;
   transform: translateY(-2px);
 }
 
@@ -545,10 +543,20 @@ td {
   border: none;
 }
 
+.adoption-requests .card {
+  background-color: var(--textshadow);
+}
+
 .badge {
   font-size: 1em;
   text-transform: capitalize;
   border-radius: 8px;
+}
+
+.request-details {
+  font-size: 13px;
+  border-top: 1px solid var(--lavender);
+  padding-top: 10px;
 }
 
 /* ----------------------------------------

@@ -107,3 +107,33 @@ export const updateAdoptionRequestStatus = async (request_id, request_status) =>
         return null;
     }
 };
+
+// Delete Adoption Request
+export const deleteAdoptionRequest = async (request_id) => {
+    try {
+        // Change this URL to match your DELETE route pattern
+        const url = `http://localhost:5001/requests/${request_id}`;
+
+        console.log("Attempting to delete request at:", url);
+
+        const response = await fetch(url, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+
+        console.log("Delete response status:", response.status);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to delete adoption request");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error deleting adoption request:", error);
+        throw error;
+    }
+};

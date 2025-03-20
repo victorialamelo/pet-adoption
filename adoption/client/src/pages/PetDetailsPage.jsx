@@ -208,7 +208,7 @@ export default function PetDetailsPage() {
                       id="message"
                       name="message"
                       rows="4"
-                      placeholder="Write your message to the pet's owner... hi.. I want to adopt"
+                      placeholder="Write your message to the pet's owner..."
                       required
                     ></textarea>
                   </div>

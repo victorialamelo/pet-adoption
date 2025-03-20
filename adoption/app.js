@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth', authRouter);
 app.use('/pets', petsRouter);
-app.use('/requests', requestsRouter)
+app.use('/requests', requestsRouter);
 app.use('/users', usersRouter);
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "http://localhost:5001");

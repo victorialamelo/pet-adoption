@@ -172,5 +172,55 @@ router.put('/request-status/:request_id', authenticate, async (req, res) => {
     }
 });
 
+// Delete Adoption Request
+router.delete('/:request_id', authenticate, async (req, res) => {
+    console.log("DELET ROUTE LOADED");
+    try {
+        const { request_id } = req.params;
+        const user_id = req.user.user_id; // Logged-in user
+
+        console.log("Incoming request to delete request_id:", request_id);
+        console.log("Authenticated user_id:", user_id);
+
+        // Check if the request exists and determine authorization
+        const checkRequestQuery = `
+            SELECT r.requester_id, p.user_id AS pet_owner_id
+            FROM Requests r
+            JOIN Pets p ON r.pet_id = p.pet_id
+            WHERE r.request_id = ${request_id}
+        `;
+        console.log("checkRequestQuery", checkRequestQuery);
+
+        const requestResult = await db(checkRequestQuery);
+        console.log("requestResult", requestResult.data);
+        if (!requestResult || requestResult.length === 0) {
+            return res.status(404).json({ message: 'Request not found' });
+        }
+
+        const { requester_id, pet_owner_id } = requestResult.data[0];
+
+        // Only allow the requester or pet owner to delete the request
+        if (user_id !== requester_id && user_id !== pet_owner_id) {
+            console.log("Unauthorized delete attempt. User:", user_id, "Requester:", requester_id, "Owner:", pet_owner_id);
+            return res.status(403).json({ message: 'Unauthorized to delete this request' });
+        }
+
+        // Delete the request
+        const deleteRequestQuery = `
+            DELETE FROM Requests
+            WHERE request_id = ${request_id}
+        `;
+
+        await db(deleteRequestQuery);
+
+        console.log("Adoption request deleted successfully:", request_id);
+        res.status(200).json({ message: 'Adoption request deleted successfully' });
+
+    } catch (error) {
+        console.error("Database Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 
 module.exports = router;
