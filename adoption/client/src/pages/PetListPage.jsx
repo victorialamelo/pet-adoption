@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import "../App.css";
+import { useAuth } from "../AuthContext";
 
 export default function PetListPage() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     animal_type: "",
     size: "",
     gender: "",
     activity_level: "",
-    neutered: 0, // Change initial state to 0 for checkboxes
+    neutered: 0,
     has_special_needs: 0,
     potty_trained: 0,
     good_with_cats: 0,
@@ -38,7 +41,7 @@ export default function PetListPage() {
         );
         if (!response.ok) throw new Error("Failed to fetch pets");
         const data = await response.json();
-        console.log(data);
+
         // Check if the response data is an array
         if (Array.isArray(data)) {
           setPets(data); // Set pets if the data is an array
@@ -59,6 +62,47 @@ export default function PetListPage() {
       ...prevFilters,
       [name]: type === "checkbox" ? (checked ? 1 : 0) : e.target.value, // set 1 for checked, 0 for unchecked
     }));
+  };
+
+  const handleSaveSearch = async () => {
+    // Redirect to login if user is not authenticated
+    if (!user) {
+      navigate("/login", { state: { from: "/petlist" } });
+      return;
+    }
+
+    const queryParams = new URLSearchParams(
+      Object.entries(filters).reduce((acc, [key, value]) => {
+        if (value !== "" && value !== 0) acc[key] = value;
+        return acc;
+      }, {})
+    ).toString();
+
+    const searchName = prompt("Enter a name for this search:");
+
+    if (!searchName) return;
+
+    try {
+      // Make sure to include authentication token in headers if required
+      const response = await fetch("http://localhost:5001/savedSearches", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`, // If you're using JWT tokens
+        },
+        body: JSON.stringify({
+          search_name: searchName,
+          search_query: queryParams,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to save search");
+
+      alert("Search saved successfully!");
+    } catch (error) {
+      console.error("Error saving search:", error);
+      alert("Failed to save search. Please try again.");
+    }
   };
 
   return (
@@ -196,6 +240,29 @@ export default function PetListPage() {
             </div>
           </form>
         </div>
+        {user ? (
+          <button
+            onClick={handleSaveSearch}
+            style={{
+              padding: "10px 15px",
+              fontSize: "16px",
+              backgroundColor: "#2a2a6a",
+              color: "white",
+              borderRadius: "5px",
+              cursor: "pointer",
+              paddingTop: "10px",
+            }}
+          >
+            Save Search to Dashboard
+          </button>
+        ) : (
+          <p className="mt-3 text-muted">
+            <Link to="/login" style={{ textDecoration: "underline" }}>
+              Log in
+            </Link>{" "}
+            to save your search criteria
+          </p>
+        )}
       </section>
 
       {/* Pet Grid */}

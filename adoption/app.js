@@ -11,9 +11,15 @@ var authRouter = require('./routes/auth');
 var petsRouter = require('./routes/pets');
 var requestsRouter = require('./routes/requests');
 var authenticate = require('./routes/middleware/authentication');
+var savedSearchesRouter = require('./routes/savedSearches');
+
 
 var app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', //  frontend origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,12 +29,13 @@ app.use('/auth', authRouter);
 app.use('/pets', petsRouter);
 app.use('/requests', requestsRouter)
 app.use('/users', usersRouter);
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5001");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
-});
+app.use('/savedSearches', savedSearchesRouter);
+// app.use((req, res, next) => {
+//     res.setHeader("Access-Control-Allow-Origin", "http://localhost:5001");
+//     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     next();
+// });
 
 // app.use('/auth', authenticate, authRouter);
 // app.use('/pets', authenticate, petsRouter);

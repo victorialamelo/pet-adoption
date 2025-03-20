@@ -1,8 +1,9 @@
 -- Drop existing tables if they exist
-DROP TABLE IF EXISTS `Users`,
-`Pets`,
+DROP TABLE IF EXISTS `Posts`,
 `Requests`,
-`Posts`;
+`SavedSearches`,
+`Pets`,
+`Users`;
 -- Create Users table
 CREATE TABLE `Users` (
     `user_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -40,6 +41,15 @@ CREATE TABLE `Pets` (
 -- Add foreign key constraint for Pets table
 ALTER TABLE `Pets`
 ADD CONSTRAINT `pets_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE;
+-- Create SavedSearches table
+CREATE TABLE `SavedSearches` (
+    `search_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `search_name` VARCHAR(100) NOT NULL,
+    `search_query` TEXT NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT `saved_searches_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
+);
 -- Create Requests table
 CREATE TABLE `Requests` (
     `request_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
