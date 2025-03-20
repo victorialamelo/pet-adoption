@@ -100,6 +100,11 @@ label, select, #image {
   color: var(--lavender);
 }
 
+.nav-item  .nav-link{
+  font-size: 16px;
+  display: block;
+}
+
 /* ----------------------------------------
    NAVIGATION
 ---------------------------------------- */
@@ -355,7 +360,6 @@ section {
 }
 
 input:focus {
-  border: 4px solid var(--peach) !important;
   box-shadow: none !important;
 }
 
@@ -368,7 +372,6 @@ input:focus {
   padding-left: 10px;
 }
 
-
 .form-applicationstatus {
   padding: 5px;
   background-color: var(--latte);
@@ -380,6 +383,21 @@ input:focus {
   color: var(--lavender);
 }
 
+.form-check-input {
+  margin: 12px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--lavender)
+}
+
+.form-check-input:focus {
+  border: 1px solid var(--lavender)
+}
+.form-check-input:checked {
+  background-color: var(--lavender);
+  border: none;
+}
+
 /* ----------------------------------------
    BUTTON STYLES
 ---------------------------------------- */
@@ -387,7 +405,7 @@ input:focus {
   background-color: var(--skyblue);
   border: none;
   font-family: "Shrikhand", serif;
-  font-size: 1.3em;
+  font-size: 20px;
   color: white;
   box-shadow: none;
 }
@@ -400,11 +418,11 @@ input:focus {
   background-color: var(--skyblue);
   border: none;
   font-family: "Shrikhand", serif;
-  font-size: 1.3em;
   color: white;
   box-shadow: none;
 }
 
+.btn:hover,
 .btn-primary:hover,
 .btn-outline-primary:hover,
 .btn-outline-primary:focus,
@@ -415,12 +433,23 @@ input:focus {
   box-shadow: none;
 }
 
+.btn-outline-danger {
+  background-color: var(--cherrypink);
+  border: none;
+  font-family: "Shrikhand", serif;
+  font-size: 20px;
+  color: white;
+  box-shadow: none;
+  width: 150px;
+}
+
+.btn-outline-danger:hover {
+  background-color: #7b2633;
+}
 .dashboard-toggle .btn-primary,
 .dashboard-toggle .btn-outline-primary  {
   margin: 20px;
 }
-
-
 
 
 /* ----------------------------------------
@@ -491,7 +520,6 @@ td {
   object-position: center;
 }
 
-/* Pet details page main image */
 .pet-detail-image {
   width: 100%;
   height: 600px;
@@ -501,10 +529,23 @@ td {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.shelter-dashboard img {
+  width: 80%;
+}
+
+/* ----------------------------------------
+   CARD & ACCORDIAN STYLES
+---------------------------------------- */
+
+.card {
+  border: none;
+}
+
+
 /* ----------------------------------------
    LIST GROUP STYLES
 ---------------------------------------- */
-.list-group-item {
+.list-group-item, .find-pets {
   border-radius: 8px;
   font-size: 2em;
   margin-top: 20px;
@@ -513,7 +554,7 @@ td {
   color: var(--lavender)
 }
 
-.list-group-item:hover {
+.list-group-item:hover, .find-pets:hover {
   background-color: var(--latte);
   border: none !important;
   outline: none;
@@ -521,6 +562,9 @@ td {
   color: var(--lavender)
 }
 
+.find-pets.active,
+.find-pets:focus,
+.find-pets:focus-visible,
 .list-group-item.active,
 .list-group-item:focus
 .list-group-item:focus-visible {
@@ -529,6 +573,11 @@ td {
   outline: none;
   margin-top: 20px !important;
   color: white
+}
+
+.find-pets {
+  background-color: white;
+  text-align: left;
 }
 
 /* ----------------------------------------

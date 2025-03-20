@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Card, Button, Row, Col, Form } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 import { fetchUserProfile } from "../backend";
-import { getMyAdoptionRequests } from "../pages/adrequestfuncs";
+import { getMyAdoptionRequests } from "../helpers/adrequestfuncs";
+import { useNavigate } from "react-router-dom";
 import ProfileSection from "./ProfileSection";
 
 export default function PetAdopterDashboard() {
@@ -18,6 +19,7 @@ export default function PetAdopterDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
+  const navigate = useNavigate();
 
   // Fetch user profile data
   useEffect(() => {
@@ -38,8 +40,8 @@ export default function PetAdopterDashboard() {
         // - Saved pet searches
         // For now, we'll use dummy data
         setSavedSearches([
-          { id: 1, name: "Small Dogs Near Me", criteria: "Dogs, Small, <10 miles" },
-          { id: 2, name: "Senior Cats", criteria: "Cats, 7+ years" }
+          { id: 1, name: "Small Dogs Near Me", criteria: "Dogs, Small" },
+          { id: 2, name: "Senior Cats", criteria: "Cats, Medium" }
         ]);
 
 
@@ -107,10 +109,12 @@ export default function PetAdopterDashboard() {
               >
                 Requests
               </button>
-            </div>
-            <Button variant="primary" className="w-100 mt-4" href="/petlist">
+              <button className="list-group-item list-group-item-action" onClick={() => navigate("/petlist")}>
               Find Pets
-            </Button>
+              </button>
+
+            </div>
+
           </div>
         </Col>
 
@@ -135,7 +139,7 @@ export default function PetAdopterDashboard() {
                       <Card.Title>{search.name}</Card.Title>
                       <Card.Text>{search.criteria}</Card.Text>
                       <div className="d-flex gap-2">
-                        <Button variant="outline-primary" size="sm" href="/search">View Results</Button>
+                        <Button variant="outline-primary" size="sm" href="/petlist">View Results</Button>
                         <Button variant="outline-danger" size="sm">Delete</Button>
                       </div>
                     </Card.Body>
@@ -167,7 +171,13 @@ export default function PetAdopterDashboard() {
                               <span className={`badge ${app.status === 'Approved' ? 'bg-success' : app.status === 'Rejected' ? 'bg-danger' : 'bg-warning'}`}>
                                 {app.request_status}
                               </span>
-                              <small className="text-muted ms-2">Applied: {app.request_date}</small>
+                              <small className="text-muted ms-2">
+                                  Applied: {new Date(app.request_date).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric'
+                                  })}
+                                </small>
                             </div>
                             <div>
                               <Button variant="outline-primary" size="sm" className="me-2">Message</Button>

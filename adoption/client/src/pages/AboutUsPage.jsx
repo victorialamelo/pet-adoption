@@ -1,11 +1,9 @@
 import React from "react";
-//import NavBar from "../components/NavBar";
 import "../App.css";
 
 function AboutUsPage() {
   return (
     <>
-      {/*<NavBar />*/}
       <section className="py-5 w-100 introduction">
         <div className="container-fluid">
           <div className="row align-items-center home-content">
@@ -45,7 +43,7 @@ function AboutUsPage() {
               alt="Team Member 1"
               style={{ width: "300px", height: "auto", borderRadius: "50%" }}
             />
-            <h3>Ashlei Temeña</h3>
+            <h3>Ash Temeña</h3>
             <p>Founder</p>
           </div>
           <div className="col-md-4 mb-5">
