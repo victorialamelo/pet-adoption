@@ -206,13 +206,13 @@ export const fetchUserProfile = async (userId) => {
 export const updateUserProfile = async (userId, profileData) => {
   const token = localStorage.getItem("token");
   console.log("updateUserProfile profileData", profileData)
-  const response = await fetch(`http://localhost:5001/users/${userId}`, {
+  const response = await fetch(`http://localhost:5001/auth/${userId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       "Authorization": `Bearer ${token}`
     },
-    body: profileData
+    body: JSON.stringify(profileData)
   });
   return handleResponse(response);
 };

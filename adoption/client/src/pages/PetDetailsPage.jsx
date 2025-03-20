@@ -134,14 +134,6 @@ export default function PetDetailsPage() {
                   </li>
                 )}
               </ul>
-
-            </div>
-            <div className="col-md-6">
-              <img
-                src={petDetails.img_url || "https://via.placeholder.com/150"}
-                alt={petDetails.name}
-                className="img-fluid pet-detail-image"
-              />
               {user && user === petDetails.user_id && (
               <EditPetDetails
                 petId={petDetails.pet_id}
@@ -150,7 +142,14 @@ export default function PetDetailsPage() {
                   setUpdateSuccess(prev => !prev);
                 }}
               />
-            )}
+              )}
+            </div>
+            <div className="col-md-6">
+              <img
+                src={petDetails.img_url || "https://via.placeholder.com/150"}
+                alt={petDetails.name}
+                className="img-fluid pet-detail-image"
+              />
             </div>
           </div>
         </div>

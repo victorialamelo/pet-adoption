@@ -24,18 +24,16 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
         updateData = {
           entity_name: formData.name,
           entity_website: formData.website,
-          entity_registration_id: formData.registrationID,
-          about: formData.about
+          entity_registration_id: formData.registrationID
         };
       } else if (isAdopter) {
         updateData = {
           user_name: formData.name,
           email: formData.email,
-          phone: formData.phone,
-          about: formData.about
+          phone: formData.phone
         };
       }
-
+      console.log("updateUserProfile userId, updateData", userId, updateData)
       await updateUserProfile(userId, updateData);
 
       // Update local state with the form data
@@ -119,7 +117,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
                 <Form.Control
                   type="text"
                   name="name"
-                  value={formData.name}
+                  value={formData.user_name}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -173,11 +171,6 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
 
                 <h5>About Me</h5>
                 <p>{profile.about || "No information provided."}</p>
-              </div>
-
-              <div className="alert alert-info">
-                <i className="bi bi-info-circle me-2"></i>
-                A complete profile increases your chances of adoption approval.
               </div>
 
               <Button variant="primary" onClick={() => setEditing(true)}>
