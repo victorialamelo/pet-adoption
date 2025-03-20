@@ -164,13 +164,6 @@ export default function AdoptionRequests({ petId }) {
                   <option value="Under Review">Under Review</option>
                   <option value="Approved">Approved</option>
                 </select>
-                <button
-                type="button"
-                className="btn btn-sm btn-outline-secondary"
-                onClick={() => handleDeleteRequest(request.request_id)}
-                >
-                Delete
-                </button>
                 </p>
                 <div className="request-details d-flex justify-content-between align-items-center">
                   <p>
@@ -183,6 +176,13 @@ export default function AdoptionRequests({ petId }) {
                   </p>
                   <p><small><strong>Email: </strong>{" "}{requester.email}</small></p>
                   <p><small><strong>Phone: </strong>{" "}{requester.phone}</small></p>
+                  <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => handleDeleteRequest(request.request_id)}
+                >
+                Delete
+                </button>
                 </div>
               </div>
             )}
