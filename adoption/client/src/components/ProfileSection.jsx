@@ -60,7 +60,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
               <input
                 type="text"
                 name="name"
-                value={formData.name === 'null' ? "" : formData.user_name }
+                placeholder={formData.name === 'null' ? formData.user_name : formData.name }
                 onChange={handleChange}
                 className="form-control"
               />
@@ -68,7 +68,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
               <input
                 type="url"
                 name="website"
-                value={formData.website === 'null' ? "" : formData.website}
+                placeholder={formData.website === 'null' ? "" : formData.website}
                 onChange={handleChange}
                 className="form-control"
               />
@@ -76,7 +76,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
               <input
                 type="text"
                 name="registrationID"
-                value={formData.registrationID === 'null' ? "" : formData.registrationID}
+                placeholder={formData.registrationID === 'null' ? "" : formData.registrationID}
                 onChange={handleChange}
                 className="form-control"
               />

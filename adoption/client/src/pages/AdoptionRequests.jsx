@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
-import { getAdoptionRequests, updateAdoptionRequestStatus } from "../helpers/adrequestfuncs";
+import { fetchUserProfile } from "../backend";
+import { getAdoptionRequests, updateAdoptionRequestStatus, deleteAdoptionRequest } from "../helpers/adrequestfuncs";
 
 export default function AdoptionRequests({ petId }) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [requester, setRequester] = useState([]);
   const [requests, setRequests] = useState([]);
   const [expandedRequest, setExpandedRequest] = useState(null);
   const [error, setError] = useState(null);
   const [loadingRequestId, setLoadingRequestId] = useState(null);
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
     if (!user) {
@@ -25,6 +28,7 @@ export default function AdoptionRequests({ petId }) {
 
         const requestsData = response.data || response || [];
         setRequests(requestsData);
+
         setError(null);
       } catch (err) {
         console.error("Error fetching adoption requests:", err);
@@ -33,10 +37,29 @@ export default function AdoptionRequests({ petId }) {
     };
 
     loadRequests();
+
   }, [user, petId, navigate]);
 
+  const loadRequesterInfo = async (requesterID) => {
+    try {
+      setLoading(true);
+      const response = await fetchUserProfile(requesterID);
+      const requesterData = response;
+      console.log("requesterData", requesterData);
+      setRequester(requesterData);
+    } catch (err) {
+      console.error("Error fetching adopter profile:", err);
+      setError("Failed to load profile data. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const toggleExpand = (requestId) => {
-    setExpandedRequest((prev) => (prev === requestId ? null : requestId));
+    setExpandedRequest((prev) => (prev === requestId.request_id ? null : requestId.request_id));
+    console.log("requestId", requestId.request_id)
+    console.log("requestId", requestId.requester_id)
+    loadRequesterInfo(requestId.requester_id);
   };
 
   const handleStatusChange = async (requestId, newStatus) => {
@@ -63,8 +86,39 @@ export default function AdoptionRequests({ petId }) {
     }
   };
 
+  const handleDeleteRequest = async (requestId) => {
+    console.log("handleDeleteRequest", requestId);
+    try {
+      await deleteAdoptionRequest(requestId);
+
+      // Option 1: Update state directly (more efficient)
+      setRequests(prevRequests => prevRequests.filter(req => req.request_id !== requestId));
+
+      // Option 2: Reload all requests from server
+      // This is useful if you need to ensure you have the latest data
+      if (petId) {
+        const response = await getAdoptionRequests(petId);
+        const requestsData = response.data || response || [];
+        setRequests(requestsData);
+      }
+
+      // Reset expanded state if the deleted request was expanded
+      if (expandedRequest === requestId) {
+        setExpandedRequest(null);
+      }
+
+    } catch (error) {
+      console.error("Failed to delete request:", error.message);
+      alert("Failed to delete request: " + error.message);
+    }
+  };
+
   if (!petId) {
     return null; // Don't render anything if there's no petId
+  }
+
+  if (loading) {
+    return <div> </div>
   }
 
   return (
@@ -77,8 +131,29 @@ export default function AdoptionRequests({ petId }) {
         <div key={request.request_id} className="card mb-3">
           <div className="card-body">
             <div className="d-flex justify-content-between align-items-center">
+
               <span>
-                <strong>{request.requester_name}</strong> - {" "}
+                <strong>{request.requester_name}</strong>{" "}
+                {loadingRequestId === request.request_id &&
+                  <small className="ms-2 text-muted">Updating...</small>
+                }
+              </span>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => toggleExpand(request)}
+              >
+                {expandedRequest === request.request_id ? "▲" : "▼ Show"}
+              </button>
+            </div>
+
+            {expandedRequest === request.request_id && (
+              <div className="mt-3">
+
+
+                <small><p><strong>Message:</strong></p></small>
+                <p>{request.request_message || "No message provided"}</p>
+                <p><strong>Request Status:{" "}</strong>
                 <select
                   value={request.request_status}
                   onChange={(e) => handleStatusChange(request.request_id, e.target.value)}
@@ -89,31 +164,26 @@ export default function AdoptionRequests({ petId }) {
                   <option value="Under Review">Under Review</option>
                   <option value="Approved">Approved</option>
                 </select>
-                {loadingRequestId === request.request_id &&
-                  <small className="ms-2 text-muted">Updating...</small>
-                }
-              </span>
-              <button
+                </p>
+                <div className="request-details d-flex justify-content-between align-items-center">
+                  <p>
+                  <small>
+                    <strong>Date: </strong>{" "}
+                    {request.request_date
+                      ? new Date(request.request_date).toLocaleDateString()
+                      : "N/A"}
+                  </small>
+                  </p>
+                  <p><small><strong>Email: </strong>{" "}{requester.email}</small></p>
+                  <p><small><strong>Phone: </strong>{" "}{requester.phone}</small></p>
+                  <button
                 type="button"
                 className="btn btn-sm btn-outline-secondary"
-                onClick={() => toggleExpand(request.request_id)}
-              >
-                {expandedRequest === request.request_id ? "▲ Hide" : "▼ Show"}
-              </button>
-            </div>
-
-            {expandedRequest === request.request_id && (
-              <div className="mt-3">
-                <p>
-                  <strong>Message:</strong> {request.request_message || "No message provided"}
-                </p>
-                <p>
-                  <strong>Date:</strong>{" "}
-                  {request.request_date
-                    ? new Date(request.request_date).toLocaleDateString()
-                    : "N/A"}
-                </p>
-
+                onClick={() => handleDeleteRequest(request.request_id)}
+                >
+                Delete
+                </button>
+                </div>
               </div>
             )}
           </div>

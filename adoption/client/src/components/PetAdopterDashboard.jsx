@@ -3,7 +3,7 @@ import { Card, Button, Row, Col, Form, Modal } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 import { fetchUserProfile } from "../backend";
 import { getMyAdoptionRequests } from "../helpers/adrequestfuncs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import ProfileSection from "./ProfileSection";
 
 export default function PetAdopterDashboard() {
@@ -237,11 +237,13 @@ export default function PetAdopterDashboard() {
                     <Card.Body>
                       <Row>
                         <Col md={2}>
+                          <Link className="link" to={`/petdetails/${app.pet_id}`}>
                           <img src={app.pet_image} alt={app.pet_name} className="img-fluid rounded" />
+                        </Link>
                         </Col>
                         <Col md={10}>
                           <Card.Title>{app.pet_name}</Card.Title>
-                          <Card.Subtitle className="mb-2">From: {app.owner_name}</Card.Subtitle>
+                          <Card.Subtitle className="mb-2">Owner: {app.owner_name}</Card.Subtitle>
                           <Card.Subtitle className="mb-2">Request Message: {app.request_message}</Card.Subtitle>
                           <div className="d-flex justify-content-between align-items-center mt-3">
                             <div>

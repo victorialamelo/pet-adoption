@@ -13,10 +13,6 @@ export const AuthProvider = ({ children }) => {
       const storedToken = localStorage.getItem("token");
       const storedUser = localStorage.getItem("user");
 
-      console.log("🔍 Checking localStorage on first load:");
-      console.log("Token from localStorage:", storedToken);
-      console.log("User from localStorage (raw):", storedUser); // Log before parsing
-
       if (storedToken) setToken(storedToken);
 
       if (storedUser && storedUser !== "undefined") {
