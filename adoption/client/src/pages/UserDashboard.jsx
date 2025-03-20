@@ -27,19 +27,23 @@ export default function UserDashboard() {
       <NavBar />
 
       {/* Dashboard View Toggle */}
+
       <div className="dashboard-view">
+      {role === "adopting" ? (
           <button
             className={`btn-primary ${activeView === "adopting" ? "btn-primary" : "btn-outline-primary"}`}
             onClick={() => setActiveView("adopting")}
           >
             Adopter Dashboard
           </button>
+      ) : (
           <button
             className={`btn-primary ${activeView === "post" ? "btn-primary" : "btn-outline-primary"}`}
             onClick={() => setActiveView("post")}
           >
             Shelter Dashboard
           </button>
+      )}
       </div>
 
       {/* Conditional rendering based on active view */}

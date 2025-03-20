@@ -60,6 +60,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
   };
 
   if (loading) return <div>Loading...</div>;

@@ -6,7 +6,7 @@ import { updateUserProfile } from "../backend";
 export default function ProfileSection({ profile, setProfile, isPoster = false, isAdopter = false }) {
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState(profile);
-
+  console.log("profile", profile);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -48,9 +48,8 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
   // Render shelter/organization profile
   if (isPoster) {
     return (
-      <div className="row">
+      <div className="row shelter-dashboard">
         <div className="col-md-6">
-          <h1>Welcome {profile.name}</h1>
           <img src="../src/assets/dogsvg.svg" width={500} alt="Dog Logo" />
         </div>
         <div className="col-md-6">
@@ -60,7 +59,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
               <input
                 type="text"
                 name="name"
-                value={formData.name}
+                value={formData.name === '' ? "Enter Organization name" : formData.name }
                 onChange={handleChange}
                 className="form-control"
               />
@@ -68,7 +67,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
               <input
                 type="url"
                 name="website"
-                value={formData.website}
+                value={formData.website === '' ? "Enter Website" : formData.website}
                 onChange={handleChange}
                 className="form-control"
               />
@@ -76,7 +75,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
               <input
                 type="text"
                 name="registrationID"
-                value={formData.registrationID}
+                value={formData.registrationID === '' ? "Enter Registration ID" : formData.registrationID}
                 onChange={handleChange}
                 className="form-control"
               />
@@ -85,15 +84,14 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
             </form>
           ) : (
             <>
-              <h1>{profile.name}</h1>
-              {profile.website && (
-                <a href={profile.website} target="_blank" rel="noopener noreferrer">{profile.name} website</a>
+              <h1>Welcome {profile.name === '' ? profile.user_name : profile.name}</h1>
+              {profile.website !== '' || profile.website !== 'null' && (
+                <p>Website: <a href={profile.website} target="_blank" rel="noopener noreferrer">{profile.website}</a></p>
               )}
-              {profile.registrationID && (
+              {profile.registrationID !== '' || profile.registrationID !== 'null' && (
                 <p>Organization Registration ID: {profile.registrationID}</p>
               )}
-              <h2>About Us</h2>
-              <p className="mb-4">{profile.about || "No information provided."}</p>
+
               <Link to="/postpet" className="btn btn-primary w-100 mt-3">Post a Pet</Link>
               <button onClick={() => setEditing(true)} className="btn btn-primary w-100 mt-3">Edit Profile</button>
             </>
