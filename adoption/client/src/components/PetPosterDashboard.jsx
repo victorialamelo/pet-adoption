@@ -5,7 +5,7 @@ import { useAuth } from "../AuthContext";
 import { fetchUserProfile, backendEditPet } from "../backend";
 import AdoptionRequests from "../pages/AdoptionRequests";
 import ProfileSection from "./ProfileSection";
-import { getUserPostedPets } from "../pages/getpetbyid";
+import { getUserPostedPets } from "../helpers/getpetbyid";
 
 export default function PetPosterDashboard() {
   const [editingPetId, setEditingPetId] = useState(null);

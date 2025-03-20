@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, Button, Row, Col, Form } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 import { fetchUserProfile } from "../backend";
-import { getMyAdoptionRequests } from "../pages/adrequestfuncs";
+import { getMyAdoptionRequests } from "../helpers/adrequestfuncs";
 import ProfileSection from "./ProfileSection";
 
 export default function PetAdopterDashboard() {

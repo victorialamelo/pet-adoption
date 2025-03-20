@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
-import { getAdoptionRequests, updateAdoptionRequestStatus } from "./adrequestfuncs";
+import { getAdoptionRequests, updateAdoptionRequestStatus } from "../helpers/adrequestfuncs";
 
 export default function AdoptionRequests({ petId }) {
   const { user } = useAuth();
@@ -24,7 +24,6 @@ export default function AdoptionRequests({ petId }) {
         const response = await getAdoptionRequests(petId);
 
         const requestsData = response.data || response || [];
-        console.log("requestsData", requestsData);
         setRequests(requestsData);
         setError(null);
       } catch (err) {
