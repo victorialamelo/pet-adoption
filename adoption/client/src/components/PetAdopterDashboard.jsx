@@ -18,7 +18,7 @@ export default function PetAdopterDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
-
+  
   // Fetch user profile data
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -161,8 +161,8 @@ export default function PetAdopterDashboard() {
                         </Col>
                         <Col md={10}>
                           <Card.Title>{app.pet_name}</Card.Title>
-                          <Card.Subtitle className="mb-2 text-muted">From: {app.owner_name}</Card.Subtitle>
-                          <Card.Subtitle className="mb-2 text-muted">Request Message: {app.request_message}</Card.Subtitle>
+                          <Card.Subtitle className="mb-2">From: {app.owner_name}</Card.Subtitle>
+                          <Card.Subtitle className="mb-2">Request Message: {app.request_message}</Card.Subtitle>
                           <div className="d-flex justify-content-between align-items-center mt-3">
                             <div>
                               <span className={`badge ${app.status === 'Approved' ? 'bg-success' : app.status === 'Rejected' ? 'bg-danger' : 'bg-warning'}`}>

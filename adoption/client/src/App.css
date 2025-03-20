@@ -122,6 +122,7 @@ nav {
   height: 100px;
   background-color: var(--lemon);
   padding: 0 20px;
+  border-bottom: 10px solid white;
 }
 
 .navbar-brand {
@@ -166,6 +167,10 @@ nav {
 /* ----------------------------------------
    HEADER & BANNER STYLES
 ---------------------------------------- */
+header {
+  border-bottom: 10px solid white;
+}
+
 header img {
   position: absolute;
   top: 0;
@@ -268,6 +273,7 @@ section {
   background-color: var(--celeste);
   padding: 50px;
   min-height: 600px;
+  border-bottom: 10px solid white;
 }
 
 .home-content {
@@ -452,11 +458,27 @@ td {
   border-radius: 8px;
   font-size: 2em;
   margin-top: 20px;
+  border: none !important;
+  outline: none;
+  color: var(--lavender)
 }
 
-.list-group-item.active {
+.list-group-item:hover {
+  background-color: var(--latte);
+  border: none !important;
+  outline: none;
+  margin-top: 20px;
+  color: var(--lavender)
+}
+
+.list-group-item.active,
+.list-group-item:focus
+.list-group-item:focus-visible {
   background-color: var(--cherrypink);
-  border: none;
+  border: none !important;
+  outline: none;
+  margin-top: 20px;
+  color: white
 }
 
 /* ----------------------------------------
