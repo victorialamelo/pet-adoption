@@ -1,17 +1,17 @@
 import React from "react";
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import "../App.css";
 
 function FaqsPage() {
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
 
       <section className="container-fluid py-5">
         <div className="row home-content">
           <div className="col-md-12">
             <h1 className="header">FAQ - Frequently Asked Questions</h1>
-            <h2 className="mb-4">1. What is Peluditos?</h2>
+            <h2 className="mb-4 mt-5">1. What is Peluditos?</h2>
             <p>
               Peluditos is a platform dedicated to connecting people looking to
               adopt pets with those wishing to rehome them. We bring together

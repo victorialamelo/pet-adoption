@@ -6,12 +6,11 @@ import { fetchUserProfile, backendEditPet } from "../backend";
 import AdoptionRequests from "../pages/AdoptionRequests";
 import ProfileSection from "./ProfileSection";
 import { getUserPostedPets } from "../pages/getpetbyid";
-import EditPetDetails from "./EditPetDetails";
 
 export default function PetPosterDashboard() {
   const [editingPetId, setEditingPetId] = useState(null);
   const [editFormData, setEditFormData] = useState({});
-  const { user } = useAuth();
+  const { user, setRole } = useAuth();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -30,6 +29,7 @@ export default function PetPosterDashboard() {
         setLoading(true);
         const response = await fetchUserProfile(user);
         const userData = response;
+        console.log("userData", userData);
         setProfile({
           user_name: userData.user_name || '',
           name: userData.entity_name || '',
@@ -54,7 +54,7 @@ export default function PetPosterDashboard() {
       }
     };
     loadData();
-  }, [user, updateSuccess]);
+  }, [user, updateSuccess, setRole]);
 
   // Handle pet edit form
   const handleEditClick = (pet) => {
@@ -153,7 +153,6 @@ export default function PetPosterDashboard() {
     return <div className="alert alert-danger">{error}</div>;
   }
 
-  console.log("pets", pets)
   return (
     <>
       <section className="dashboard-container row">
@@ -164,7 +163,7 @@ export default function PetPosterDashboard() {
         />
       </section>
       {pets.length && (
-      <section className="dashboard-container row">
+      <section className="dashboard-container posted-peluditos row">
         <h1>Posted Peluditos</h1>
         <div className="space-y-4">
           {!pets || pets.length === 0 ? (
@@ -193,8 +192,7 @@ export default function PetPosterDashboard() {
                           <p className="text-muted">
                             Animal: {pet.animal_type} | Size: {pet.size} | Weight: {pet.weight} kg
                           </p>
-                        </div>
-                        <Form.Select
+                          <Form.Select
                           value={pet.status || "Available"}
                           onChange={(e) => handlePetStatusChange(pet.id, e.target.value)}
                           style={{ width: '130px' }}
@@ -203,6 +201,8 @@ export default function PetPosterDashboard() {
                           <option value="Adopted">Adopted</option>
                           <option value="Archived">Archived</option>
                         </Form.Select>
+                        </div>
+
                       </div>
                     </Accordion.Header>
                     <Accordion.Body>
@@ -440,7 +440,7 @@ export default function PetPosterDashboard() {
                           <Button
                             variant="secondary"
                             onClick={() => setEditingPetId(null)}
-                            className="mt-2 ms-2"
+                            className="mt-2 ms-2 btn-primary"
                           >
                             Cancel
                           </Button>

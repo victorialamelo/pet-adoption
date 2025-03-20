@@ -88,7 +88,6 @@ export default function PetAdopterDashboard() {
       <Row>
         <Col md={3} className="mb-4">
           <div className="sticky-top pt-3">
-            <h4>{profile.name}</h4>
             <div className="list-group mt-4">
               <button
                 className={`list-group-item list-group-item-action ${activeTab === "profile" ? "active" : ""}`}
@@ -161,8 +160,8 @@ export default function PetAdopterDashboard() {
                         </Col>
                         <Col md={10}>
                           <Card.Title>{app.pet_name}</Card.Title>
-                          <Card.Subtitle className="mb-2 text-muted">From: {app.owner_name}</Card.Subtitle>
-                          <Card.Subtitle className="mb-2 text-muted">Request Message: {app.request_message}</Card.Subtitle>
+                          <Card.Subtitle className="mb-2">From: {app.owner_name}</Card.Subtitle>
+                          <Card.Subtitle className="mb-2">Request Message: {app.request_message}</Card.Subtitle>
                           <div className="d-flex justify-content-between align-items-center mt-3">
                             <div>
                               <span className={`badge ${app.status === 'Approved' ? 'bg-success' : app.status === 'Rejected' ? 'bg-danger' : 'bg-warning'}`}>

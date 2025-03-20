@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom"; // Update import for Link
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import "../App.css";
 
 function HomePage() {
@@ -37,7 +37,7 @@ function HomePage() {
 
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
 
       {/* Intro Section */}
       <section className="py-5 w-100 banner">
@@ -75,8 +75,8 @@ function HomePage() {
             />
             <h3 className="mt-3">Paquita</h3>
             <p>
-              Looking for cuddles and adventure? Fred’s got you covered! Give
-              this little guy a warm hogar and a lifetime of belly rubs.
+              Looking for cuddles and adventure? Paquita’s got you covered! Give
+              this little girl a warm hogar and a lifetime of belly rubs.
             </p>
           </div>
           <div className="col-md-4 mb-5 text-center">

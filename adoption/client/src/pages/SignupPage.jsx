@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import { backendCreateUser } from "../backend";
 import { useAuth } from "../AuthContext";
 
@@ -15,6 +15,7 @@ export default function SignupPage() {
     try {
       setLoading(true);
       const newUser = {
+        usertype: role,
         user_name: formData.get("name"),
         date_of_birth: formData.get("date"),
         city: formData.get("city"),
@@ -63,7 +64,7 @@ export default function SignupPage() {
 
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
       <div className="container my-5">
         <div className="row justify-content-center">
           <div className="col-md-6">

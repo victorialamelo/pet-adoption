@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS `Users`,
 CREATE TABLE `Users` (
     `user_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_name` VARCHAR(255) NOT NULL,
+    `usertype` VARCHAR(255) NOT NULL,
     `zipcode` VARCHAR(255) NOT NULL,
     `city` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL UNIQUE,
@@ -34,7 +35,7 @@ CREATE TABLE `Pets` (
     `has_special_needs` BOOLEAN NOT NULL,
     `potty_trained` BOOLEAN NOT NULL,
     `img_url` VARCHAR(255) NOT NULL,
-    `pet_description` VARCHAR(255) NOT NULL,
+    `pet_description` TEXT NOT NULL,
     `user_id` BIGINT UNSIGNED NOT NULL
 );
 -- Add foreign key constraint for Pets table

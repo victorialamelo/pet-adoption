@@ -1,11 +1,11 @@
 import React from "react";
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import "../App.css";
 
 function AboutUsPage() {
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
       <section className="py-5 w-100 introduction">
         <div className="container-fluid">
           <div className="row align-items-center home-content">
