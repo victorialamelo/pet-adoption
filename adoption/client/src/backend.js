@@ -157,7 +157,7 @@ export async function backendEditPet(petId, updatedPet) {
 export async function backendFetchPetDetails(petId) {
   const token = localStorage.getItem("token");
   if (!token) {
-    throw new Error("User not authenticated");
+    throw new Error("User not authenticated. To check our pets, please go back to Home Page and login.");
   }
 
   console.log(`Fetching details for pet with ID: ${petId}`);
