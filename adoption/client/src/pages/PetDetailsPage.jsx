@@ -14,6 +14,7 @@ export default function PetDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,36 +58,45 @@ export default function PetDetailsPage() {
       console.error("No token found! User is not authenticated.");
       alert("You must be logged in to submit an adoption request.");
       return;
-  }
+    }
 
-  console.log("Token being sent:", token); // Debugging
+    console.log("Token being sent:", token); // Debugging
 
-  try {
+    try {
       const response = await fetch("http://localhost:5001/requests/adopt", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}` // Ensure token is included
-          },
-          body: JSON.stringify({
-              pet_id: petDetails?.pet_id,
-              request_message: requestMessage
-          }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Ensure token is included
+        },
+        body: JSON.stringify({
+          pet_id: petDetails?.pet_id,
+          request_message: requestMessage
+        }),
       });
 
       const data = await response.json();
       console.log("Server Response:", data);
 
       if (response.ok) {
-          alert("Adoption request submitted successfully!");
+        // Replace the alert with showing the modal
+        setShowSuccessModal(true);
       } else {
-          alert(`Failed to submit adoption request: ${data.message}`);
+        alert(`Failed to submit adoption request: ${data.message}`);
       }
-  } catch (error) {
+    } catch (error) {
       console.error("Request error:", error);
       alert("Something went wrong. Please try again.");
-  }
-};
+    }
+  };
+
+  const closeModal = () => {
+    setShowSuccessModal(false);
+  };
+
+  const navigateToDashboard = () => {
+    navigate("/userdashboard");
+  };
 
   if (loading) return <p>Loading pet details...</p>;
   if (error) {
@@ -97,6 +107,30 @@ export default function PetDetailsPage() {
   return (
     <>
       {/*<NavBar />*/}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="modal show d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Success!</h5>
+                <button type="button" className="btn-close" onClick={closeModal} aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                <p>Your adoption request for {petDetails.name} has been submitted successfully!</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
+                <button type="button" className="btn btn-primary" onClick={navigateToDashboard}>
+                  View My Requests
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      )}
 
       <section className="mb-10">
         <div className="container">
@@ -139,13 +173,13 @@ export default function PetDetailsPage() {
                 )}
               </ul>
               {user && user === petDetails.user_id && (
-              <EditPetDetails
-                petId={petDetails.pet_id}
-                onSuccess={(updatedPet) => {
-                  console.log("updated pet", updatedPet);
-                  setUpdateSuccess(prev => !prev);
-                }}
-              />
+                <EditPetDetails
+                  petId={petDetails.pet_id}
+                  onSuccess={(updatedPet) => {
+                    console.log("updated pet", updatedPet);
+                    setUpdateSuccess(prev => !prev);
+                  }}
+                />
               )}
             </div>
             <div className="col-md-6">

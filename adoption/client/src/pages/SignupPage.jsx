@@ -82,13 +82,6 @@ export default function SignupPage() {
                     name="name"
                     className="form-control"
                     placeholder="Enter your name"
-                    onInput={(e) => {
-                      let value = e.target.value.trim();
-                      if (value.length > 0) {
-                        e.target.value =
-                          value.charAt(0).toUpperCase() + value.slice(1);
-                      }
-                    }}
                     required
                   />
                 </div>
