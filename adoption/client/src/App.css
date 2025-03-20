@@ -399,6 +399,16 @@ input:focus {
   margin: 20px;
 }
 
+.btn-outline-primary {
+  background-color: var(--buff);
+  border: none;
+  font-family: "Shrikhand", serif;
+  font-size: 1.3em;
+  color: white;
+  margin: 20px;
+}
+
+
 /* ----------------------------------------
    DASHBOARD STYLES
 ---------------------------------------- */
@@ -436,8 +446,7 @@ section.posted-peluditos {
 .adopter-dashboard {
   min-height: 1300px;
   padding: 20px;
-  margin-top: 100px;
-  margin: 100px auto ;
+  margin: 0 auto ;
   background-color: var(--celeste);
   max-width: 1200px;
 }
