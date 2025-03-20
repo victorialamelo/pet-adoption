@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, Button, Row, Col, Form } from "react-bootstrap";
+import { Card, Button, Row, Col, Form, Modal } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 import { fetchUserProfile } from "../backend";
 import { getMyAdoptionRequests } from "../helpers/adrequestfuncs";
@@ -20,6 +20,15 @@ export default function PetAdopterDashboard() {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
   const navigate = useNavigate();
+
+  // Modal states
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState(null);
+  const [ownerDetails, setOwnerDetails] = useState(null);
 
   // Fetch user profile data
   useEffect(() => {
@@ -84,6 +93,74 @@ export default function PetAdopterDashboard() {
   if (error) {
     return <div className="alert alert-danger">{error}</div>;
   }
+
+  // Function to open message modal
+  const handleOpenMessageModal = (request) => {
+    setSelectedRequest(request);
+    setMessage("");
+    setSendError(null);
+    setShowMessageModal(true);
+  };
+
+  // Function to open details modal
+  const handleOpenDetailsModal = async (request) => {
+    setSelectedRequest(request);
+    setShowDetailsModal(true); // Show modal first to avoid delay
+    console.log("request",request);
+
+    try {
+      // First set loading state
+      setLoading(true);
+
+      // Fetch the requester details using the requesterID
+      const requestDetails = await fetchUserProfile(request.requester_id);
+      console.log("requestDetails", requestDetails)
+      // Set the owner details from the fetched data
+      setOwnerDetails({
+        name: requestDetails.user_name || "Owner Name Not Available",
+        email: requestDetails.email || "Not Available",
+        phone: requestDetails.phone || "Not Available",
+        address: requestDetails.address || "Address Not Available"
+      });
+    } catch (err) {
+      console.error("Error fetching owner details:", err);
+      setOwnerDetails({
+        name: "Error loading owner details",
+        email: "Not Available",
+        phone: "Not Available",
+        address: "Not Available"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to send a message
+  const handleSendMessage = async () => {
+    if (!message.trim() || !selectedRequest) return;
+
+    try {
+      setSending(true);
+      setSendError(null);
+
+      // Replace with your actual API call
+      // await sendMessageToOwner(selectedRequest.request_id, message);
+
+      // For now, let's simulate an API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Success handling
+      setMessage("");
+      setShowMessageModal(false);
+      alert("Message sent successfully!");
+
+    } catch (err) {
+      console.error("Error sending message:", err);
+      setSendError("Failed to send message. Please try again.");
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <div className="adopter-dashboard">
@@ -180,8 +257,8 @@ export default function PetAdopterDashboard() {
                                 </small>
                             </div>
                             <div>
-                              <Button variant="outline-primary" size="sm" className="me-2">Message</Button>
-                              <Button variant="outline-secondary" size="sm" href={`/petdetails/${app.pet_id}`}>View Details</Button>
+                              <Button variant="outline-primary" size="sm" className="me-2" onClick={() => handleOpenMessageModal(app)}>Message</Button>
+                              <Button variant="outline-secondary" size="sm" onClick={() => handleOpenDetailsModal(app)}>View Details</Button>
                             </div>
                           </div>
                         </Col>
@@ -194,6 +271,69 @@ export default function PetAdopterDashboard() {
           )}
         </Col>
       </Row>
+
+      {/* Message Modal */}
+      <Modal show={showMessageModal} onHide={() => setShowMessageModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Message to {selectedRequest?.owner_name}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {sendError && <div className="alert alert-danger">{sendError}</div>}
+            <Form.Group>
+              <Form.Label>Your Message</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={5}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Write your message here..."
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowMessageModal(false)}>Cancel</Button>
+            <Button
+              variant="primary"
+              onClick={handleSendMessage}
+              disabled={sending || !message.trim()}
+            >
+              {sending ? "Sending..." : "Send Message"}
+            </Button>
+          </Modal.Footer>
+      </Modal>
+
+      {/* Details Modal */}
+      <Modal show={showDetailsModal} onHide={() => setShowDetailsModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Owner Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {ownerDetails && (
+            <div>
+              <h5>Pet Information</h5>
+              <p><strong>Pet Name:</strong> {selectedRequest?.pet_name}</p>
+              <p><strong>Status:</strong> {selectedRequest?.request_status}</p>
+              <p><strong>Request Date:</strong> {selectedRequest?.request_date ? new Date(selectedRequest.request_date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              }) : 'N/A'}</p>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDetailsModal(false)}>Close</Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              setShowDetailsModal(false);
+              handleOpenMessageModal(selectedRequest);
+            }}
+          >
+            Send Message
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

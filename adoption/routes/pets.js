@@ -183,7 +183,6 @@ router.get("/pet", async (req, res) => {
     }
 });
 
-
 // Get Pet By ID WORKING (Logged in users can access, fe filters should work.)
 router.get("/:pet_id", authenticate, authenticate, async (req, res) => {
     try {
@@ -207,7 +206,6 @@ router.get("/:pet_id", authenticate, authenticate, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 
 //Get all of current user´s posted pets.
 router.get("/allpostedpets/:user_id", authenticate, async (req, res) => {
