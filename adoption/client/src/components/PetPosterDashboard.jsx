@@ -31,15 +31,19 @@ export default function PetPosterDashboard() {
         const response = await fetchUserProfile(user);
         const userData = response;
         setProfile({
-          name: userData.entity_name || userData.user_name,
+          user_name: userData.user_name || '',
+          name: userData.entity_name || '',
           website: userData.entity_website || '',
           registrationID: userData.entity_registration_id || '',
-          about: userData.about || ''
+          about: userData.about || '',
+          email: userData.email || '',
+          phone: userData.phone || ''
         });
         // Fetch pets posted by the user
         const userId = localStorage.getItem('user');
         if (userId) {
           const userPets = await getUserPostedPets(userId);
+          console.log("pets", userPets);
           setPets(userPets || []);
         }
       } catch (err) {
@@ -149,6 +153,7 @@ export default function PetPosterDashboard() {
     return <div className="alert alert-danger">{error}</div>;
   }
 
+  console.log("pets", pets)
   return (
     <>
       <section className="dashboard-container row">
@@ -158,6 +163,7 @@ export default function PetPosterDashboard() {
           isPoster={true}
         />
       </section>
+      {pets.length && (
       <section className="dashboard-container row">
         <h1>Posted Peluditos</h1>
         <div className="space-y-4">
@@ -459,6 +465,7 @@ export default function PetPosterDashboard() {
           <Link to="/postpet" className="btn btn-primary">Post a New Pet</Link>
         </div>
       </section>
+      )}
     </>
   );
 }

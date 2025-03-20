@@ -388,13 +388,17 @@ input:focus {
   padding: 30px;
 }
 
+.shelter-dashboard {
+  background-color: var(--celeste);
+}
+
 .user-dashboard {
   background-color: var(--celeste);
   padding: 70px;
 }
 
 .dashboard-container {
-  background-color: var(--sage);
+  background-color: var(--celeste);
   margin: 0 auto;
 }
 
