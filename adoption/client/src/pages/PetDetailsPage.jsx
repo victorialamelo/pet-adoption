@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { backendFetchPetDetails } from "../backend";
 import { useAuth } from "../AuthContext";
 import EditPetDetails from "../components/EditPetDetails";
+import { useNavigate } from "react-router-dom";
 // import { createAdoptionRequest } from "./adrequestfuncs";
 
 export default function PetDetailsPage() {
@@ -13,6 +14,7 @@ export default function PetDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPetDetails = async () => {
@@ -87,7 +89,9 @@ export default function PetDetailsPage() {
 };
 
   if (loading) return <p>Loading pet details...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (error) {
+    navigate("/login");
+  }
   if (!petDetails) return <p>Pet not found.</p>;
 
   return (

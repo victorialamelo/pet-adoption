@@ -16,6 +16,10 @@ export default function UserDashboard() {
     setActiveView(role);
   }, [role]);
 
+  const handleViewChange = (view) => {
+    setActiveView(view);
+    localStorage.setItem("role", view); // Store the selected view in localStorage
+  };
   // Redirect to login if no user
   if (!user) {
     navigate('/login');
@@ -25,7 +29,28 @@ export default function UserDashboard() {
   return (
     <>
       {/*<NavBar />*/}
-
+      <div className="dashboard-toggle w-100 pt-4 mb-4">
+        <div className="row ">
+          <div className="col-12 d-flex justify-content-center">
+            <div className="" aria-label="Dashboard View Toggle">
+              <button
+                type="button"
+                className={`btn ${activeView === "adopting" ? "btn-primary" : "btn-outline-primary"}`}
+                onClick={() => handleViewChange("adopting")}
+              >
+                Pets I'm Adopting
+              </button>
+              <button
+                type="button"
+                className={`btn ${activeView === "posting" ? "btn-primary" : "btn-outline-primary"}`}
+                onClick={() => handleViewChange("posting")}
+              >
+                Pets I'm Rehoming
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       {activeView === "adopting" ? (
         <PetAdopterDashboard />
       ) : (<PetPosterDashboard />

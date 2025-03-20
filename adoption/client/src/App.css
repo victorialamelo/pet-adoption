@@ -76,7 +76,7 @@ li, form {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-size: 1.3em;
+  font-size: 1.2em;
   color: var(--lavender);
   line-height: 2;
 }
@@ -94,7 +94,7 @@ label, select, #image {
   font-family: "Lexend Deca", sans-serif;
   font-optical-sizing: auto;
   text-transform: capitalize;
-  font-size: 1.2em;
+  font-size: 1.1em;
   font-weight: 00;
   font-style: normal;
   color: var(--lavender);
@@ -383,21 +383,45 @@ input:focus {
 /* ----------------------------------------
    BUTTON STYLES
 ---------------------------------------- */
-.btn-primary, .btn-success {
+.btn-primary, .btn-success, .btn-outline-primary {
   background-color: var(--skyblue);
   border: none;
   font-family: "Shrikhand", serif;
   font-size: 1.3em;
   color: white;
+  box-shadow: none;
 }
 
-.btn-primary:hover {
+.btn-check:checked+.btn,
+.btn.active
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check)+.btn:active {
+  background-color: var(--skyblue);
+  border: none;
+  font-family: "Shrikhand", serif;
+  font-size: 1.3em;
+  color: white;
+  box-shadow: none;
+}
+
+.btn-primary:hover,
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:focus-visible,
+.btn-primary:focus,
+.btn-primary:focus-visible {
   background-color: var(--hoverskyblue);
+  box-shadow: none;
 }
 
-.dashboard-view .btn-primary {
+.dashboard-toggle .btn-primary,
+.dashboard-toggle .btn-outline-primary  {
   margin: 20px;
 }
+
+
+
 
 /* ----------------------------------------
    DASHBOARD STYLES
@@ -424,20 +448,26 @@ section.posted-peluditos {
 .dashboard-container {
   background-color: var(--celeste);
   margin: 0 auto;
+  max-width: 1200px;
 }
 
 .dashboard-view {
-  padding-top: 30px;
   height: auto;
   background-color: var(--skyblue);
   text-align: right;
 }
 
+.dashboard-toggle {
+  height: auto;
+  background-color: var(--skyblue);
+  text-align: right;
+  width: 100%;
+}
+
 .adopter-dashboard {
   min-height: 1300px;
   padding: 20px;
-  margin-top: 100px;
-  margin: 100px auto ;
+  margin: 0 auto ;
   background-color: var(--celeste);
   max-width: 1200px;
 }
