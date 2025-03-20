@@ -10,7 +10,7 @@ export default function SignupPage() {
   const [role, setRole] = useState("");
   const navigate = useNavigate();
 
-  // Function to handle user creation
+  // REGISTER NEW USER
   const createUser = async (formData) => {
     try {
       setLoading(true);
@@ -29,9 +29,9 @@ export default function SignupPage() {
       };
 
       const addedUser = await backendCreateUser(newUser);
-      console.log("CREATED USER, ADDED USER ID", addedUser.user.user_id);
+
       login(addedUser.user.user_id, addedUser.token);
-      console.log("user created and logged in", addedUser.user.user_id);
+      console.log("CREATED USER, ADDED USER ID", addedUser.user.user_id);
     } catch (error) {
       console.error("Error creating user:", error.message);
       alert(error.message);
@@ -42,12 +42,12 @@ export default function SignupPage() {
     navigate(`/userdashboard`);
   };
 
-  // Form submission handler
+  // FORM SUBMISSION HANDLER
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
 
-    // Basic validation
+    // BASIC VALIDATION
     if (!formData.get("email").includes("@")) {
       alert("Please enter a valid email.");
       return;
@@ -64,13 +64,13 @@ export default function SignupPage() {
 
   return (
     <>
-      {/*<NavBar />*/}
       <div className="container my-5">
         <div className="row justify-content-center">
           <div className="col-md-6">
             <div className="card shadow p-4">
               <h1 className="text-center mb-3">Sign Up</h1>
               <form onSubmit={handleSubmit}>
+
                 {/* Full Name */}
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">

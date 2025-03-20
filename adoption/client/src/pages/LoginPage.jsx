@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-//import NavBar from "../components/NavBar";
 import { useAuth } from "../AuthContext";
 import { backendLoginUser } from "../backend";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
-  const { login } = useAuth(); // this function
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -14,17 +13,13 @@ export default function LoginPage() {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const navigate = useNavigate();
-  // const [serverError, setServerError] = useState("");
 
+  // LOGIN HANDLER
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log("Submitting login form..."); //Debugging
-    console.log("Email:", email); //Debugging
-    console.log("Password:", password); //Debugging
-
     if (!validateInputs()) {
-      console.log("Validation failed"); //Debugging
+      console.log("Validation failed");
       return;
     }
 
@@ -41,6 +36,7 @@ export default function LoginPage() {
     }
   };
 
+  // BASIC VALIDATION
   const validateInputs = () => {
     let isValid = true;
 
@@ -67,13 +63,14 @@ export default function LoginPage() {
 
   return (
     <>
-      {/*<NavBar />*/}
+
       <div className="container my-5">
         <div className="row justify-content-center">
           <div className="col-md-6">
             <div className="login p-4">
               <h1 className="text-center mb-3">Welcome Back!</h1>
               <form onSubmit={handleSubmit}>
+                
                 {/* Email */}
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">
