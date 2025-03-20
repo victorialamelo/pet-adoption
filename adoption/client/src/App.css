@@ -392,7 +392,7 @@ input:focus {
   background-color: var(--skyblue);
   border: none;
   font-family: "Shrikhand", serif;
-  font-size: 1.3em;
+  font-size: 1.2em;
   color: white;
   box-shadow: none;
 }
@@ -405,11 +405,11 @@ input:focus {
   background-color: var(--skyblue);
   border: none;
   font-family: "Shrikhand", serif;
-  font-size: 1.3em;
   color: white;
   box-shadow: none;
 }
 
+.btn:hover,
 .btn-primary:hover,
 .btn-outline-primary:hover,
 .btn-outline-primary:focus,
