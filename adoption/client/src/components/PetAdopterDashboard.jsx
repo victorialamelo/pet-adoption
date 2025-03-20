@@ -3,6 +3,7 @@ import { Card, Button, Row, Col, Form } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
 import { fetchUserProfile } from "../backend";
 import { getMyAdoptionRequests } from "../helpers/adrequestfuncs";
+import { useNavigate } from "react-router-dom";
 import ProfileSection from "./ProfileSection";
 
 export default function PetAdopterDashboard() {
@@ -18,6 +19,7 @@ export default function PetAdopterDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
+  const navigate = useNavigate();
 
   // Fetch user profile data
   useEffect(() => {
@@ -107,10 +109,12 @@ export default function PetAdopterDashboard() {
               >
                 Requests
               </button>
-            </div>
-            <Button variant="primary" className="w-100 mt-4" href="/petlist">
+              <button className="list-group-item list-group-item-action" onClick={() => navigate("/petlist")}>
               Find Pets
-            </Button>
+              </button>
+
+            </div>
+
           </div>
         </Col>
 

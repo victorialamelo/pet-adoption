@@ -392,7 +392,7 @@ input:focus {
   background-color: var(--skyblue);
   border: none;
   font-family: "Shrikhand", serif;
-  font-size: 1.2em;
+  font-size: 20px;
   color: white;
   box-shadow: none;
 }
@@ -512,7 +512,7 @@ td {
 /* ----------------------------------------
    LIST GROUP STYLES
 ---------------------------------------- */
-.list-group-item {
+.list-group-item, .find-pets {
   border-radius: 8px;
   font-size: 2em;
   margin-top: 20px;
@@ -521,7 +521,7 @@ td {
   color: var(--lavender)
 }
 
-.list-group-item:hover {
+.list-group-item:hover, .find-pets:hover {
   background-color: var(--latte);
   border: none !important;
   outline: none;
@@ -529,6 +529,9 @@ td {
   color: var(--lavender)
 }
 
+.find-pets.active,
+.find-pets:focus,
+.find-pets:focus-visible,
 .list-group-item.active,
 .list-group-item:focus
 .list-group-item:focus-visible {
@@ -537,6 +540,11 @@ td {
   outline: none;
   margin-top: 20px !important;
   color: white
+}
+
+.find-pets {
+  background-color: white;
+  text-align: left;
 }
 
 /* ----------------------------------------

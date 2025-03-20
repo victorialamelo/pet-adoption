@@ -361,7 +361,7 @@ export default function EditPetDetails({ petId, onSuccess }) {
 
     </Form>
     )}
-    <Button variant="secondary" className="btn-primary mt-2 w-100" onClick={() => setIsEditing(!isEditing)}>
+    <Button className="btn-primary mt-2 w-100" onClick={() => setIsEditing(!isEditing)}>
     {isEditing ? "Cancel" : "Edit Pet Details"}
     </Button>
     </>
