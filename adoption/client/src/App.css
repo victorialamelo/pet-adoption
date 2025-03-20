@@ -433,12 +433,23 @@ input:focus {
   box-shadow: none;
 }
 
+.btn-outline-danger {
+  background-color: var(--cherrypink);
+  border: none;
+  font-family: "Shrikhand", serif;
+  font-size: 20px;
+  color: white;
+  box-shadow: none;
+  width: 150px;
+}
+
+.btn-outline-danger:hover {
+  background-color: #7b2633;
+}
 .dashboard-toggle .btn-primary,
 .dashboard-toggle .btn-outline-primary  {
   margin: 20px;
 }
-
-
 
 
 /* ----------------------------------------
@@ -521,6 +532,15 @@ td {
 .shelter-dashboard img {
   width: 80%;
 }
+
+/* ----------------------------------------
+   CARD & ACCORDIAN STYLES
+---------------------------------------- */
+
+.card {
+  border: none;
+}
+
 
 /* ----------------------------------------
    LIST GROUP STYLES

@@ -7,6 +7,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState(profile);
   console.log("profile", profile);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -59,7 +60,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
               <input
                 type="text"
                 name="name"
-                value={formData.name === 'null' ? "" : formData.name }
+                value={formData.name === 'null' ? "" : formData.user_name }
                 onChange={handleChange}
                 className="form-control"
               />
@@ -116,7 +117,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
                   type="text"
                   name="name"
                   placeholder="Organization Name"
-                  value={formData.name === 'null' ? '' : 'test'}
+                  value={formData.name === 'null' ? '' : formData.name}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -125,6 +126,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
+                  disabled
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
@@ -138,18 +140,6 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>About Me</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  name="about"
-                  value={formData.about}
-                  onChange={handleChange}
-                  rows={4}
-                  placeholder="Tell shelters about yourself, your living situation, and why you want to adopt..."
                 />
               </Form.Group>
 
