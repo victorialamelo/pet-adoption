@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -16,10 +17,10 @@ var savedSearchesRouter = require('./routes/savedSearches');
 
 var app = express();
 app.use(cors({
-    origin: 'http://localhost:5173', //  frontend origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: 'http://localhost:5173', // React app's URL
     credentials: true
 }));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

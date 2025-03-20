@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import "../App.css";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../AuthContext"; // Make sure to import useAuth
 
 export default function PetListPage() {
-  const { user } = useAuth();
+  const { user, token } = useAuth(); // Destructure both user and token from useAuth
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     animal_type: "",
@@ -83,17 +83,21 @@ export default function PetListPage() {
     if (!searchName) return;
 
     try {
-      // Make sure to include authentication token in headers if required
       const response = await fetch("http://localhost:5001/savedSearches", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`, // If you're using JWT tokens
+          Authorization: `Bearer ${token}`, // Now using the token from the AuthContext
         },
         body: JSON.stringify({
           search_name: searchName,
           search_query: queryParams,
         }),
+      });
+      console.log("User token:", token); // Make sure the token is being used
+      console.log("Search payload:", {
+        search_name: searchName,
+        search_query: queryParams,
       });
 
       if (!response.ok) throw new Error("Failed to save search");
