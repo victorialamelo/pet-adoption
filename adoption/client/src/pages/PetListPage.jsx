@@ -80,7 +80,9 @@ export default function PetListPage() {
             <div className="row">
               {/* Animal Type */}
               <div className="col-md-6 mb-3">
-                <label className="form-label"><h4>Animal Type</h4></label>
+                <label className="form-label">
+                  <h4>Animal Type</h4>
+                </label>
                 <select
                   name="animal_type"
                   className="form-select"
@@ -95,7 +97,9 @@ export default function PetListPage() {
 
               {/* Gender */}
               <div className="col-md-6">
-                <label className="form-label"><h4>Gender</h4></label>
+                <label className="form-label">
+                  <h4>Gender</h4>
+                </label>
                 <select
                   name="gender"
                   className="form-select"
@@ -110,7 +114,9 @@ export default function PetListPage() {
 
               {/* Size */}
               <div className="col-md-6 mt-3">
-                <label className="form-label"><h4>Size</h4></label>
+                <label className="form-label">
+                  <h4>Size</h4>
+                </label>
                 <select
                   name="size"
                   className="form-select"
@@ -118,15 +124,19 @@ export default function PetListPage() {
                   onChange={handleFilterChange}
                 >
                   <option value="">Select size</option>
+                  <option value="extra small">Extra Small</option>
                   <option value="small">Small</option>
                   <option value="medium">Medium</option>
                   <option value="large">Large</option>
+                  <option value="extra large">Extra Large</option>
                 </select>
               </div>
 
               {/* Activity Level */}
               <div className="col-md-6 mt-3">
-                <label className="form-label"><h4>Activity Level</h4></label>
+                <label className="form-label">
+                  <h4>Activity Level</h4>
+                </label>
                 <select
                   name="activity_level"
                   className="form-select"
@@ -134,9 +144,9 @@ export default function PetListPage() {
                   onChange={handleFilterChange}
                 >
                   <option value="">Select activity</option>
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
+                  <option value="keep me inside">Keep Me Inside</option>
+                  <option value="some exercise">Some Exercise</option>
+                  <option value="lots of exercise">Lots of Exercise</option>
                 </select>
               </div>
 
@@ -160,8 +170,8 @@ export default function PetListPage() {
                     </div>
                   )
                 )}
-                </div>
-                <div className="col-md-6 mt-3">
+              </div>
+              <div className="col-md-6 mt-3">
                 {/* Good With Filters */}
                 <h4>Good With</h4>
                 {["cats", "dogs", "kids", "smallspaces"].map((key) => (
