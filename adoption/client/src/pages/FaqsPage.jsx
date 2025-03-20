@@ -1,11 +1,11 @@
 import React from "react";
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import "../App.css";
 
 function FaqsPage() {
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
 
       <section className="container-fluid py-5">
         <div className="row home-content">

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import "../App.css";
 import { useAuth } from "../AuthContext";
 import { backendAddPostPet } from "../backend";
@@ -54,7 +54,7 @@ export default function PostPetPage() {
 
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
       <section className="postapet mt-10">
         <div className="container">
           <h1 className="display-4 text-center mb-4">

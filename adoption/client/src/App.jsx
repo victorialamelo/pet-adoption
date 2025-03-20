@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
+import NotFound from "./pages/NotFound";
 
+import Navbar from "./components/NavBar";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -15,6 +17,7 @@ import "./App.css";
 export default function App() {
   return (
     <AuthProvider>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -25,6 +28,7 @@ export default function App() {
         <Route path="/userdashboard" element={<UserDashboard />} />
         <Route path="/aboutus" element={<AboutUsPage />} />
         <Route path="/faqs" element={<FaqsPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AuthProvider>
   );

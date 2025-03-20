@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import PetAdopterDashboard from "../components/PetAdopterDashboard";
 import PetPosterDashboard from "../components/PetPosterDashboard";
 import "../App.css";
@@ -24,7 +24,7 @@ export default function UserDashboard() {
 
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
 
       {activeView === "adopting" ? (
         <PetAdopterDashboard />

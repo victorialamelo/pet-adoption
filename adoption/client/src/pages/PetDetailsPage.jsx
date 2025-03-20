@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import { backendFetchPetDetails } from "../backend";
 import { useAuth } from "../AuthContext";
 import EditPetDetails from "../components/EditPetDetails";
@@ -92,7 +92,7 @@ export default function PetDetailsPage() {
 
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
 
       <section className="mb-10">
         <div className="container">

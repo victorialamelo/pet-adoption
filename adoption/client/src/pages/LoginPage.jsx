@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import { useAuth } from "../AuthContext";
 import { backendLoginUser } from "../backend";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +67,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
       <div className="container my-5">
         <div className="row justify-content-center">
           <div className="col-md-6">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import NavBar from "../components/NavBar";
+//import NavBar from "../components/NavBar";
 import "../App.css";
 
 export default function PetListPage() {
@@ -63,7 +63,7 @@ export default function PetListPage() {
 
   return (
     <>
-      <NavBar />
+      {/*<NavBar />*/}
 
       <header className="header-petlist">
         <div className="container">
