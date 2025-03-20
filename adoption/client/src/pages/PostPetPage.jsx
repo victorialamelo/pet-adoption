@@ -27,15 +27,15 @@ export default function PostPetPage() {
       size: formData.get("size"),
       gender: formData.get("gender"),
       activity_level: formData.get("activity"),
-      neutered: Number(formData.get("neutered")) || 0,
-      has_special_needs: Number(formData.get("specialNeeds")) || 0,
-      potty_trained: Number(formData.get("pottyTrained")) || 0,
+      neutered: formData.get("neutered") ? 1 : 0,
+      has_special_needs: formData.get("specialNeeds") ? 1 : 0,
+      potty_trained: formData.get("pottyTrained") ? 1 : 0,
       pet_description: formData.get("story"),
-      good_with_cats: Number(formData.get("goodwithcats")) || 0,
-      good_with_dogs: Number(formData.get("goodwithdogs")) || 0,
-      good_with_kids: Number(formData.get("goodwithkids")) || 0,
-      good_with_smallspaces: Number(formData.get("goodwithsmallspaces")) || 0,
-      photo: photo, // Include the file directly
+      good_with_cats: formData.get("goodwithcats") ? 1 : 0,
+      good_with_dogs: formData.get("goodwithdogs") ? 1 : 0,
+      good_with_kids: formData.get("goodwithkids") ? 1 : 0,
+      good_with_smallspaces: formData.get("goodwithsmallspaces") ? 1 : 0,
+      photo: photo,
     };
 
     try {

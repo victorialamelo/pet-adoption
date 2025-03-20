@@ -29,8 +29,8 @@ export default function UserDashboard() {
   return (
     <>
       {/*<NavBar />*/}
-      <div className="container mt-4 mb-4">
-        <div className="row">
+      <div className="dashboard-toggle w-100 pt-4 mb-4">
+        <div className="row ">
           <div className="col-12 d-flex justify-content-center">
             <div className="" aria-label="Dashboard View Toggle">
               <button
@@ -38,14 +38,14 @@ export default function UserDashboard() {
                 className={`btn ${activeView === "adopting" ? "btn-primary" : "btn-outline-primary"}`}
                 onClick={() => handleViewChange("adopting")}
               >
-                Demo Adopter View
+                Pets I'm Adopting
               </button>
               <button
                 type="button"
                 className={`btn ${activeView === "posting" ? "btn-primary" : "btn-outline-primary"}`}
                 onClick={() => handleViewChange("posting")}
               >
-                Demo Poster View
+                Pets I'm Rehoming
               </button>
             </div>
           </div>
