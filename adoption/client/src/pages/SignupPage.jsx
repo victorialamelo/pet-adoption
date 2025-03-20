@@ -15,6 +15,7 @@ export default function SignupPage() {
     try {
       setLoading(true);
       const newUser = {
+        usertype: role,
         user_name: formData.get("name"),
         date_of_birth: formData.get("date"),
         city: formData.get("city"),

@@ -31,7 +31,9 @@ export default function LoginPage() {
     try {
       const data = await backendLoginUser({ email, password });
       login(data.user.user_id, data.token);
-      console.log("Login successful:", data.user.user_id, data.token);
+      localStorage.setItem("role", data.user.usertype);
+      console.log("Login successful:", data.user);
+
     } catch (error) {
       console.error("Login failed:", error.message);
     } finally {

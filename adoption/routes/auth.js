@@ -11,7 +11,7 @@ const saltRounds = 10;
 
 // user registration with duplicate email check
 router.post("/register", async (req, res) => {
-  const { email, password, user_name, ...otherDetails } = req.body;
+  const { email, password, user_name, usertype, ...otherDetails } = req.body;
 
   try {
     // check if the email already exists
@@ -32,6 +32,7 @@ router.post("/register", async (req, res) => {
     console.log("entity_registration_id", entity_registration_id)
     const result = await db(
       `INSERT INTO Users (
+                usertype,
                 user_name,
                 zipcode,
                 city,
@@ -42,7 +43,8 @@ router.post("/register", async (req, res) => {
                 entity_registration_id,
                 email,
                 password)
-       VALUES ("${user_name}",
+       VALUES ("${usertype}",
+               "${user_name}",
                "${zipcode}",
                "${city}",
                "${date_of_birth}",
@@ -57,7 +59,7 @@ router.post("/register", async (req, res) => {
     const user_id = result.insertId;
 
     // Fetch the newly created user from the database
-    const userQuery = await db(`SELECT user_id, user_name, email, city, zipcode, date_of_birth, phone, entity_name, entity_website, entity_registration_id FROM Users WHERE user_id = ${user_id}`);
+    const userQuery = await db(`SELECT usertype, user_id, user_name, email, city, zipcode, date_of_birth, phone, entity_name, entity_website, entity_registration_id FROM Users WHERE user_id = ${user_id}`);
     const newUser = userQuery.data[0];
 
     const token = jwt.sign(
@@ -139,7 +141,7 @@ router.post("/login", async (req, res) => {
 
   try {
     const result = await db(
-      `SELECT user_id, user_name, email, password, entity_name, entity_website, entity_registration_id, zipcode, city, date_of_birth, phone
+      `SELECT *
        FROM Users WHERE email = "${email}"`
     );
 

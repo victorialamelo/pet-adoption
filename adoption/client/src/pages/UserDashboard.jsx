@@ -26,11 +26,10 @@ export default function UserDashboard() {
     <>
       <NavBar />
 
-
+      {activeView === "adopting" ? (
         <PetAdopterDashboard />
-
-        <PetPosterDashboard />
-
+      ) : (<PetPosterDashboard />
+      )}
     </>
   );
 }
