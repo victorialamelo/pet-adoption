@@ -7,7 +7,7 @@ import PetPosterDashboard from "../components/PetPosterDashboard";
 import "../App.css";
 
 export default function UserDashboard() {
-  const [activeView, setActiveView] = useState("post"); // Default to post view (current functionality)
+  const [activeView, setActiveView] = useState("adopting"); // Default to post view (current functionality)
   const { user } = useAuth();
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
@@ -26,32 +26,11 @@ export default function UserDashboard() {
     <>
       <NavBar />
 
-      {/* Dashboard View Toggle */}
 
-      <div className="dashboard-view">
-      {role === "adopting" ? (
-          <button
-            className={`btn-primary ${activeView === "adopting" ? "btn-primary" : "btn-outline-primary"}`}
-            onClick={() => setActiveView("adopting")}
-          >
-            Adopter Dashboard
-          </button>
-      ) : (
-          <button
-            className={`btn-primary ${activeView === "post" ? "btn-primary" : "btn-outline-primary"}`}
-            onClick={() => setActiveView("post")}
-          >
-            Shelter Dashboard
-          </button>
-      )}
-      </div>
-
-      {/* Conditional rendering based on active view */}
-      {activeView === "adopting" ? (
         <PetAdopterDashboard />
-      ) : (
+
         <PetPosterDashboard />
-      )}
+
     </>
   );
 }

@@ -155,7 +155,7 @@ export default function PetDetailsPage() {
         </div>
       </section>
       {user && (
-        <section className="mb-10">
+        <section className="mb-10 pet-details">
           <div className="container">
             <div className="row">
               <div className="col-md-6">

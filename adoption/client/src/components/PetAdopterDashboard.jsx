@@ -18,7 +18,7 @@ export default function PetAdopterDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
-  
+
   // Fetch user profile data
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -88,7 +88,6 @@ export default function PetAdopterDashboard() {
       <Row>
         <Col md={3} className="mb-4">
           <div className="sticky-top pt-3">
-            <h4>{profile.name}</h4>
             <div className="list-group mt-4">
               <button
                 className={`list-group-item list-group-item-action ${activeTab === "profile" ? "active" : ""}`}

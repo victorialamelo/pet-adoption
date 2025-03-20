@@ -80,15 +80,15 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
                 className="form-control"
               />
               <button type="submit" className="btn btn-success mt-3 w-100">Save</button>
-              <button type="button" onClick={() => setEditing(false)} className="btn btn-secondary mt-2 w-100">Cancel</button>
+              <button type="button" onClick={() => setEditing(false)} className="btn btn-primary mt-2 w-100">Cancel</button>
             </form>
           ) : (
             <>
               <h1>Welcome {profile.name === '' ? profile.user_name : profile.name}</h1>
-              {profile.website !== '' || profile.website !== 'null' && (
+              {profile.website && (
                 <p>Website: <a href={profile.website} target="_blank" rel="noopener noreferrer">{profile.website}</a></p>
               )}
-              {profile.registrationID !== '' || profile.registrationID !== 'null' && (
+              {profile.registrationID && (
                 <p>Organization Registration ID: {profile.registrationID}</p>
               )}
 
@@ -104,10 +104,10 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
   // Render adopter profile
   if (isAdopter) {
     return (
+      <>
+      <h2>{profile.name === '' ? profile.user_name : profile.name}'s Profile</h2>
       <div className="card">
         <div className="card-body">
-          <h2 className="card-title">My Profile</h2>
-
           {editing ? (
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
@@ -154,7 +154,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
 
               <div className="d-flex gap-2">
                 <Button type="submit" variant="primary">Save Changes</Button>
-                <Button variant="outline-secondary" onClick={() => setEditing(false)}>Cancel</Button>
+                <Button className="btn-primary" onClick={() => setEditing(false)}>Cancel</Button>
               </div>
             </Form>
           ) : (
@@ -167,8 +167,6 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
                 <p>Email: {profile.email || "Not provided"}</p>
                 <p>Phone: {profile.phone || "Not provided"}</p>
 
-                <h5>About Me</h5>
-                <p>{profile.about || "No information provided."}</p>
               </div>
 
               <Button variant="primary" onClick={() => setEditing(true)}>
@@ -178,6 +176,7 @@ export default function ProfileSection({ profile, setProfile, isPoster = false, 
           )}
         </div>
       </div>
+      </>
     );
   }
 

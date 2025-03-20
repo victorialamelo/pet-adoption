@@ -22,8 +22,9 @@ export default function AdoptionRequests({ petId }) {
     const loadRequests = async () => {
       try {
         const response = await getAdoptionRequests(petId);
-        // Handle different response structures
+
         const requestsData = response.data || response || [];
+        console.log("requestsData", requestsData);
         setRequests(requestsData);
         setError(null);
       } catch (err) {
@@ -113,16 +114,7 @@ export default function AdoptionRequests({ petId }) {
                     ? new Date(request.request_date).toLocaleDateString()
                     : "N/A"}
                 </p>
-                <button
-                  className="btn btn-sm btn-outline-primary"
-                  onClick={() => {
-                    // Navigate to messaging with this user
-                    // navigate(`/messages/${request.requester_id}`);
-                    alert("Messaging functionality not implemented yet");
-                  }}
-                >
-                  Message Applicant
-                </button>
+
               </div>
             )}
           </div>

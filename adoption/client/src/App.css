@@ -71,7 +71,7 @@ h5 {
 
 p,
 span,
-li {
+li, form {
   font-family: "Lexend Deca", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
@@ -273,7 +273,14 @@ section {
   background-color: var(--celeste);
   padding: 50px;
   min-height: 600px;
-  border-bottom: 10px solid white;
+}
+
+.petgrid {
+  border-top: 10px solid white;
+}
+
+.pet-details {
+  border: none;
 }
 
 .home-content {
@@ -287,6 +294,7 @@ section {
   background-color: var(--sage);
   position: static;
   top: 0;
+  border-bottom: 10px solid white;
 }
 
 .donate {
@@ -370,7 +378,7 @@ input:focus {
 /* ----------------------------------------
    BUTTON STYLES
 ---------------------------------------- */
-.btn-primary {
+.btn-primary, .btn-success {
   background-color: var(--skyblue);
   border: none;
   font-family: "Shrikhand", serif;
@@ -392,6 +400,11 @@ input:focus {
 .postpet {
   max-width: 700px;
   padding: 30px;
+}
+
+section.posted-peluditos {
+  min-height: 1000px;
+  border-bottom: none;
 }
 
 .shelter-dashboard {
@@ -416,10 +429,10 @@ input:focus {
 }
 
 .adopter-dashboard {
-  border-top: 10px solid white;
   min-height: 1300px;
   padding: 20px;
-  background-color: var(--sage);
+  margin-top: 100px;
+  background-color: var(--celeste);
 }
 
 /* ----------------------------------------
@@ -477,7 +490,7 @@ td {
   background-color: var(--cherrypink);
   border: none !important;
   outline: none;
-  margin-top: 20px;
+  margin-top: 20px !important;
   color: white
 }
 

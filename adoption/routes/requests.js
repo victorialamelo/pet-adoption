@@ -71,9 +71,6 @@ router.get('/adoption-requests', authenticate, async (req, res) => {
             queryParams.push(request_id);
         }
 
-        console.log("Executing SQL Query:", query);
-        console.log("With parameters:", queryParams);
-
         const result = await db(query, queryParams);
 
         // Debugging: Check what we get back
