@@ -23,10 +23,10 @@ export default function PetListPage() {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        // Convert filters to query string
+        // URLSearchParams converts filters object to query string (key=value&...)
         const queryParams = new URLSearchParams(
           Object.entries(filters).reduce((acc, [key, value]) => {
-            // Only add parameters with non-falsy values (including '0' for unchecked checkboxes)
+            // only add parameters with non-falsy values (excluding empty strings "" and '0' for unchecked checkboxes)
             if (value !== "" && value !== 0) acc[key] = value;
             return acc;
           }, {})
@@ -40,7 +40,7 @@ export default function PetListPage() {
         const data = await response.json();
 
         if (Array.isArray(data)) {
-          setPets(data); 
+          setPets(data);
         } else {
           console.error("Data is not an array:", data);
         }
@@ -52,6 +52,7 @@ export default function PetListPage() {
     fetchPets();
   }, [filters]); // fetch pets when filters change
 
+  // updating the filters state
   const handleFilterChange = (e) => {
     const { name, type, checked } = e.target;
     setFilters((prevFilters) => ({

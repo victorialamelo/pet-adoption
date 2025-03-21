@@ -29,6 +29,7 @@ export default function PostPetPage() {
       size: formData.get("size"),
       gender: formData.get("gender"),
       activity_level: formData.get("activity"),
+      // if checked (truthy), assign 1, else assign 0 (null/falsy)
       neutered: formData.get("neutered") ? 1 : 0,
       has_special_needs: formData.get("specialNeeds") ? 1 : 0,
       potty_trained: formData.get("pottyTrained") ? 1 : 0,
@@ -49,7 +50,7 @@ export default function PostPetPage() {
     }
   };
 
-  // FILE UPLOAD HANDLER
+  // FILE UPLOAD HANDLER - saving the file to 'photo' state, to be included in the form submission and sent to backend
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setPhoto(file); // store file for submission
@@ -59,7 +60,6 @@ export default function PostPetPage() {
     <>
       <section className="postapet mt-10">
         <div className="container">
-
           <h1 className="display-4 text-center mb-4">
             Post a Pet for Adoption
           </h1>
@@ -67,7 +67,6 @@ export default function PostPetPage() {
           <form className="form-postpet" onSubmit={createPet}>
             <div className="row">
               <div className="col-md-12">
-
                 {/* Pet Name */}
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">

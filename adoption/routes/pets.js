@@ -5,7 +5,7 @@ const db = require("../model/helper");
 const upload = require('./middleware/upload');
 const cloudinary = require('cloudinary').v2;
 
-// Add a Pet to Pets and Posts Table WORKING
+// Add a Pet to Pets and Posts Table WORKING - using upload middleware to store photo in Cloudinary
 router.post('/pet', authenticate, upload.single('photo'), async (req, res) => {
     try {
         console.log("Received request body:", req.body);
@@ -15,10 +15,10 @@ router.post('/pet', authenticate, upload.single('photo'), async (req, res) => {
         let img_url = null;
 
         if (req.file) {
-            // When using multer-storage-cloudinary, the file is already uploaded to cloudinary
-            // and the cloudinary data is available in req.file
+            // when using multer-storage-cloudinary, the file is uploaded to cloudinary
+            // and the cloudinary metadata is available in req.file object, and then we store it in img_url to be saved to our DB
             img_url = req.file.path || req.file.secure_url;
-            console.log("Image uploaded to:", img_url);
+
         }
 
         const {
