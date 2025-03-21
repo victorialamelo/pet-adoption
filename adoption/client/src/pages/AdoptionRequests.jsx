@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
-import { fetchUserProfile } from "../backend";
+import { fetchUserProfile } from "../requestsbackend";
 import { getAdoptionRequests, updateAdoptionRequestStatus, deleteAdoptionRequest } from "../helpers/adrequestfuncs";
 
 export default function AdoptionRequests({ petId }) {

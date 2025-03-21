@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
-import { updateUserProfile } from "../backend";
+import { updateUserProfile } from "../requestsbackend";
 
 export default function ProfileSection({ profile, setProfile, isPoster = false, isAdopter = false }) {
   const [editing, setEditing] = useState(false);

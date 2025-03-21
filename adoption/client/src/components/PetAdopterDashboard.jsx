@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, Button, Row, Col, Form, Modal } from "react-bootstrap";
 import { useAuth } from "../AuthContext";
-import { fetchUserProfile } from "../backend";
+import { fetchUserProfile } from "../requestsbackend";
 import { getMyAdoptionRequests } from "../helpers/adrequestfuncs";
 import { useNavigate, Link } from "react-router-dom";
 import ProfileSection from "./ProfileSection";

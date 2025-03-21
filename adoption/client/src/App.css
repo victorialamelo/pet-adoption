@@ -543,6 +543,26 @@ td {
   border: none;
 }
 
+.accordion-button:not(.collapsed) {
+  background-color: var(--textshadow);
+  border: 0;
+
+}
+
+.accordion-button:focus,
+.accordion-item:focus-visible {
+  background-color: var(--textshadow);
+  outline: 0;
+  box-shadow: none;
+}
+
+.accordion-button .collapsed {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background-color: red;
+}
+
 .adoption-requests .card {
   background-color: var(--textshadow);
 }

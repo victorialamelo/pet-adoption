@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Accordion, AccordionItem, Image, Card, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
-import { fetchUserProfile, backendEditPet } from "../backend";
+import { fetchUserProfile, backendEditPet } from "../requestsbackend";
 import AdoptionRequests from "../pages/AdoptionRequests";
 import ProfileSection from "./ProfileSection";
 import { getUserPostedPets } from "../helpers/getpetbyid";

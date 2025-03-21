@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 //import NavBar from "../components/NavBar";
-import { backendCreateUser } from "../backend";
+import { backendCreateUser } from "../requestsbackend";
 import { useAuth } from "../AuthContext";
 
 export default function SignupPage() {

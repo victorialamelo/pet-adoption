@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import { useAuth } from "../AuthContext";
-import { backendAddPostPet } from "../backend";
+import { backendAddPostPet } from "../requestsbackend";
 import { useState } from "react";
 
 export default function PostPetPage() {

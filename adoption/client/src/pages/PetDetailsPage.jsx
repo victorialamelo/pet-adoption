@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 //import NavBar from "../components/NavBar";
-import { backendFetchPetDetails } from "../backend";
+import { backendFetchPetDetails } from "../requestsbackend";
 import { useAuth } from "../AuthContext";
 import EditPetDetails from "../components/EditPetDetails";
 import { useNavigate } from "react-router-dom";

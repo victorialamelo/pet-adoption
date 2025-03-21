@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Form, Button, Image } from "react-bootstrap";
-import { backendEditPet } from "../backend";
+import { backendEditPet } from "../requestsbackend";
 
 export default function EditPetDetails({ petId, onSuccess }) {
   const [editFormData, setEditFormData] = useState({});
@@ -15,7 +15,7 @@ export default function EditPetDetails({ petId, onSuccess }) {
       try {
         setLoading(true);
 
-        const { backendFetchPetDetails } = await import("../backend");
+        const { backendFetchPetDetails } = await import("../requestsbackend");
         const response = await backendFetchPetDetails(petId);
         const petData = response[0];
 
